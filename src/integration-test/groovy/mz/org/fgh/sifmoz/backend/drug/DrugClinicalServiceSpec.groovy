@@ -10,7 +10,7 @@ import spock.lang.Specification
 @Rollback
 class DrugClinicalServiceSpec extends Specification {
 
-    DrugService drugService
+    IDrugService drugService
     @Autowired Datastore datastore
 
     private Long setupData() {

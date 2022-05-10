@@ -7,6 +7,7 @@ class DestroyedStock {
     String id
     String notes
     String updateStatus
+    Date date
     Clinic clinic
     static hasMany = [adjustments : StockDestructionAdjustment]
 

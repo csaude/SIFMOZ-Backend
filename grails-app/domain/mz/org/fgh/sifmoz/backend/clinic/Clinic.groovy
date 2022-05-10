@@ -38,4 +38,25 @@ class Clinic {
         sectors nullable: true
         nationalClinic nullable: true
     }
+
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (getClass() != o.class) return false
+
+        Clinic clinic = (Clinic) o
+
+        if (clinicName != clinic.clinicName) return false
+        if (code != clinic.code) return false
+        if (id != clinic.id) return false
+
+        return true
+    }
+
+    int hashCode() {
+        int result
+        result = id.hashCode()
+        result = 31 * result + code.hashCode()
+        result = 31 * result + clinicName.hashCode()
+        return result
+    }
 }

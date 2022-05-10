@@ -1,6 +1,6 @@
 package mz.org.fgh.sifmoz.backend.stockentrance
 
-import grails.rest.Resource
+
 import mz.org.fgh.sifmoz.backend.clinic.Clinic
 import mz.org.fgh.sifmoz.backend.stock.Stock
 
@@ -9,7 +9,7 @@ class StockEntrance {
     String orderNumber
     Date dateReceived
     Clinic clinic
-    static hasMany = [stocks : Stock]
+    static hasMany = [stocks: Stock]
 
     static mapping = {
         id generator: "uuid"
@@ -20,5 +20,16 @@ class StockEntrance {
         dateReceived(nullable: false, blank: false, validator: { dateReceived, urc ->
             return ((dateReceived <= new Date()))
         })
+    }
+
+    @Override
+    public String toString() {
+        return "StockEntrance{" +
+                "stocks=" + stocks +
+                ", id='" + id + '\'' +
+                ", orderNumber='" + orderNumber + '\'' +
+                ", dateReceived=" + dateReceived +
+                ", clinic=" + clinic +
+                '}';
     }
 }

@@ -6,22 +6,33 @@ import mz.org.fgh.sifmoz.backend.clinicSector.ClinicSector
 import mz.org.fgh.sifmoz.backend.doctor.Doctor
 import mz.org.fgh.sifmoz.backend.episode.Episode
 import mz.org.fgh.sifmoz.backend.form.Form
+import mz.org.fgh.sifmoz.backend.stock.Stock
 import mz.org.fgh.sifmoz.backend.therapeuticRegimen.TherapeuticRegimen
 
 class Drug {
     String id
     int packSize
     String name
-    double defaultTreatment // numero de toma
-    int defaultTimes// numero de vezes a tomar
-    String defaultPeriodTreatment //  periofo a tomar --commbo (dia , semana , mes, ano)
+    /**
+     * numero de toma
+     */
+    double defaultTreatment
+
+    /**
+     * numero de vezes a tomar
+     */
+    int defaultTimes
+
+    /**
+     * periodo a tomar --commbo (dia , semana , mes, ano)
+     */
+    String defaultPeriodTreatment
     String fnmCode
     String uuidOpenmrs
-    @JsonBackReference
     Form form
     static belongsTo = [Form]
     boolean active
-  //  static hasMany = [therapeuticRegimens: TherapeuticRegimen]
+    static hasMany = [stockList: Stock]
     static mapping = {
         id generator: "uuid"
         form lazy: true
@@ -34,5 +45,6 @@ class Drug {
         uuidOpenmrs nullable: true
      //   defaultTreatment(min: 1.00)
         defaultTimes(min:1)
+        stockList nullable: true
     }
 }

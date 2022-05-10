@@ -4,6 +4,7 @@ import grails.rest.Resource
 import mz.org.fgh.sifmoz.backend.clinic.Clinic
 import mz.org.fgh.sifmoz.backend.drug.Drug
 import mz.org.fgh.sifmoz.backend.packagedDrug.PackagedDrug
+import mz.org.fgh.sifmoz.backend.stockadjustment.StockAdjustment
 import mz.org.fgh.sifmoz.backend.stockcenter.StockCenter
 import mz.org.fgh.sifmoz.backend.stockentrance.StockEntrance
 
@@ -20,7 +21,7 @@ class Stock {
     Drug drug
     StockCenter center
     Clinic clinic
-    static hasMany = [packagedDrugs: PackagedDrug]
+    static hasMany = [packagedDrugs: PackagedDrug, adjustments: StockAdjustment]
     static belongsTo = [entrance: StockEntrance]
 
     static mapping = {
@@ -35,5 +36,6 @@ class Stock {
         stockMoviment(min: 0)
         manufacture(nullable: true, maxSize: 20)
         packagedDrugs nullable: true
+        adjustments nullable: true
     }
 }

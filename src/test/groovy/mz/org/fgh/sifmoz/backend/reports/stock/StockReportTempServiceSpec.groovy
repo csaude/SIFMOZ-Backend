@@ -1,9 +1,9 @@
-package mz.org.fgh.sifmoz.backend.packagedDrug
+package mz.org.fgh.sifmoz.backend.reports.stock
 
 import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
-class PackagedDrugServiceSpec extends Specification implements ServiceUnitTest<PackagedDrugService>{
+class StockReportTempServiceSpec extends Specification implements ServiceUnitTest<IStockReportService>{
 
     def setup() {
     }

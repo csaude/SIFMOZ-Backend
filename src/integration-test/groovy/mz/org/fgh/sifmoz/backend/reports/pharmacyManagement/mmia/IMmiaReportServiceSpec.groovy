@@ -1,4 +1,4 @@
-package mz.org.fgh.sifmoz.backend.regimenDrug
+package mz.org.fgh.sifmoz.backend.reports.pharmacyManagement.mmia
 
 import grails.testing.mixin.integration.Integration
 import grails.gorm.transactions.Rollback
@@ -8,20 +8,20 @@ import spock.lang.Specification
 
 @Integration
 @Rollback
-class RegimenDrugServiceSpec extends Specification {
+class IMmiaReportServiceSpec extends Specification {
 
-    RegimenDrugService regimenDrugService
+    IMmiaReportService mmiaReportService
     @Autowired Datastore datastore
 
     private Long setupData() {
         // TODO: Populate valid domain instances and return a valid ID
-        //new RegimenDrug(...).save(flush: true, failOnError: true)
-        //new RegimenDrug(...).save(flush: true, failOnError: true)
-        //RegimenDrug regimenDrug = new RegimenDrug(...).save(flush: true, failOnError: true)
-        //new RegimenDrug(...).save(flush: true, failOnError: true)
-        //new RegimenDrug(...).save(flush: true, failOnError: true)
+        //new MmiaReport(...).save(flush: true, failOnError: true)
+        //new MmiaReport(...).save(flush: true, failOnError: true)
+        //MmiaReport mmiaReport = new MmiaReport(...).save(flush: true, failOnError: true)
+        //new MmiaReport(...).save(flush: true, failOnError: true)
+        //new MmiaReport(...).save(flush: true, failOnError: true)
         assert false, "TODO: Provide a setupData() implementation for this generated test suite"
-        //regimenDrug.id
+        //mmiaReport.id
     }
 
     void cleanup() {
@@ -32,17 +32,17 @@ class RegimenDrugServiceSpec extends Specification {
         setupData()
 
         expect:
-        regimenDrugService.get(1) != null
+        mmiaReportService.get(1) != null
     }
 
     void "test list"() {
         setupData()
 
         when:
-        List<RegimenDrug> regimenDrugList = regimenDrugService.list(max: 2, offset: 2)
+        List<MmiaReport> mmiaReportList = mmiaReportService.list(max: 2, offset: 2)
 
         then:
-        regimenDrugList.size() == 2
+        mmiaReportList.size() == 2
         assert false, "TODO: Verify the correct instances are returned"
     }
 
@@ -50,30 +50,30 @@ class RegimenDrugServiceSpec extends Specification {
         setupData()
 
         expect:
-        regimenDrugService.count() == 5
+        mmiaReportService.count() == 5
     }
 
     void "test delete"() {
-        Long regimenDrugId = setupData()
+        Long mmiaReportId = setupData()
 
         expect:
-        regimenDrugService.count() == 5
+        mmiaReportService.count() == 5
 
         when:
-        regimenDrugService.delete(regimenDrugId)
+        mmiaReportService.delete(mmiaReportId)
         datastore.currentSession.flush()
 
         then:
-        regimenDrugService.count() == 4
+        mmiaReportService.count() == 4
     }
 
     void "test save"() {
         when:
         assert false, "TODO: Provide a valid instance to save"
-        RegimenDrug regimenDrug = new RegimenDrug()
-        regimenDrugService.save(regimenDrug)
+        MmiaReport mmiaReport = new MmiaReport()
+        mmiaReportService.save(mmiaReport)
 
         then:
-        regimenDrug.id != null
+        mmiaReport.id != null
     }
 }

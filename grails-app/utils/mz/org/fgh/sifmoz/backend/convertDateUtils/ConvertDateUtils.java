@@ -1,14 +1,9 @@
 package mz.org.fgh.sifmoz.backend.convertDateUtils;
 
 import mz.org.fgh.sifmoz.backend.utilities.Utilities;
-import org.apache.commons.lang3.time.DateUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoField;
 import java.util.*;
 
 public class ConvertDateUtils {
@@ -20,7 +15,8 @@ public class ConvertDateUtils {
     public static final String SECOND_FORMAT="ss";
     public static final String MINUTE_FORMAT="mm";
     public static final String MILLISECOND_FORMAT="SSS";
-    public static final String DATE_FORMAT="dd-MM-yyyy";
+    public static final String DDMM_DATE_FORMAT ="dd-MM-yyyy";
+    public static final String MMDD_DATE_FORMAT="MM-dd-yyyy";
     public static final String DATE_TIME_FORMAT="dd-MM-yyyy HH:mm:ss";
 
 
@@ -169,6 +165,21 @@ public class ConvertDateUtils {
         }
     }
 
+    public static double calculaIdade(Date dataMenor) throws ParseException {
+
+       // String dataMaior = formatToDDMMYYYY(getCurrentDate());
+       // String dataMaior = formatToDDMMYYYY(getCurrentDate());
+
+        try {
+          //  Date dataMenorAux = createDate(dataMenor, "dd-MM-yyyy");
+          //  Date dataMaiorAux = createDate(dataMaior, "dd-MM-yyyy");
+
+            return dateDiff(getCurrentDate(), dataMenor, ConvertDateUtils.YEAR_FORMAT);
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
 
     public static String formatToDDMMYYYY(String date) throws IllegalArgumentException {
         if (date == null) return null;
@@ -300,7 +311,7 @@ public class ConvertDateUtils {
 
     public static String getDateAfterAddingDaysToGivenDate(final String oldDate, int daysToAdd){
 
-        SimpleDateFormat sdf = new SimpleDateFormat(ConvertDateUtils.DATE_FORMAT);
+        SimpleDateFormat sdf = new SimpleDateFormat(ConvertDateUtils.DDMM_DATE_FORMAT);
 
         Calendar c = Calendar.getInstance();
         try{
@@ -321,7 +332,7 @@ public class ConvertDateUtils {
                     "The days must be a positive value");
         }
 
-        return DateUtils.addDays(date, (-1) * days);
+        return org.apache.commons.lang3.time.DateUtils.addDays(date, (-1) * days);
     }
 
     public static Date getSqlDateFromString(String stringDate, String pattern) {
@@ -362,7 +373,7 @@ public class ConvertDateUtils {
             throw new IllegalArgumentException("The days must be a positive value");
         }
 
-        return DateUtils.addDays(date, days);
+        return org.apache.commons.lang3.time.DateUtils.addDays(date, days);
     }
 
     public static Date setHour(Date date, int hour){
@@ -611,7 +622,7 @@ public class ConvertDateUtils {
 
         String newDate = dia + "-" + mes + "-" + ano;
 
-        return createDate(newDate, DATE_FORMAT);
+        return createDate(newDate, DDMM_DATE_FORMAT);
     }
 
     public static boolean isValidAno(int ano, int minAno, int maxAno){
@@ -645,6 +656,54 @@ public class ConvertDateUtils {
         String strDate = dateFormat.format(date);
 
         return strDate;
+    }
+
+    public static Date addMonth(Date date, int amount){
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.MONTH, amount);
+        return c.getTime();
+    }
+
+    public static Date addDay(Date date, int amount){
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.DATE, amount);
+        return c.getTime();
+    }
+
+    public static Date setDays(Date date, int amount) {
+        return set(date, Calendar.DAY_OF_MONTH, amount);
+    }
+
+    public static Date setMonth(Date date, int amount) {
+        return set(date, Calendar.MONTH, amount);
+    }
+
+    private static Date set(Date date, int calendarField, int amount) {
+        if (date == null) {
+            throw new IllegalArgumentException("The date must not be null");
+        }
+        // getInstance() returns a new object, so this method is thread safe.
+        Calendar c = Calendar.getInstance();
+        c.setLenient(false);
+        c.setTime(date);
+        c.set(calendarField, amount);
+        return c.getTime();
+    }
+
+    public static double getAge(Date dataMenor) throws ParseException{
+
+        String dataMaior = ConvertDateUtils.formatToDDMMYYYY(ConvertDateUtils.getCurrentDate());
+
+        try {
+            Date dataMenorAux = ConvertDateUtils.createDate(ConvertDateUtils.formatToDDMMYYYY(dataMenor), ConvertDateUtils.DDMM_DATE_FORMAT);
+            Date dataMaiorAux = ConvertDateUtils.createDate(dataMaior, ConvertDateUtils.DDMM_DATE_FORMAT);
+
+            return ConvertDateUtils.dateDiff(dataMaiorAux, dataMenorAux, ConvertDateUtils.YEAR_FORMAT);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
 }

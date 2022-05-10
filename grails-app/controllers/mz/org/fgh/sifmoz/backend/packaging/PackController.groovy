@@ -8,14 +8,11 @@ import mz.org.fgh.sifmoz.backend.packagedDrug.PackagedDrugService
 import mz.org.fgh.sifmoz.backend.packagedDrug.PackagedDrugStock
 import mz.org.fgh.sifmoz.backend.packagedDrug.PackagedDrugStockService
 import mz.org.fgh.sifmoz.backend.clinic.ClinicService
-import mz.org.fgh.sifmoz.backend.patientVisitDetails.PatientVisitDetails
-import mz.org.fgh.sifmoz.backend.prescription.Prescription
 import mz.org.fgh.sifmoz.backend.stock.Stock
 import mz.org.fgh.sifmoz.backend.stock.StockService
 import mz.org.fgh.sifmoz.backend.utilities.JSONSerializer
 
 import mz.org.fgh.sifmoz.backend.packagedDrug.PackagedDrug
-import mz.org.fgh.sifmoz.backend.utilities.Utilities
 
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
@@ -26,7 +23,7 @@ import grails.gorm.transactions.Transactional
 
 class PackController extends RestfulController{
 
-    PackService packService
+    IPackService packService
     StockService stockService
     PackagedDrugStockService packagedDrugStockService
     PackagedDrugService packagedDrugService

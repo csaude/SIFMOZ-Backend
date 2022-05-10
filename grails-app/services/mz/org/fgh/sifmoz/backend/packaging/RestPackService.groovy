@@ -8,7 +8,6 @@ import mz.org.fgh.sifmoz.backend.patient.Patient
 import mz.org.fgh.sifmoz.backend.patientVisit.PatientVisit
 import mz.org.fgh.sifmoz.backend.patientVisitDetails.IPatientVisitDetailsService
 import mz.org.fgh.sifmoz.backend.patientVisitDetails.PatientVisitDetails
-import mz.org.fgh.sifmoz.backend.restUtils.RequestMethod
 import mz.org.fgh.sifmoz.backend.restUtils.RestOpenMRSClient
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
@@ -20,7 +19,7 @@ import java.text.SimpleDateFormat
 @EnableScheduling
 class RestPackService {
 
-    PackService packService
+    IPackService packService
     IPatientVisitDetailsService visitDetailsService
     RestOpenMRSClient restOpenMRSClient = new RestOpenMRSClient()
     final String requestMethod_POST = "POST"

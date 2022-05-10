@@ -2,6 +2,7 @@ package mz.org.fgh.sifmoz.backend.stock
 
 import grails.gorm.services.Query
 import mz.org.fgh.sifmoz.backend.drug.Drug
+import mz.org.fgh.sifmoz.backend.service.ClinicalService
 
 
 interface IStockService {
@@ -18,5 +19,7 @@ interface IStockService {
 
     @Query("select ${s} from ${Stock s} where s.units_received > 0 and s.drug_id =  ${drug.getId()}")
     List<Stock> findAllOnceReceivedByDrug(Drug drug)
+
+
 
 }

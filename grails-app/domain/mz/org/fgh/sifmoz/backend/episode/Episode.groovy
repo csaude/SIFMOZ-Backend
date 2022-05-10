@@ -26,6 +26,9 @@ class Episode {
     Clinic clinic
 
     @JsonIgnore
+    Clinic referralClinic
+
+    @JsonIgnore
     @JsonBackReference
     PatientServiceIdentifier patientServiceIdentifier
     static belongsTo = [PatientServiceIdentifier]
@@ -40,6 +43,7 @@ class Episode {
         episodeDate(nullable: false, blank: false, validator: { episodeDate, urc ->
             return episodeDate <= new Date()
         })
+        referralClinic nullable: true
     }
 
 //    @Override

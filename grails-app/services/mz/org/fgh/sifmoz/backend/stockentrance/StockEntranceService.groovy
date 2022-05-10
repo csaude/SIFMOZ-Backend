@@ -6,7 +6,7 @@ import mz.org.fgh.sifmoz.backend.clinic.Clinic
 
 @Transactional
 @Service(StockEntrance)
-abstract class StockEntranceService implements IStockEntranceService{
+abstract class StockEntranceService implements IStockEntranceService {
 
     def serviceMethod() {
 
@@ -14,6 +14,13 @@ abstract class StockEntranceService implements IStockEntranceService{
 
     @Override
     List<StockEntrance> getAllByClinicId(String clinicId, int offset, int max) {
-        return StockEntrance.findAllByClinic(Clinic.findById(clinicId),[offset: offset, max: max])
+        return StockEntrance.findAllByClinic(Clinic.findById(clinicId), [offset: offset, max: max])
     }
+
+    @Override
+    List<StockEntrance> getAllByClinicAndReceivedDate(String clinicId, Date startDate, Date endDate) {
+        return StockEntrance.findAllByClinicAndDateReceivedBetween(Clinic.findById(clinicId), startDate, endDate)
+    }
+
+
 }

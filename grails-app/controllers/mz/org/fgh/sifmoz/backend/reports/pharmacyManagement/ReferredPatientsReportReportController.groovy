@@ -1,8 +1,10 @@
 package mz.org.fgh.sifmoz.backend.reports.pharmacyManagement
 
+import grails.converters.JSON
 import grails.validation.ValidationException
 import mz.org.fgh.sifmoz.backend.multithread.MultiThreadRestReportController
 import mz.org.fgh.sifmoz.backend.multithread.ReportSearchParams
+import mz.org.fgh.sifmoz.backend.utilities.JSONSerializer
 
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
@@ -102,13 +104,18 @@ class ReferredPatientsReportReportController extends MultiThreadRestReportContro
     }
 
     @Override
-    long getRecordsQtyToProcess() {
+    protected int countProcessedRecs() {
         return 0
     }
 
     @Override
-    void getProcessedRecordsQty(String reportId) {
+    int countRecordsToProcess() {
+        return 0
+    }
 
+    @Override
+    protected String getProcessingStatusMsg() {
+        return null
     }
 
     @Override

@@ -1,9 +1,12 @@
 package mz.org.fgh.sifmoz.backend.drug
 
 import grails.gorm.services.Service
+import mz.org.fgh.sifmoz.backend.clinic.Clinic
+import mz.org.fgh.sifmoz.backend.service.ClinicalService
+import mz.org.fgh.sifmoz.backend.stock.Stock
 
-@Service(Drug)
-interface DrugService {
+
+interface IDrugService {
 
     Drug get(Serializable id)
 
@@ -14,5 +17,4 @@ interface DrugService {
     Drug delete(Serializable id)
 
     Drug save(Drug drug)
-
 }

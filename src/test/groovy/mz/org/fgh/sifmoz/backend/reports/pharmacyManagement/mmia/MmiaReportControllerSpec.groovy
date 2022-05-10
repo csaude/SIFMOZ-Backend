@@ -1,4 +1,4 @@
-package mz.org.fgh.sifmoz.backend.drug
+package mz.org.fgh.sifmoz.backend.reports.pharmacyManagement.mmia
 
 import spock.lang.*
 import static org.springframework.http.HttpStatus.OK
@@ -11,7 +11,7 @@ import grails.testing.web.controllers.ControllerUnitTest
 import grails.testing.gorm.DomainUnitTest
 import grails.plugin.json.view.JsonViewGrailsPlugin
 
-class DrugControllerSpec extends Specification implements ControllerUnitTest<DrugController>, DomainUnitTest<Drug> {
+class MmiaReportControllerSpec extends Specification implements ControllerUnitTest<MmiaReportController>, DomainUnitTest<MmiaReport> {
 
     void setupSpec() {
         defineBeans(new JsonViewGrailsPlugin(applicationContext: applicationContext))
@@ -27,7 +27,7 @@ class DrugControllerSpec extends Specification implements ControllerUnitTest<Dru
 
     void "Test the index action returns the correct response"() {
         given:
-        controller.drugService = Mock(IDrugService) {
+        controller.mmiaReportService = Mock(IMmiaReportService) {
             1 * list(_) >> []
             1 * count() >> 0
         }
@@ -52,8 +52,8 @@ class DrugControllerSpec extends Specification implements ControllerUnitTest<Dru
 
     void "Test the save action correctly persists"() {
         given:
-        controller.drugService = Mock(IDrugService) {
-            1 * save(_ as Drug)
+        controller.mmiaReportService = Mock(IMmiaReportService) {
+            1 * save(_ as MmiaReport)
         }
 
         when:
@@ -61,7 +61,7 @@ class DrugControllerSpec extends Specification implements ControllerUnitTest<Dru
         request.contentType = JSON_CONTENT_TYPE
         request.method = 'POST'
         populateValidParams(params)
-        request.json = new Drug(params)
+        request.json = new MmiaReport(params)
         controller.save()
 
         then:
@@ -71,9 +71,9 @@ class DrugControllerSpec extends Specification implements ControllerUnitTest<Dru
 
     void "Test the save action with an invalid instance"() {
         given:
-        controller.drugService = Mock(IDrugService) {
-            1 * save(_ as Drug) >> { Drug drug ->
-                throw new ValidationException("Invalid instance", drug.errors)
+        controller.mmiaReportService = Mock(IMmiaReportService) {
+            1 * save(_ as MmiaReport) >> { MmiaReport mmiaReport ->
+                throw new ValidationException("Invalid instance", mmiaReport.errors)
             }
         }
 
@@ -81,7 +81,7 @@ class DrugControllerSpec extends Specification implements ControllerUnitTest<Dru
         request.contentType = JSON_CONTENT_TYPE
         request.method = 'POST'
         populateValidParams(params)
-        request.json = new Drug(params)
+        request.json = new MmiaReport(params)
         controller.save()
 
         then:
@@ -91,7 +91,7 @@ class DrugControllerSpec extends Specification implements ControllerUnitTest<Dru
 
     void "Test the show action with a null id"() {
         given:
-        controller.drugService = Mock(IDrugService) {
+        controller.mmiaReportService = Mock(IMmiaReportService) {
             1 * get(null) >> null
         }
 
@@ -104,8 +104,8 @@ class DrugControllerSpec extends Specification implements ControllerUnitTest<Dru
 
     void "Test the show action with a valid id"() {
         given:
-        controller.drugService = Mock(IDrugService) {
-            1 * get(2) >> new Drug()
+        controller.mmiaReportService = Mock(IMmiaReportService) {
+            1 * get(2) >> new MmiaReport()
         }
 
         when:"A domain instance is passed to the show action"
@@ -129,8 +129,8 @@ class DrugControllerSpec extends Specification implements ControllerUnitTest<Dru
 
     void "Test the update action correctly persists"() {
         given:
-        controller.drugService = Mock(IDrugService) {
-            1 * save(_ as Drug)
+        controller.mmiaReportService = Mock(IMmiaReportService) {
+            1 * save(_ as MmiaReport)
         }
 
         when:
@@ -138,7 +138,7 @@ class DrugControllerSpec extends Specification implements ControllerUnitTest<Dru
         request.contentType = JSON_CONTENT_TYPE
         request.method = 'PUT'
         populateValidParams(params)
-        def instance = new Drug(params)
+        def instance = new MmiaReport(params)
         instance.id = 1
         instance.version = 0
         controller.update(instance)
@@ -150,16 +150,16 @@ class DrugControllerSpec extends Specification implements ControllerUnitTest<Dru
 
     void "Test the update action with an invalid instance"() {
         given:
-        controller.drugService = Mock(IDrugService) {
-            1 * save(_ as Drug) >> { Drug drug ->
-                throw new ValidationException("Invalid instance", drug.errors)
+        controller.mmiaReportService = Mock(IMmiaReportService) {
+            1 * save(_ as MmiaReport) >> { MmiaReport mmiaReport ->
+                throw new ValidationException("Invalid instance", mmiaReport.errors)
             }
         }
 
         when:
         request.contentType = JSON_CONTENT_TYPE
         request.method = 'PUT'
-        def instance = new Drug(params)
+        def instance = new MmiaReport(params)
         instance.id = 1
         instance.version = 0
         controller.update(instance)
@@ -181,8 +181,8 @@ class DrugControllerSpec extends Specification implements ControllerUnitTest<Dru
 
     void "Test the delete action with an instance"() {
         given:
-        controller.drugService = Mock(IDrugService) {
-            1 * delete(2) >> new Drug(id: 2)
+        controller.mmiaReportService = Mock(IMmiaReportService) {
+            1 * delete(2) >> new MmiaReport(id: 2)
         }
 
         when:

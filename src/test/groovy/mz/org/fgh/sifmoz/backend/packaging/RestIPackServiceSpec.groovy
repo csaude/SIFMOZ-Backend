@@ -1,9 +1,9 @@
-package mz.org.fgh.sifmoz.backend.group
+package mz.org.fgh.sifmoz.backend.packaging
 
 import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
-class GroupPackServiceSpec extends Specification implements ServiceUnitTest<GroupPackService>{
+class RestIPackServiceSpec extends Specification implements ServiceUnitTest<RestPackService>{
 
     def setup() {
     }
