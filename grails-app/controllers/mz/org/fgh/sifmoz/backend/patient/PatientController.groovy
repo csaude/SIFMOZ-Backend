@@ -3,20 +3,17 @@ package mz.org.fgh.sifmoz.backend.patient
 import grails.converters.JSON
 import grails.rest.RestfulController
 import grails.validation.ValidationException
-import mz.org.fgh.sifmoz.backend.clinic.Clinic
 import mz.org.fgh.sifmoz.backend.healthInformationSystem.HealthInformationSystem
 import mz.org.fgh.sifmoz.backend.interoperabilityAttribute.InteroperabilityAttribute
 import mz.org.fgh.sifmoz.backend.interoperabilityType.InteroperabilityType
-import mz.org.fgh.sifmoz.backend.patientIdentifier.PatientServiceIdentifier
 import mz.org.fgh.sifmoz.backend.prescription.Prescription
+import mz.org.fgh.sifmoz.backend.prescriptionDetail.PrescriptionDetail
+import mz.org.fgh.sifmoz.backend.reports.patients.ActiveOrFaltosoPatientReport
 import mz.org.fgh.sifmoz.backend.restUtils.RestOpenMRSClient
-import mz.org.fgh.sifmoz.backend.service.ClinicalService
 import mz.org.fgh.sifmoz.backend.utilities.JSONSerializer
-import mz.org.fgh.sifmoz.backend.utilities.Utilities
-import mz.org.fgh.sifmoz.report.ReportGenerator
-import org.grails.web.json.JSONArray
 
-import java.nio.charset.StandardCharsets
+import java.text.SimpleDateFormat
+import java.time.LocalDate
 
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
@@ -129,31 +126,81 @@ class PatientController extends RestfulController {
 
     def getReportActiveByServiceCode () {
 
-        Clinic clinic = Clinic.findById("ff8081817c668dcc017c66dc3d330002")
-        ClinicalService clinicalService = ClinicalService.findByCode("TARV")
-        // SessionFactoryUtils.getDataSource(sessionFactory).getConnection()
-        List<PatientServiceIdentifier> patients =   PatientServiceIdentifier.findAllByStartDateIsNotNullAndEndDateIsNullAndClinicAndService(clinic,clinicalService)
 
-        Map<String, Object> map = new HashMap<>()
-        map.put("path", "/home/muhammad/IdeaProjects/SIFMOZ-Backend-New/src/main/webapp/reports");
-        map.put("clinic", clinic.getClinicName())
-        map.put("clinicid", clinic.getId())
-        Map<String, Object> map1 = new HashMap<String, Object>()
-        map1.put("clinicname", clinic.getClinicName())
-           List<Map<String, Object>> reportObjects = new ArrayList<>()
-        //    List<Map<String, Object>> reportObjects = new ArrayList<Map<String, Object>>()
-        for (PatientServiceIdentifier patient:patients) {
-            Map<String, Object> reportObject = new HashMap<String, Object>()
-            reportObject.put("nid", patient.value)
-            reportObject.put("name", patient.patient.firstNames)
-            reportObject.put("gender", patient.patient.gender)
-            reportObject.put("birthDate", patient.patient.dateOfBirth)
-            reportObject.put("initTreatmentDate", patient.startDate)
-            reportObjects.add(reportObject)
+        Date startDate = new Date()
+        Date endDate = new Date()
+
+        // Take a date
+        LocalDate date = LocalDate.parse("2021-08-03")
+
+        // subtract days to date
+        LocalDate newDate = date.minusDays(33)
+        Date realEndDate = new SimpleDateFormat("yyyy-MM-dd").parse(newDate.toString())
+
+        def service_id = "ff8081817c699611017c6b6bc36f0003"
+        def clinic_id = "ff8081817c668dcc017c66dc3d330002"
+
+        String reportId = "00001"
+        Prescription prescription
+        PrescriptionDetail prescriptionDetail
+        Date dateOfBirth
+        Date pickupDate
+        Date nextPickUpDate
+        ActiveOrFaltosoPatientReport activePatientsReport
+        def reportType = "ACTIVE_PATIENT"
+        def age = ""
+
+        /*
+        def result = Patient.executeQuery(
+                "select p.firstNames, p.middleNames, p.lastNames, p.gender, p.dateOfBirth, p.cellphone, p.alternativeCellphone, p.address, p.addressReference, p.province.id, " +
+                        "p.district.id, p.bairro.id, p.postoAdministrativo.id, p.clinic.id, i.identifierType.id, i.value, i.prefered, pvd.pack.pickupDate, pvd.pack.nextPickUpDate, " +
+                        "pvd.pack.dispenseMode.id, pvd.prescription.id " +
+                        "from Patient p " +
+                        "inner join p.identifiers i " +
+                        "inner join i.episodes ep " +
+                        "inner join ep.patientVisitDetails pvd " +
+                        "where p.id = i.patient and " +
+                        "i.service.id = :service_id and " +
+                        "i.clinic.id = :clinic_id and " +
+                        "i.id = ep.patientServiceIdentifier.id and " +
+                        "ep.startStopReason.isStartReason = true and " + //false
+                        "ep.id = pvd.episode.id and " +
+                        "pvd.pack.nextPickUpDate  < :realEndDate", // >=
+                [clinic_id: clinic_id, service_id: service_id, realEndDate: realEndDate]
+        )*/
+        def result = Patient.executeQuery(
+                "select p.firstNames, p.middleNames, p.lastNames, p.gender, p.dateOfBirth " +
+                        "from Patient p "
+        )
+
+        for (p in result){
+            System.out.println(p)
         }
-        reportObjects.add(map1)
-        byte [] report = ReportGenerator.generateReport(map,reportObjects,"/home/muhammad/IdeaProjects/SIFMOZ-Backend-New/src/main/webapp/reports/RelatorioPacientesActivos.jrxml")
-        render(file: report, contentType: 'application/pdf')
+
+        // O NID eh 'value' se prefered=true, caso contrario o NID eh identifierType
+
+//        Map<String, Object> map = new HashMap<>()
+//        map.put("path", "/home/muhammad/IdeaProjects/SIFMOZ-Backend-New/src/main/webapp/reports");
+//        map.put("clinic", clinic.getClinicName())
+//        map.put("clinicid", clinic.getId())
+//        Map<String, Object> map1 = new HashMap<String, Object>()
+//        map1.put("clinicname", clinic.getClinicName())
+//           List<Map<String, Object>> reportObjects = new ArrayList<>()
+//        //    List<Map<String, Object>> reportObjects = new ArrayList<Map<String, Object>>()
+//        for (PatientServiceIdentifier patient:patients) {
+//            Map<String, Object> reportObject = new HashMap<String, Object>()
+//            reportObject.put("nid", patient.value)
+//            reportObject.put("name", patient.patient.firstNames)
+//            reportObject.put("gender", patient.patient.gender)
+//            reportObject.put("birthDate", patient.patient.dateOfBirth)
+//            reportObject.put("initTreatmentDate", patient.startDate)
+//            reportObjects.add(reportObject)
+//        }
+//        reportObjects.add(map1)
+//        byte [] report = ReportGenerator.generateReport(map,reportObjects,"/home/muhammad/IdeaProjects/SIFMOZ-Backend-New/src/main/webapp/reports/RelatorioPacientesActivos.jrxml")
+//        render(file: report, contentType: 'application/pdf')
+
+        return  result
     }
 
 }
