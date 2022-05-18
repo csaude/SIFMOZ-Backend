@@ -31,4 +31,8 @@ class ClinicalService {
         therapeuticRegimens nullable: true
         clinicSectors nullable: true
     }
+
+    boolean isPrep() {
+        false
+    }
 }

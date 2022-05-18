@@ -2,15 +2,17 @@ package mz.org.fgh.sifmoz.backend.reports.pharmacyManagement
 
 import grails.testing.mixin.integration.Integration
 import grails.gorm.transactions.Rollback
+import mz.org.fgh.sifmoz.backend.reports.referralManagement.IReferredPatientsReportService
+import mz.org.fgh.sifmoz.backend.reports.referralManagement.ReferredPatientsReport
 import org.grails.datastore.mapping.core.Datastore
 import org.springframework.beans.factory.annotation.Autowired
 import spock.lang.Specification
 
 @Integration
 @Rollback
-class ReferredPatientsReportServiceSpec extends Specification {
+class IReferredPatientsReportServiceSpec extends Specification {
 
-    ReferredPatientsReportService referredPatientsReportService
+    IReferredPatientsReportService referredPatientsReportService
     @Autowired Datastore datastore
 
     private Long setupData() {

@@ -1,4 +1,4 @@
-package mz.org.fgh.sifmoz.backend.packagedDrug
+package mz.org.fgh.sifmoz.backend.prescriptionDrug
 
 import grails.testing.mixin.integration.Integration
 import grails.gorm.transactions.Rollback
@@ -8,20 +8,20 @@ import spock.lang.Specification
 
 @Integration
 @Rollback
-class IPackagedIDrugServiceSpec extends Specification {
+class IPrescribedDrugServiceSpec extends Specification {
 
-    IPackagedDrugService packagedDrugService
+    IPrescribedDrugService prescribedDrugService
     @Autowired Datastore datastore
 
     private Long setupData() {
         // TODO: Populate valid domain instances and return a valid ID
-        //new PackagedDrug(...).save(flush: true, failOnError: true)
-        //new PackagedDrug(...).save(flush: true, failOnError: true)
-        //PackagedDrug packagedDrug = new PackagedDrug(...).save(flush: true, failOnError: true)
-        //new PackagedDrug(...).save(flush: true, failOnError: true)
-        //new PackagedDrug(...).save(flush: true, failOnError: true)
+        //new PrescribedDrug(...).save(flush: true, failOnError: true)
+        //new PrescribedDrug(...).save(flush: true, failOnError: true)
+        //PrescribedDrug prescribedDrug = new PrescribedDrug(...).save(flush: true, failOnError: true)
+        //new PrescribedDrug(...).save(flush: true, failOnError: true)
+        //new PrescribedDrug(...).save(flush: true, failOnError: true)
         assert false, "TODO: Provide a setupData() implementation for this generated test suite"
-        //packagedDrug.id
+        //prescribedDrug.id
     }
 
     void cleanup() {
@@ -32,17 +32,17 @@ class IPackagedIDrugServiceSpec extends Specification {
         setupData()
 
         expect:
-        packagedDrugService.get(1) != null
+        prescribedDrugService.get(1) != null
     }
 
     void "test list"() {
         setupData()
 
         when:
-        List<PackagedDrug> packagedDrugList = packagedDrugService.list(max: 2, offset: 2)
+        List<PrescribedDrug> prescribedDrugList = prescribedDrugService.list(max: 2, offset: 2)
 
         then:
-        packagedDrugList.size() == 2
+        prescribedDrugList.size() == 2
         assert false, "TODO: Verify the correct instances are returned"
     }
 
@@ -50,30 +50,30 @@ class IPackagedIDrugServiceSpec extends Specification {
         setupData()
 
         expect:
-        packagedDrugService.count() == 5
+        prescribedDrugService.count() == 5
     }
 
     void "test delete"() {
-        Long packagedDrugId = setupData()
+        Long prescribedDrugId = setupData()
 
         expect:
-        packagedDrugService.count() == 5
+        prescribedDrugService.count() == 5
 
         when:
-        packagedDrugService.delete(packagedDrugId)
+        prescribedDrugService.delete(prescribedDrugId)
         datastore.currentSession.flush()
 
         then:
-        packagedDrugService.count() == 4
+        prescribedDrugService.count() == 4
     }
 
     void "test save"() {
         when:
         assert false, "TODO: Provide a valid instance to save"
-        PackagedDrug packagedDrug = new PackagedDrug()
-        packagedDrugService.save(packagedDrug)
+        PrescribedDrug prescribedDrug = new PrescribedDrug()
+        prescribedDrugService.save(prescribedDrug)
 
         then:
-        packagedDrug.id != null
+        prescribedDrug.id != null
     }
 }

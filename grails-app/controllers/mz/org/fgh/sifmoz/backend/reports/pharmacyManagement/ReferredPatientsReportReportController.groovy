@@ -104,17 +104,15 @@ class ReferredPatientsReportReportController extends MultiThreadRestReportContro
     }
 
     @Override
-    protected int countProcessedRecs() {
-        return 0
-    }
-
-    @Override
-    int countRecordsToProcess() {
-        return 0
-    }
-
-    @Override
     protected String getProcessingStatusMsg() {
         return null
     }
+<<<<<<< HEAD
+=======
+
+
+    def printReport(String reportId, String fileType) {
+
+    }
+>>>>>>> 92963a1a071960f72c8701a71908032755213ac4
 }

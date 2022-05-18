@@ -8,7 +8,7 @@ import spock.lang.Specification
 
 @Integration
 @Rollback
-class RegimenIDrugServiceSpec extends Specification {
+class RegimenDrugServiceSpec extends Specification {
 
     RegimenDrugService regimenDrugService
     @Autowired Datastore datastore

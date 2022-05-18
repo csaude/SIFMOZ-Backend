@@ -11,6 +11,7 @@ class StartStopReason {
     public static final String REFERIDO_PARA = "REFERIDO_PARA"
     public static final String TRANSITO = "TRANSITO"
     public static final String OBITO = "OBITO"
+    public static final String ALTERACAO = "ALTERACAO"
     public static final String MANUNTENCAO = "MANUNTENCAO"
     public static final String INICIO_AO_TRATAMENTO = "INICIO_AO_TRATAMENTO"
 
@@ -35,12 +36,15 @@ class StartStopReason {
         return this.code.equals(MANUNTENCAO)
     }
     boolean isAlteracao() {
-        return this.code.equals(MANUNTENCAO)
+        return this.code.equals(ALTERACAO)
     }
     boolean isTransferido() {
         return this.code.equals(TRANSFERIDO_DE)
     }
     boolean isTransito() {
         return this.code.equals(TRANSITO)
+    }
+    boolean isReferido() {
+        return this.code.equals(REFERIDO_PARA)
     }
 }

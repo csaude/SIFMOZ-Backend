@@ -8,6 +8,8 @@ class MmiaReport {
     String periodType
     int period
     int year
+    Date startDate
+    Date endDate
 
     /**
      * Tipo de doentes em TARV
@@ -45,6 +47,8 @@ class MmiaReport {
     int dtM2
 
     int dM
+
+
     static mapping = {
         id generator: "uuid"
     }
@@ -113,5 +117,7 @@ class MmiaReport {
         this.dM ++
     }
 
-
+    void addTotalPrep() {
+        this.prep ++
+    }
 }

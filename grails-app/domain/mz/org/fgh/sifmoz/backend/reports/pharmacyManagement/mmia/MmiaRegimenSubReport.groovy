@@ -16,13 +16,13 @@ class MmiaRegimenSubReport {
 
     }
 
-    MmiaRegimenSubReport (PrescriptionDetail detail, String reportId) {
+    MmiaRegimenSubReport (PrescriptionDetail detail, String reportId, boolean isReferido) {
         this.reportId = reportId
         this.code = detail.getTherapeuticRegimen().getCode()
         this.regimen = detail.getTherapeuticRegimen().getDescription()
         this.lineCode = detail.getTherapeuticLine().getCode()
         this.line = detail.getTherapeuticLine().getDescription()
-        addpatient()
+        isReferido ? addpatientDC() : addpatient()
     }
     static mapping = {
         id generator: "uuid"
@@ -32,5 +32,9 @@ class MmiaRegimenSubReport {
 
     def addpatient() {
         this.totalPatients ++
+    }
+
+    def addpatientDC() {
+        this.cumunitaryClinic ++
     }
 }

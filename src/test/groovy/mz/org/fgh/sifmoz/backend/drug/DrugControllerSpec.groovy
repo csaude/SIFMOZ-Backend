@@ -27,7 +27,7 @@ class DrugControllerSpec extends Specification implements ControllerUnitTest<Dru
 
     void "Test the index action returns the correct response"() {
         given:
-        controller.drugService = Mock(IDrugService) {
+        controller.drugService = Mock(DrugService) {
             1 * list(_) >> []
             1 * count() >> 0
         }
@@ -52,7 +52,7 @@ class DrugControllerSpec extends Specification implements ControllerUnitTest<Dru
 
     void "Test the save action correctly persists"() {
         given:
-        controller.drugService = Mock(IDrugService) {
+        controller.drugService = Mock(DrugService) {
             1 * save(_ as Drug)
         }
 
@@ -71,7 +71,7 @@ class DrugControllerSpec extends Specification implements ControllerUnitTest<Dru
 
     void "Test the save action with an invalid instance"() {
         given:
-        controller.drugService = Mock(IDrugService) {
+        controller.drugService = Mock(DrugService) {
             1 * save(_ as Drug) >> { Drug drug ->
                 throw new ValidationException("Invalid instance", drug.errors)
             }
@@ -91,7 +91,7 @@ class DrugControllerSpec extends Specification implements ControllerUnitTest<Dru
 
     void "Test the show action with a null id"() {
         given:
-        controller.drugService = Mock(IDrugService) {
+        controller.drugService = Mock(DrugService) {
             1 * get(null) >> null
         }
 
@@ -104,7 +104,7 @@ class DrugControllerSpec extends Specification implements ControllerUnitTest<Dru
 
     void "Test the show action with a valid id"() {
         given:
-        controller.drugService = Mock(IDrugService) {
+        controller.drugService = Mock(DrugService) {
             1 * get(2) >> new Drug()
         }
 
@@ -129,7 +129,7 @@ class DrugControllerSpec extends Specification implements ControllerUnitTest<Dru
 
     void "Test the update action correctly persists"() {
         given:
-        controller.drugService = Mock(IDrugService) {
+        controller.drugService = Mock(DrugService) {
             1 * save(_ as Drug)
         }
 
@@ -150,7 +150,7 @@ class DrugControllerSpec extends Specification implements ControllerUnitTest<Dru
 
     void "Test the update action with an invalid instance"() {
         given:
-        controller.drugService = Mock(IDrugService) {
+        controller.drugService = Mock(DrugService) {
             1 * save(_ as Drug) >> { Drug drug ->
                 throw new ValidationException("Invalid instance", drug.errors)
             }
@@ -181,7 +181,7 @@ class DrugControllerSpec extends Specification implements ControllerUnitTest<Dru
 
     void "Test the delete action with an instance"() {
         given:
-        controller.drugService = Mock(IDrugService) {
+        controller.drugService = Mock(DrugService) {
             1 * delete(2) >> new Drug(id: 2)
         }
 

@@ -1,9 +1,9 @@
-package mz.org.fgh.sifmoz.backend.prescriptionDrug
+package mz.org.fgh.sifmoz.backend.reports.pharmacyManagement.mmia
 
 import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
-class PrescribedIDrugServiceSpec extends Specification implements ServiceUnitTest<PrescribedDrugService>{
+class MmiaReportServiceSpec extends Specification implements ServiceUnitTest<MmiaReportService>{
 
     def setup() {
     }

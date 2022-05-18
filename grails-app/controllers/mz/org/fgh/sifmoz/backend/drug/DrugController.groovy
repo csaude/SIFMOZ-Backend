@@ -14,7 +14,7 @@ import grails.gorm.transactions.Transactional
 
 class DrugController extends RestfulController{
 
-    IDrugService drugService
+    DrugService drugService
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]

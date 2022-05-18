@@ -11,6 +11,14 @@ import mz.org.fgh.sifmoz.backend.prescriptionDetail.PrescriptionDetail
 import mz.org.fgh.sifmoz.backend.reports.patients.ActiveOrFaltosoPatientReport
 import mz.org.fgh.sifmoz.backend.restUtils.RestOpenMRSClient
 import mz.org.fgh.sifmoz.backend.utilities.JSONSerializer
+<<<<<<< HEAD
+=======
+import mz.org.fgh.sifmoz.backend.utilities.Utilities
+import mz.org.fgh.sifmoz.report.ReportGenerator
+import org.grails.web.json.JSONArray
+import org.hibernate.SessionFactory
+import org.springframework.orm.hibernate5.SessionFactoryUtils
+>>>>>>> 92963a1a071960f72c8701a71908032755213ac4
 
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -25,6 +33,8 @@ import grails.gorm.transactions.Transactional
 class PatientController extends RestfulController {
 
     IPatientService patientService
+
+    def SessionFactory sessionFactory
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
@@ -126,6 +136,13 @@ class PatientController extends RestfulController {
 
     def getReportActiveByServiceCode () {
 
+<<<<<<< HEAD
+=======
+        Clinic clinic = Clinic.findById("ff8081817c668dcc017c66dc3d330002")
+        ClinicalService clinicalService = ClinicalService.findByCode("TARV")
+        SessionFactoryUtils.getDataSource(sessionFactory).getConnection()
+        List<PatientServiceIdentifier> patients =   PatientServiceIdentifier.findAllByStartDateIsNotNullAndEndDateIsNullAndClinicAndService(clinic,clinicalService)
+>>>>>>> 92963a1a071960f72c8701a71908032755213ac4
 
         Date startDate = new Date()
         Date endDate = new Date()

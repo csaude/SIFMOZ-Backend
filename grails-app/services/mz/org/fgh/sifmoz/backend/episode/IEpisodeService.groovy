@@ -1,5 +1,9 @@
 package mz.org.fgh.sifmoz.backend.episode
 
+import mz.org.fgh.sifmoz.backend.clinic.Clinic
+import mz.org.fgh.sifmoz.backend.patientIdentifier.PatientServiceIdentifier
+import mz.org.fgh.sifmoz.backend.service.ClinicalService
+
 interface IEpisodeService {
 
     Episode get(Serializable id)
@@ -16,4 +20,7 @@ interface IEpisodeService {
 
     List<Episode> getAllByIndentifier(String identifierId, int offset, int max)
 
+    List<Episode> getEpisodeOfReferralOrBackReferral(Clinic clinic, ClinicalService clinicalServiceId, String startStopReasonCode, Date startDate, Date endDate)
+
+    Episode getEpisodeOfReferralByPatientServiceIdentfierAndBelowEpisodeDate(PatientServiceIdentifier patientServiceIdentifier, Date episodeDate)
 }

@@ -24,4 +24,7 @@ interface IPackService {
 
     int countPacksByServiceOnPeriod(ClinicalService service, Clinic clinic, Date startDate, Date endDate)
 
+    List<Pack> getPacksOfReferredPatientsByClinicalServiceAndClinicOnPeriod(ClinicalService clinicalService,Clinic clinic,Date startDate, Date endDate)
+
+    List<Pack> getAbsentReferredPatientsByClinicalServiceAndClinicOnPeriod(ClinicalService clinicalService,Clinic clinic,Date startDate, Date endDate)
 }
