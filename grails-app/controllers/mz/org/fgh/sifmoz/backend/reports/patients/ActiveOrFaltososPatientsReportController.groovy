@@ -101,22 +101,6 @@ class ActiveOrFaltososPatientsReportController extends MultiThreadRestReportCont
         activeOrFaltososPatientsReportService.doSave(activeOrFaltososPatientsReportService.processamentoDados(getSearchParams()))
     }
 
-
-    @Override
-    protected int countProcessedRecs() {
-        return 0
-    }
-
-    @Override
-    protected int countRecordsToProcess() {
-        return 0
-    }
-
-    @Override
-    protected String getProcessingStatusMsg() {
-        return null
-    }
-
     def printReport(ReportSearchParams searchParams) {
         String reportId = searchParams.getId()
         String jrxmlFilePath
@@ -141,4 +125,8 @@ class ActiveOrFaltososPatientsReportController extends MultiThreadRestReportCont
         render(file: report, contentType: 'application/pdf')
     }
 
+    @Override
+    protected String getProcessingStatusMsg() {
+        return null
+    }
 }

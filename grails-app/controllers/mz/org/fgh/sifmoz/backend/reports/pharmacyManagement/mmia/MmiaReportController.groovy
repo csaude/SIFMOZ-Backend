@@ -34,14 +34,11 @@ class MmiaReportController extends MultiThreadRestReportController{
         return processStage
     }
 
-<<<<<<< HEAD
-=======
     def printReport(String reportId, String fileType) {
         byte [] report = super.printReport(reportId, fileType, "/home/voloide/projects/dev/workspaces/JWORKSPACE/SIFMOZ-Backend/src/main/webapp/reports/pharmacyManagement", "MmiaReport.jrxml")
         render(file: report, contentType: 'application/pdf')
     }
 
->>>>>>> 92963a1a071960f72c8701a71908032755213ac4
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond mmiaReportService.list(params), model:[mmiaReportCount: mmiaReportService.count()]

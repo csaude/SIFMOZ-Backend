@@ -100,14 +100,11 @@ class StockReportController extends MultiThreadRestReportController {
         return null
     }
 
-<<<<<<< HEAD
-=======
 
     def printReport(String reportId, String fileType) {
 
     }
 
->>>>>>> 92963a1a071960f72c8701a71908032755213ac4
     @Override
     void run() {
         stockReportService.processReportRecords(searchParams)

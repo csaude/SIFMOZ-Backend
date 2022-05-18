@@ -68,11 +68,6 @@ public abstract class MultiThreadRestReportController<T> extends RestfulControll
 
     protected abstract String getProcessingStatusMsg();
 
-<<<<<<< HEAD
-//    public abstract void printReport(ReportSearchParams searchParams);
-//
-//    public abstract void printReport(String reportId, String fileType);
-=======
     protected byte[] printReport(String reportId, String fileType, String path, String report) throws SQLException {
         Map<String, Object> map = new HashMap<>();
         Connection connection = SessionFactoryUtils.getDataSource(sessionFactory).getConnection();
@@ -84,5 +79,4 @@ public abstract class MultiThreadRestReportController<T> extends RestfulControll
 
         return ReportGenerator.generateReport(map,path, report, connection);
     }
->>>>>>> 92963a1a071960f72c8701a71908032755213ac4
 }

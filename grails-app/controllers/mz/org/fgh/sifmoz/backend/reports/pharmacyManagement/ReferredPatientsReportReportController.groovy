@@ -4,6 +4,7 @@ import grails.converters.JSON
 import grails.validation.ValidationException
 import mz.org.fgh.sifmoz.backend.multithread.MultiThreadRestReportController
 import mz.org.fgh.sifmoz.backend.multithread.ReportSearchParams
+import mz.org.fgh.sifmoz.backend.reports.referralManagement.ReferredPatientsReport
 import mz.org.fgh.sifmoz.backend.utilities.JSONSerializer
 
 import static org.springframework.http.HttpStatus.CREATED
@@ -107,12 +108,9 @@ class ReferredPatientsReportReportController extends MultiThreadRestReportContro
     protected String getProcessingStatusMsg() {
         return null
     }
-<<<<<<< HEAD
-=======
 
 
     def printReport(String reportId, String fileType) {
 
     }
->>>>>>> 92963a1a071960f72c8701a71908032755213ac4
 }

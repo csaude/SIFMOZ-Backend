@@ -24,16 +24,6 @@ class HistoricoLevantamentoReportController extends MultiThreadRestReportControl
     }
 
     @Override
-    protected int countProcessedRecs() {
-        return 0
-    }
-
-    @Override
-    protected int countRecordsToProcess() {
-        return 0
-    }
-
-    @Override
     protected String getProcessingStatusMsg() {
         return null
     }

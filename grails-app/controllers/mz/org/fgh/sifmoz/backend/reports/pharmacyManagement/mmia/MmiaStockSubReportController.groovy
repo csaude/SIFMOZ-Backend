@@ -2,7 +2,6 @@ package mz.org.fgh.sifmoz.backend.reports.pharmacyManagement.mmia
 
 import grails.validation.ValidationException
 import mz.org.fgh.sifmoz.backend.multithread.MultiThreadRestReportController
-import mz.org.fgh.sifmoz.backend.multithread.ReportSearchParams
 
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
@@ -28,13 +27,10 @@ class MmiaStockSubReportController extends MultiThreadRestReportController<MmiaS
         return null
     }
 
-<<<<<<< HEAD
-=======
     def printReport(String reportId, String fileType) {
 
     }
 
->>>>>>> 92963a1a071960f72c8701a71908032755213ac4
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond mmiaStockSubReportService.list(params), model:[mmiaStockSubReportCount: mmiaStockSubReportService.count()]
