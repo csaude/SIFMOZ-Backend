@@ -47,7 +47,7 @@ public class ReportSearchParams implements Validateable {
                 Date startDateTemp = DateUtils.addMonths(ConvertDateUtils.getDateFromDayAndMonthAndYear(21, month, getYear()), -1);
                 int yearStartDate = DateUtils.toCalendar(startDateTemp).get(Calendar.YEAR);
                 int monthStartDate = DateUtils.toCalendar(startDateTemp).get(Calendar.MONTH);
-                setStartDate(ConvertDateUtils.getDateFromDayAndMonthAndYear(21, monthStartDate, yearStartDate));
+                setStartDate(startDateTemp);
                 setEndDate(ConvertDateUtils.getDateFromDayAndMonthAndYear(20, month, getYear()));
                 break;
             case PERIOD_TYPE_QUARTER:

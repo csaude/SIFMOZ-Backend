@@ -4,6 +4,10 @@ import grails.converters.JSON
 import grails.validation.ValidationException
 import mz.org.fgh.sifmoz.backend.multithread.MultiThreadRestReportController
 import mz.org.fgh.sifmoz.backend.multithread.ReportSearchParams
+<<<<<<< HEAD
+=======
+import mz.org.fgh.sifmoz.backend.reports.referralManagement.IReferredPatientsReportService
+>>>>>>> 6f35413ae40509586a1b46e4ddb62e9509f37b77
 import mz.org.fgh.sifmoz.backend.reports.referralManagement.ReferredPatientsReport
 import mz.org.fgh.sifmoz.backend.utilities.JSONSerializer
 
@@ -18,7 +22,7 @@ import grails.gorm.transactions.Transactional
 @ReadOnly
 class ReferredPatientsReportReportController extends MultiThreadRestReportController{
 
-    ReferredPatientsReportService referredPatientsReportService
+    IReferredPatientsReportService referredPatientsReportService
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]

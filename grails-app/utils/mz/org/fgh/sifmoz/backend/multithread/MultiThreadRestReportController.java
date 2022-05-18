@@ -5,16 +5,24 @@ import grails.rest.RestfulController;
 import mz.org.fgh.sifmoz.backend.convertDateUtils.ConvertDateUtils;
 import mz.org.fgh.sifmoz.backend.reports.common.ReportProcessMonitor;
 import mz.org.fgh.sifmoz.backend.reports.common.IReportProcessMonitorService;
+import mz.org.fgh.sifmoz.backend.reports.referralManagement.ReferredPatientsReport;
+import mz.org.fgh.sifmoz.backend.utilities.Utilities;
 import mz.org.fgh.sifmoz.report.ReportGenerator;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.SessionFactoryUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
+
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 public abstract class MultiThreadRestReportController<T> extends RestfulController<T> implements ReportExecutor {
     protected ReportSearchParams searchParams;
@@ -60,6 +68,11 @@ public abstract class MultiThreadRestReportController<T> extends RestfulControll
         reportProcessMonitorService.save(this.processStatus);
     }
 
+  /*  protected void deleteByReportId(String reportId) {
+        List<ReferredPatientsReport> referredPatientsReports = ReferredPatientsReport.findAllByReportId(reportId)
+        ReferredPatientsReport.deleteAll(referredPatientsReports)
+        render status: NO_CONTENT
+    }*/
 
     public ReportProcessMonitor getProcessStatus() {
         return processStatus;
@@ -67,15 +80,30 @@ public abstract class MultiThreadRestReportController<T> extends RestfulControll
 
     protected abstract String getProcessingStatusMsg();
 
-    protected byte[] printReport(String reportId, String fileType, String path, String report) throws SQLException {
-        Map<String, Object> map = new HashMap<>();
-        Connection connection = SessionFactoryUtils.getDataSource(sessionFactory).getConnection();
+    protected byte[] printReport(String reportId, String fileType, String report, Map<String, Object> params) throws SQLException {
+        return this.printReport(reportId, fileType, report, params, null);
+    }
 
-        map.put("path", path);
-        map.put("reportId", reportId);
-        map.put("username", "Test_user");
-        map.put("dataelaboracao", ConvertDateUtils.getCurrentDate());
+    protected byte[] printReport(String reportId, String fileType, String report, Map<String, Object> params, List<Map<String, Object>> reportObjects) throws SQLException {
 
-        return ReportGenerator.generateReport(map,path, report, connection);
+        params.put("path", getReportsPath());
+        params.put("reportId", reportId);
+        params.put("username", "Test_user");
+        params.put("dataelaboracao", ConvertDateUtils.getCurrentDate());
+
+        if (Utilities.listHasElements((ArrayList<?>) reportObjects)) {
+            return ReportGenerator.generateReport(params, fileType, reportObjects, report);
+        } else {
+            return ReportGenerator.generateReport(report, params, fileType, SessionFactoryUtils.getDataSource(sessionFactory).getConnection());
+        }
+    }
+
+    protected String getReportsPath (){
+        try {
+            return grails.util.BuildSettings.BASE_DIR.getCanonicalPath()+"/"+"src/main/webapp/reports/";
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }

@@ -1,6 +1,7 @@
 package mz.org.fgh.sifmoz.backend.reports.pharmacyManagement.mmia
 
 import grails.converters.JSON
+import grails.util.BuildSettings
 import grails.validation.ValidationException
 import mz.org.fgh.sifmoz.backend.multithread.MultiThreadRestReportController
 import mz.org.fgh.sifmoz.backend.multithread.ReportSearchParams
@@ -35,8 +36,9 @@ class MmiaReportController extends MultiThreadRestReportController{
     }
 
     def printReport(String reportId, String fileType) {
-        byte [] report = super.printReport(reportId, fileType, "/home/voloide/projects/dev/workspaces/JWORKSPACE/SIFMOZ-Backend/src/main/webapp/reports/pharmacyManagement", "MmiaReport.jrxml")
-        render(file: report, contentType: 'application/pdf')
+        Map<String, Object> params = new HashMap<>()
+        byte[] report = super.printReport(reportId, fileType, getReportsPath()+"pharmacyManagement/MmiaReport.jrxml", params)
+        render(file: report, contentType: 'application/'+fileType.equals("PDF")? 'pdf' : 'xls')
     }
 
     def index(Integer max) {

@@ -41,6 +41,7 @@ class UrlMappings {
         get "/$controller/printReport/$reportId/$fileType(.$format)?"(action:'printReport')
         get "/$controller/getProcessingStatus/$reportId(.$format)?"(action:'getProcessingStatus')
         get "/$controller/printReport/$reportId/$reportType/$fileType(.$format)?"(action:'printReport')
+        delete "/$controller/delete/$reportId(.$format)?"(action:'deleteByReportId')
         "/"(controller: 'application', action:'index')
         "500"(view: '/error')
         "404"(view: '/notFound')

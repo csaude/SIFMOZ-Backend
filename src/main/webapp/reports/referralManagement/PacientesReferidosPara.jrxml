@@ -91,7 +91,7 @@
 				<text><![CDATA[Unidade Sanitária:]]></text>
 			</staticText>
 			<line>
-				<reportElement key="line-2" mode="Opaque" x="0" y="0" width="1" height="211" forecolor="#000000" backcolor="#000000" uuid="e5370354-d88b-4521-b686-7d9367c68ba4"/>
+				<reportElement key="line-2" mode="Opaque" x="0" y="0" width="1" height="212" forecolor="#000000" backcolor="#000000" uuid="e5370354-d88b-4521-b686-7d9367c68ba4"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.75"/>
 				</graphicElement>
@@ -141,13 +141,15 @@
 				<text><![CDATA[Periodo:]]></text>
 			</staticText>
 			<line>
-				<reportElement x="0" y="0" width="634" height="1" uuid="485ba419-6c15-41b1-8bfe-a15656359127"/>
+				<reportElement x="0" y="0" width="634" height="1" uuid="485ba419-6c15-41b1-8bfe-a15656359127">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.75"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement key="line-2" mode="Opaque" x="633" y="0" width="1" height="211" forecolor="#000000" backcolor="#000000" uuid="b8a46c58-02ff-4ec6-b308-42cce170e3d7"/>
+				<reportElement key="line-2" mode="Opaque" x="634" y="0" width="1" height="211" forecolor="#000000" backcolor="#000000" uuid="b8a46c58-02ff-4ec6-b308-42cce170e3d7"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.75"/>
 				</graphicElement>
@@ -159,7 +161,7 @@
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="1" y="211" width="633" height="1" uuid="bdfcf8f2-1e40-41fe-9df1-7a6bbba03058"/>
+				<reportElement x="1" y="211" width="634" height="1" uuid="bdfcf8f2-1e40-41fe-9df1-7a6bbba03058"/>
 				<graphicElement>
 					<pen lineWidth="0.75"/>
 				</graphicElement>
@@ -328,7 +330,7 @@
 				<textFieldExpression><![CDATA[$F{therapeuticalRegimen}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="23" width="633" height="1" uuid="be11a57e-b67a-4662-9113-1110deff0718"/>
+				<reportElement x="0" y="23" width="635" height="1" uuid="be11a57e-b67a-4662-9113-1110deff0718"/>
 			</line>
 			<line>
 				<reportElement key="line-28" x="0" y="0" width="1" height="24" backcolor="#000000" uuid="285b9c8a-a4ef-44c2-9643-4ce4ec597fac"/>
@@ -337,7 +339,7 @@
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement key="line-28" x="633" y="0" width="1" height="24" backcolor="#000000" uuid="22d58475-dc61-4e12-bed9-45c1549abc67"/>
+				<reportElement key="line-28" x="634" y="0" width="1" height="24" backcolor="#000000" uuid="22d58475-dc61-4e12-bed9-45c1549abc67"/>
 				<graphicElement>
 					<pen lineWidth="0.75"/>
 				</graphicElement>

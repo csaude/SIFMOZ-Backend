@@ -6,33 +6,43 @@ import mz.org.fgh.sifmoz.backend.clinic.Clinic
 import mz.org.fgh.sifmoz.backend.convertDateUtils.ConvertDateUtils
 import mz.org.fgh.sifmoz.backend.episode.Episode
 import mz.org.fgh.sifmoz.backend.episode.EpisodeService
+import mz.org.fgh.sifmoz.backend.episode.IEpisodeService
 import mz.org.fgh.sifmoz.backend.multithread.ReportSearchParams
+import mz.org.fgh.sifmoz.backend.packaging.IPackService
 import mz.org.fgh.sifmoz.backend.packaging.Pack
 import mz.org.fgh.sifmoz.backend.packaging.PackService
+import mz.org.fgh.sifmoz.backend.prescription.IPrescriptionService
 import mz.org.fgh.sifmoz.backend.prescription.Prescription
 import mz.org.fgh.sifmoz.backend.prescription.PrescriptionService
 import mz.org.fgh.sifmoz.backend.prescriptionDetail.PrescriptionDetail
+import mz.org.fgh.sifmoz.backend.reports.common.IReportProcessMonitorService
+import mz.org.fgh.sifmoz.backend.reports.common.ReportProcessMonitor
 import mz.org.fgh.sifmoz.backend.reports.referralManagement.IReferredPatientsReportService
 import mz.org.fgh.sifmoz.backend.reports.referralManagement.ReferredPatientsReport
 import mz.org.fgh.sifmoz.backend.service.ClinicalService
+import org.springframework.beans.factory.annotation.Autowired
 
 @Transactional
 @Service(ReferredPatientsReport)
 abstract class ReferredPatientsReportService implements IReferredPatientsReportService{
-
-    PrescriptionService prescriptionService
-
-    PackService packService
-    EpisodeService episodeService
+    @Autowired
+    IPrescriptionService prescriptionService
+    @Autowired
+    IPackService packService
+    @Autowired
+    IEpisodeService episodeService
+    @Autowired
+    IReportProcessMonitorService reportProcessMonitorService
 
     @Override
-    void processReferredAndBackReferredReportRecords(ReportSearchParams searchParams) {
+    void processReferredAndBackReferredReportRecords(ReportSearchParams searchParams, ReportProcessMonitor processMonitor) {
 
         Clinic clinic = Clinic.findById(searchParams.clinicId)
         ClinicalService clinicalService = ClinicalService.findById(searchParams.clinicalService)
         Map<String , Prescription> prescriptionMap= prescriptionService.getLastPrescriptionsByClinicAndClinicalServiceAndEndDate(clinic,clinicalService,searchParams.endDate)
         List<Episode> episodes = episodeService.getEpisodeOfReferralOrBackReferral(clinic,clinicalService,searchParams.reportType,searchParams.startDate,searchParams.endDate)
         println(episodes)
+            double percentageUnit = 100/episodes.size()
         List<ReferredPatientsReport> referencesToCreate = new ArrayList<>()
         for (Episode episode:episodes) {
             Prescription lastPrescription = prescriptionMap.get(episode.patientServiceIdentifier.patient.id)
@@ -52,15 +62,17 @@ abstract class ReferredPatientsReportService implements IReferredPatientsReportS
                 referredPatient.setNotes(episode.notes)
             }
             referencesToCreate.add(referredPatient)
+            processMonitor.setProgress(processMonitor.getProgress() + percentageUnit)
+            reportProcessMonitorService.save(processMonitor)
             save(referredPatient)
         }
     }
 
-    void processReportReferredDispenseRecords(ReportSearchParams searchParams) {
+    void processReportReferredDispenseRecords(ReportSearchParams searchParams, ReportProcessMonitor processMonitor) {
         Clinic clinic = Clinic.findById(searchParams.clinicId)
         ClinicalService clinicalService = ClinicalService.findById(searchParams.clinicalService)
         List<Pack> packs = packService.getPacksOfReferredPatientsByClinicalServiceAndClinicOnPeriod(clinicalService,clinic,searchParams.startDate,searchParams.endDate)
-
+        double percentageUnit = 100/packs.size()
         for (Pack pack:packs) {
             Prescription prescription = pack.patientVisitDetails.getAt(0).prescription
             PrescriptionDetail prescriptionDetail = prescription.prescriptionDetails.getAt(0)
@@ -72,15 +84,17 @@ abstract class ReferredPatientsReportService implements IReferredPatientsReportS
             referredPatientDispense.setPickUpDate(pack.pickupDate)
             referredPatientDispense.setNextPickUpDate(pack.nextPickUpDate)
             referredPatientDispense.setTarvType(prescription.patientType)
+            processMonitor.setProgress(processMonitor.getProgress() + percentageUnit)
+            reportProcessMonitorService.save(processMonitor)
             save(referredPatientDispense)
         }
     }
 
-    void processReportAbsentReferredDispenseRecords(ReportSearchParams searchParams) {
+    void processReportAbsentReferredDispenseRecords(ReportSearchParams searchParams, ReportProcessMonitor processMonitor) {
         Clinic clinic = Clinic.findById(searchParams.clinicId)
         ClinicalService clinicalService = ClinicalService.findById(searchParams.clinicalService)
         List absentReferredPatients = packService.getAbsentReferredPatientsByClinicalServiceAndClinicOnPeriod(clinicalService,clinic,searchParams.startDate,searchParams.endDate)
-
+        double percentageUnit = 100/absentReferredPatients.size()
         for (int i = 0; i < absentReferredPatients.size(); i ++) {
             Object item = absentReferredPatients[0]
             Episode episode = (Episode) item[0]
@@ -97,6 +111,8 @@ abstract class ReferredPatientsReportService implements IReferredPatientsReportS
             if(item[3] != null) {
                 referredPatientAbsent.setReturnedPickUp(item[3] as Date)
             }
+            processMonitor.setProgress(processMonitor.getProgress() + percentageUnit)
+            reportProcessMonitorService.save(processMonitor)
             save(referredPatientAbsent)
         }
 
