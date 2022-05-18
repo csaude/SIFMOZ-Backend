@@ -53,6 +53,7 @@ public abstract class MultiThreadRestReportController<T> extends RestfulControll
         reportProcessMonitorService.save(this.processStatus);
     }
 
+
     /**
      * Processa o relatório
      */

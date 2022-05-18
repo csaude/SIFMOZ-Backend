@@ -1,10 +1,9 @@
-
 package mz.org.fgh.sifmoz.backend.reports.stock
 
-import grails.testing.web.controllers.ControllerUnitTest
+import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
-class StockReportTempControllerSpec extends Specification implements ControllerUnitTest<ReceivedStockReportController> {
+class UsedStockReportTempSpec extends Specification implements DomainUnitTest<UsedStockReportTemp> {
 
     def setup() {
     }
@@ -14,5 +13,6 @@ class StockReportTempControllerSpec extends Specification implements ControllerU
 
     void "test something"() {
         expect:"fix me"
+            true == false
     }
 }

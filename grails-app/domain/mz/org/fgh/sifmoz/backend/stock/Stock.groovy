@@ -1,6 +1,6 @@
 package mz.org.fgh.sifmoz.backend.stock
 
-import grails.rest.Resource
+
 import mz.org.fgh.sifmoz.backend.clinic.Clinic
 import mz.org.fgh.sifmoz.backend.drug.Drug
 import mz.org.fgh.sifmoz.backend.packagedDrug.PackagedDrug
@@ -10,8 +10,8 @@ import mz.org.fgh.sifmoz.backend.stockentrance.StockEntrance
 
 class Stock {
     String id
-    Date expireDate;
-    boolean modified;
+    Date expireDate
+    boolean modified
     String shelfNumber
     int unitsReceived
     int stockMoviment
@@ -23,6 +23,7 @@ class Stock {
     Clinic clinic
     static hasMany = [packagedDrugs: PackagedDrug, adjustments: StockAdjustment]
     static belongsTo = [entrance: StockEntrance]
+
 
     static mapping = {
         id generator: "uuid"
@@ -37,5 +38,24 @@ class Stock {
         manufacture(nullable: true, maxSize: 20)
         packagedDrugs nullable: true
         adjustments nullable: true
+    }
+
+
+    @Override
+    public String toString() {
+        return "Stock{" +
+                ", id='" + id + '\'' +
+                ", expireDate=" + expireDate +
+                ", modified=" + modified +
+                ", shelfNumber='" + shelfNumber + '\'' +
+                ", unitsReceived=" + unitsReceived +
+                ", stockMoviment=" + stockMoviment +
+                ", manufacture='" + manufacture + '\'' +
+                ", batchNumber='" + batchNumber + '\'' +
+                ", hasUnitsRemaining=" + hasUnitsRemaining +
+                ", drug=" + drug +
+                ", center=" + center +
+                ", clinic=" + clinic +
+                '}';
     }
 }

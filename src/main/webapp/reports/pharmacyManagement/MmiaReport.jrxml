@@ -1908,7 +1908,7 @@ MAPA MENSAL DE INFORMAÇÃO ARV]]></text>
 			</line>
 			<image>
 				<reportElement x="1" y="1" width="59" height="54" uuid="f17c5cc0-e2be-4fb6-93cd-d21339d4970a"/>
-				<imageExpression><![CDATA[($P{path} + java.io.File.separator+ "Simbolo_Moz.jpg")]]></imageExpression>
+				<imageExpression><![CDATA[($P{path} + "img"+ java.io.File.separator+ "Simbolo_Moz.jpg")]]></imageExpression>
 			</image>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="tf_facilityName" mode="Opaque" x="37" y="74" width="143" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="ebee27fa-40f6-4819-beac-03813575be79"/>

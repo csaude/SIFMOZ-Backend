@@ -17,10 +17,4 @@ abstract class StockEntranceService implements IStockEntranceService {
         return StockEntrance.findAllByClinic(Clinic.findById(clinicId), [offset: offset, max: max])
     }
 
-    @Override
-    List<StockEntrance> getAllByClinicAndReceivedDate(String clinicId, Date startDate, Date endDate) {
-        return StockEntrance.findAllByClinicAndDateReceivedBetween(Clinic.findById(clinicId), startDate, endDate)
-    }
-
-
 }

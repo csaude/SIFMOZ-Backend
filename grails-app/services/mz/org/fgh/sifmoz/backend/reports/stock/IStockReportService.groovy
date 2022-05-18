@@ -17,5 +17,6 @@ interface IStockReportService {
 
     void processReportRecords(ReportSearchParams searchParams)
 
+    List<StockReportTemp> getReportDataByReportId(String reportId)
 
 }

@@ -1,7 +1,6 @@
 package mz.org.fgh.sifmoz.backend.reports.stock
 
-class StockReportTemp {
-
+class UsedStockReportTemp {
     String id //ReportId
     String reportId
     String pharmacyId
@@ -15,14 +14,17 @@ class StockReportTemp {
     int year
     Date startDate
     Date endDate
-    String orderNumber
-    String drugName
-    Date expiryDate
-    Date dateReceived
-    Long unitsReceived
-    String manufacture
-    String batchNumber
 
+    //Used Stock Report
+    String fnName
+    String drugId
+    String drugName
+    Long balance
+    Long receivedStock
+    Long stockIssued
+    Long destroyedStock
+    Long adjustment
+    Long actualStock
 
     static constraints = {
         id generator: "uuid"
@@ -37,18 +39,17 @@ class StockReportTemp {
         endDate nullable: true
         year nullable: true
         periodType nullable: true
-        orderNumber nullable: true
-        manufacture nullable: true
-        batchNumber nullable: true
+        drugId nullable: true
+        fnName nullable: true
     }
-
 
     @Override
     public String toString() {
-        return "StockReportTemp{" +
+        return "UsedStockReportTemp{" +
                 "id='" + id + '\'' +
+                "drugName='" + drugName + '\'' +
                 ", reportId='" + reportId + '\'' +
-                ", clinic='" + pharmacyId + '\'' +
+                ", pharmacyId='" + pharmacyId + '\'' +
                 ", provinceId='" + provinceId + '\'' +
                 ", districtId='" + districtId + '\'' +
                 ", period='" + period + '\'' +
@@ -59,13 +60,12 @@ class StockReportTemp {
                 ", year=" + year +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
-                ", orderNumber='" + orderNumber + '\'' +
-                ", drugName='" + drugName + '\'' +
-                ", expiryDate=" + expiryDate +
-                ", dateReceived=" + dateReceived +
-                ", unitsReceived=" + unitsReceived +
-                ", manufacture='" + manufacture + '\'' +
-                ", batchNumber='" + batchNumber + '\'' +
+                ", balance=" + balance +
+                ", receivedStock=" + receivedStock +
+                ", stockIssued=" + stockIssued +
+                ", destroyedStock=" + destroyedStock +
+                ", adjustment=" + adjustment +
+                ", actualStock=" + actualStock +
                 '}';
     }
 }

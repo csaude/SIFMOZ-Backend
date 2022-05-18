@@ -1,9 +1,8 @@
 package mz.org.fgh.sifmoz.backend.patientVisitDetails
 
-import grails.gorm.services.Service
-import mz.org.fgh.sifmoz.backend.packaging.Pack
-import mz.org.fgh.sifmoz.backend.patient.Patient
 
+import mz.org.fgh.sifmoz.backend.packaging.Pack
+import mz.org.fgh.sifmoz.backend.reports.monitoringAndEvaluation.DrugQuantityTemp
 
 interface IPatientVisitDetailsService {
 
@@ -22,5 +21,9 @@ interface IPatientVisitDetailsService {
     List<PatientVisitDetails> getAllByEpisodeId(String episodeId, int offset, int max)
 
     PatientVisitDetails getByPack(Pack pack)
+
+    List<PatientVisitDetails> getARVDailyReport(String clinicId, Date startDate, Date endDate, String clinicalServiceId)
+
+    List<DrugQuantityTemp> getProducts(String patientVisitDetailId, String clinicId, Date startDate, Date endDate)
 
 }

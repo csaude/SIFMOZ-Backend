@@ -16,7 +16,7 @@ import java.sql.Connection
 
 class ReportGenerator {
 
-    static byte[] generateReport(Map<String, Object> parameters, String fileType, List<Map<String, Object>> reportObjects, String reportPath ) {
+    static byte[] generateReport(Map<String, Object> parameters, String fileType,Collection reportObjects, String reportPath ) {
         return generateReport(parameters, reportPath, fileType, null, reportObjects)
     }
 
@@ -24,7 +24,7 @@ class ReportGenerator {
         return generateReport(parameters, reportPath, fileType, connection, null)
     }
 
-    static byte[] generateReport(Map<String, Object> parameters, String reportPath, String fileType, Connection connection, List<Map<String, Object>> reportObjects) {
+    static byte[] generateReport(Map<String, Object> parameters, String reportPath, String fileType, Connection connection, Collection reportObjects) {
         try {
             def jasperPrint
             JasperReport jasperReport = JasperCompileManager.compileReport(reportPath)
@@ -84,11 +84,11 @@ class ReportGenerator {
             } else {
                 jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection)
             }
-            if (fileType.equals("PDF")) {
+            if (fileType.equalsIgnoreCase("PDF")) {
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()
                 JasperExportManager.exportReportToPdfStream(jasperPrint, byteArrayOutputStream)
                 return byteArrayOutputStream.toByteArray()
-            } else if (fileType.equals("XLS")) {
+            } else if (fileType.equalsIgnoreCase("XLS")) {
                 SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
                 configuration.setOnePagePerSheet(true);
                 configuration.setIgnoreGraphics(false);

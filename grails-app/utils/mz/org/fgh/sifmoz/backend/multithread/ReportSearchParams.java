@@ -1,5 +1,6 @@
 package mz.org.fgh.sifmoz.backend.multithread;
 
+
 import grails.validation.Validateable;
 import groovy.lang.Closure;
 import mz.org.fgh.sifmoz.backend.convertDateUtils.ConvertDateUtils;
@@ -38,7 +39,7 @@ public class ReportSearchParams implements Validateable {
 //        switch (getPeriodType()) {
         switch ("MONTH") {
             case PERIOD_TYPE_SPECIFIC:
-               setStartDate(ConvertDateUtils.createDate(getStartDateParam(),"dd-MM-yyyy"));
+                setStartDate(ConvertDateUtils.createDate(getStartDateParam(),"dd-MM-yyyy"));
                 setEndDate(ConvertDateUtils.createDate(getEndDateParam(),"dd-MM-yyyy"));
                 break;
             case PERIOD_TYPE_MONTH:

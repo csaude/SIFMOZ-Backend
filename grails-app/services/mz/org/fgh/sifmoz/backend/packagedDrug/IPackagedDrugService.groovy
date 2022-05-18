@@ -1,9 +1,5 @@
 package mz.org.fgh.sifmoz.backend.packagedDrug
 
-import grails.gorm.services.Service
-import mz.org.fgh.sifmoz.backend.prescriptionDrug.PrescribedDrug
-
-
 interface IPackagedDrugService {
 
     PackagedDrug get(Serializable id)

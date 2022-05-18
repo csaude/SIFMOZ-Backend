@@ -1,9 +1,5 @@
 package mz.org.fgh.sifmoz.backend.stockentrance
 
-import grails.gorm.services.Service
-import mz.org.fgh.sifmoz.backend.clinic.Clinic
-
-
 interface IStockEntranceService {
 
     StockEntrance get(Serializable id)
@@ -17,8 +13,5 @@ interface IStockEntranceService {
     StockEntrance save(StockEntrance stockEntrance)
 
     List<StockEntrance> getAllByClinicId(String clinicId, int offset, int max)
-
-    List<StockEntrance> getAllByClinicAndReceivedDate(String clinicId, Date startDate, Date endDate)
-
 
 }
