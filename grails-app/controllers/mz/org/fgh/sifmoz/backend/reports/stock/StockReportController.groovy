@@ -113,11 +113,6 @@ class StockReportController extends MultiThreadRestReportController {
     }
 
     @Override
-    void printReport(String reportId, String fileType) {
-
-    }
-
-    @Override
     void run() {
         stockReportService.processReportRecords(searchParams)
 

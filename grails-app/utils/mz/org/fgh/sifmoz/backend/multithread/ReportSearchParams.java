@@ -35,13 +35,15 @@ public class ReportSearchParams implements Validateable {
     private String reportType;
 
     public void determineStartEndDate() {
-        switch (getPeriodType()) {
+//        switch (getPeriodType()) {
+        switch ("MONTH") {
             case PERIOD_TYPE_SPECIFIC:
                setStartDate(ConvertDateUtils.createDate(getStartDateParam(),"dd-MM-yyyy"));
                 setEndDate(ConvertDateUtils.createDate(getEndDateParam(),"dd-MM-yyyy"));
                 break;
             case PERIOD_TYPE_MONTH:
-                int month = Integer.parseInt(getPeriod());
+//                int month = Integer.parseInt(getPeriod());
+                int month = Integer.parseInt("1");
                 Date startDateTemp = DateUtils.addMonths(ConvertDateUtils.getDateFromDayAndMonthAndYear(21, month, getYear()), -1);
                 int yearStartDate = DateUtils.toCalendar(startDateTemp).get(Calendar.YEAR);
                 int monthStartDate = DateUtils.toCalendar(startDateTemp).get(Calendar.MONTH);

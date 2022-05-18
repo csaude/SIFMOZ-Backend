@@ -52,5 +52,7 @@ public abstract class MultiThreadRestReportController<T> extends RestfulControll
 
     protected abstract String getProcessingStatusMsg();
 
-    public abstract void printReport(String reportId, String fileType);
+//    public abstract void printReport(ReportSearchParams searchParams);
+//
+//    public abstract void printReport(String reportId, String fileType);
 }

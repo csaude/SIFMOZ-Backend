@@ -1,16 +1,22 @@
 package mz.org.fgh.sifmoz.backend.reports.patients
 
+import grails.converters.JSON
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
+import mz.org.fgh.sifmoz.backend.clinic.Clinic
+import mz.org.fgh.sifmoz.backend.convertDateUtils.ConvertDateUtils
+import mz.org.fgh.sifmoz.backend.distribuicaoAdministrativa.District
+import mz.org.fgh.sifmoz.backend.distribuicaoAdministrativa.Province
 import mz.org.fgh.sifmoz.backend.multithread.MultiThreadRestReportController
 import mz.org.fgh.sifmoz.backend.multithread.ReportSearchParams
+import mz.org.fgh.sifmoz.backend.utilities.Utilities
+import mz.org.fgh.sifmoz.report.ReportGenerator
 
 import static org.springframework.http.HttpStatus.*
 
 class ActiveOrFaltososPatientsReportController extends MultiThreadRestReportController {
 
     IActiveOrFaltososPatientsReportService activeOrFaltososPatientsReportService
-    ReportSearchParams reportSearchParams
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
@@ -41,7 +47,6 @@ class ActiveOrFaltososPatientsReportController extends MultiThreadRestReportCont
         }
 
         try {
-            //activeOrFaltososPatientsReportService.doSave(activePatientsReport)
         } catch (ValidationException e) {
             respond activePatientsReport.errors
             return
@@ -84,7 +89,7 @@ class ActiveOrFaltososPatientsReportController extends MultiThreadRestReportCont
 
     def initReportProcess (ReportSearchParams searchParams) {
         super.initReportParams(searchParams)
-        render qtyToProcess: qtyRecordsToProcess
+        render getProcessStatus() as JSON
         doProcessReport()
     }
 
@@ -94,47 +99,46 @@ class ActiveOrFaltososPatientsReportController extends MultiThreadRestReportCont
     @Override
     void run() {
         activeOrFaltososPatientsReportService.doSave(activeOrFaltososPatientsReportService.processamentoDados(getSearchParams()))
-//        for (patient in activePatientsReportService.processamentoDados()) {
-//            save(patient)
-//        ReportSearchParams
-//        }
-
     }
 
-    /*
-    String calcularIdade (Date dateOfBirth, Date endDate) {
-        Calendar calendar = Calendar.getInstance()
-        Calendar dateOfBirth1 = new GregorianCalendar()
-        dateOfBirth.setTime(dateOfBirth1)
-        calendar.setTime(endDate)
-        def endDateYear = calendar.get(Calendar.YEAR)
-        calendar.setTime(dateOfBirth)
-        def dateOfBirthYear = calendar.get(Calendar.YEAR)
-        def age = endDateYear - dateOfBirthYear
-
-        dateOfBirth1.add(Calendar.YEAR, age)
-
-        if (endDate.before(dateOfBirth1)) {
-
-            age--
-
-        }
-        return  age.toString()
-    }
-    */
 
     @Override
-    long getRecordsQtyToProcess() {
+    protected int countProcessedRecs() {
         return 0
     }
 
     @Override
-    void getProcessedRecordsQty(String reportId) {
-
+    protected int countRecordsToProcess() {
+        return 0
     }
 
     @Override
-    void printReport(String reportId, String fileType) {
-
+    protected String getProcessingStatusMsg() {
+        return null
     }
+
+    def printReport(ReportSearchParams searchParams) {
+        String reportId = searchParams.getId()
+        String jrxmlFilePath
+        Map<String, Object> map = new HashMap<>()
+        map.put("path", System.getProperty("user.home"))
+        map.put("reportId", reportId)
+        map.put("facilityName", Clinic.findById(searchParams.getClinicId()).getClinicName())
+        map.put("startDate", new Date())
+        map.put("endDate", new Date())
+        map.put("province", Province.findById(searchParams.getProvinceId()).getDescription())
+        map.put("district", District.findById(searchParams.getDistrictId()).getDescription())
+        map.put("year", searchParams.getYear().toString())
+
+        List<ActiveOrFaltosoPatientReport> reportObjects = activeOrFaltososPatientsReportService.getReportDataByReportId(reportId)
+        if (searchParams.reportType.contains("ACTIVE_PATIENT")){
+            jrxmlFilePath = System.getProperty("user.home")+ File.separator + "PacientesActivos.jrxml"
+        } else {
+            jrxmlFilePath = System.getProperty("user.home")+ File.separator + "PacientesFaltosos.jrxml"
+        }
+
+        byte [] report = ReportGenerator.generateReport(map,reportObjects,jrxmlFilePath)
+        render(file: report, contentType: 'application/pdf')
+    }
+
 }

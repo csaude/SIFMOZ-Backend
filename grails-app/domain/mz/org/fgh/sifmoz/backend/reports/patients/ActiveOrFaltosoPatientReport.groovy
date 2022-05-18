@@ -3,6 +3,11 @@ package mz.org.fgh.sifmoz.backend.reports.patients
 class ActiveOrFaltosoPatientReport {
     String id
     String reportId
+    String periodType
+    int year
+    Date startDate
+    Date endDate
+
     String firstNames
     String middleNames
     String lastNames
@@ -10,57 +15,39 @@ class ActiveOrFaltosoPatientReport {
     String ageOnEndDate
     Date dateOfBirth
     String cellphone
-    String alternativeCellphone
-    String address
-    String addressReference
-    String provinceId
-    String districtId
-    String bairroId
-    String postoAdministrativoId
-    String pharmacyId //clinic
+    String province
+    String district
+    String clinic // Report Parameter
     String nid
     String reportType
     Date pickupDate
     Date nextPickUpDate
-    String dispenseModeId
-    String prescriptionId
     String therapeuticRegimen
+    String therapeuticLine
     String dispenseType
-    Date startDate // Report Parameter
-    Date endDate // Report Parameter
-    String periodType
-    int year
+    String patientType
 
-    ActiveOrFaltosoPatientReport(){
+    ActiveOrFaltosoPatientReport() {
     }
 
-    ActiveOrFaltosoPatientReport(String reportId, String firstNames, String middleNames, String lastNames, String gender, String cellphone, String alternativeCellphone, String address, String addressReference,
-                                 String provinceId, String districtId, String bairroId, String postoAdministrativoId, String pharmacyId, String dispenseModeId, String prescriptionId, String reportType) {
+    ActiveOrFaltosoPatientReport(String reportId, String firstNames, String middleNames, String lastNames, String gender, String cellphone, String therapeuticRegimen,  String therapeuticLine, String reportType) {
         this.reportId = reportId
         this.firstNames = firstNames
         this.middleNames = middleNames
         this.lastNames = lastNames
         this.gender = gender
         this.cellphone = cellphone
-        this.alternativeCellphone = alternativeCellphone
-        this.address = address
-        this.addressReference = addressReference
-        this.provinceId = provinceId
-        this.districtId = districtId
-        this.bairroId = bairroId
-        this.postoAdministrativoId = postoAdministrativoId
-        this.pharmacyId = pharmacyId
-        this.dispenseModeId = dispenseModeId
-        this.prescriptionId = prescriptionId
         this.reportType = reportType
+        this.therapeuticRegimen = therapeuticRegimen
+        this.therapeuticLine = therapeuticLine
     }
     static constraints = {
         id generator: "uuid"
-        pharmacyId nullable: true
-        provinceId nullable: true
-        districtId nullable: true
-        periodType nullable: false , inList: ['MONTH','QUARTER','SEMESTER','ANNUAL']
-        reportType nullable: false , inList: ['ACTIVE_PATIENT','FALTOSO']
+        clinic nullable: true
+        province nullable: true
+        district nullable: true
+        periodType nullable: false, inList: ['MONTH', 'QUARTER', 'SEMESTER', 'ANNUAL']
+        reportType nullable: false, inList: ['ACTIVE_PATIENT', 'FALTOSO']
         startDate nullable: true
         endDate nullable: true
         ageOnEndDate nullable: true
@@ -83,19 +70,12 @@ class ActiveOrFaltosoPatientReport {
                 ", gender='" + gender + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", cellphone='" + cellphone + '\'' +
-                ", alternativeCellphone='" + alternativeCellphone + '\'' +
-                ", address='" + address + '\'' +
-                ", addressReference='" + addressReference + '\'' +
-                ", provinceId='" + provinceId + '\'' +
-                ", districtId='" + districtId + '\'' +
-                ", bairroId='" + bairroId + '\'' +
-                ", postoAdministrativoId='" + postoAdministrativoId + '\'' +
-                ", pharmacyId='" + pharmacyId + '\'' +
+                ", provinceId='" + province + '\'' +
+                ", districtId='" + district + '\'' +
+                ", clinic='" + clinic + '\'' +
                 ", nid='" + nid + '\'' +
                 ", pickupDate=" + pickupDate +
                 ", nextPickUpDate=" + nextPickUpDate +
-                ", dispenseModeId='" + dispenseModeId + '\'' +
-                ", prescriptionId='" + prescriptionId + '\'' +
                 ", therapeuticRegimen='" + therapeuticRegimen + '\'' +
                 ", dispenseType='" + dispenseType + '\'' +
                 ", startDate=" + startDate +

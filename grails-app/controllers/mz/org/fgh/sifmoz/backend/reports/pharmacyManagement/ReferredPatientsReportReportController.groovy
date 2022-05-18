@@ -117,9 +117,4 @@ class ReferredPatientsReportReportController extends MultiThreadRestReportContro
     protected String getProcessingStatusMsg() {
         return null
     }
-
-    @Override
-    void printReport(String reportId, String fileType) {
-
-    }
 }

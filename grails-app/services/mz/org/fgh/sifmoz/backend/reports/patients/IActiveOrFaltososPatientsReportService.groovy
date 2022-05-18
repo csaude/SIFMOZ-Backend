@@ -16,5 +16,7 @@ interface IActiveOrFaltososPatientsReportService {
 
     ActiveOrFaltosoPatientReport save(ActiveOrFaltosoPatientReport activeOrFaltosoPatientReport)
 
+    List<ActiveOrFaltosoPatientReport> getReportDataByReportId(String reportId)
+
     void doSave(List<ActiveOrFaltosoPatientReport> activePatientsReport)
 }

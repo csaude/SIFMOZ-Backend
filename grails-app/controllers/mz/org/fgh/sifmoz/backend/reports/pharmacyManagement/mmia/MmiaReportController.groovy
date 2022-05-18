@@ -65,11 +65,6 @@ class MmiaReportController extends MultiThreadRestReportController{
         return processStage
     }
 
-    @Override
-    void printReport(String reportId, String fileType) {
-
-    }
-
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond mmiaReportService.list(params), model:[mmiaReportCount: mmiaReportService.count()]

@@ -2,6 +2,7 @@ package mz.org.fgh.sifmoz.backend.reports.pharmacyManagement.mmia
 
 import grails.validation.ValidationException
 import mz.org.fgh.sifmoz.backend.multithread.MultiThreadRestReportController
+import mz.org.fgh.sifmoz.backend.multithread.ReportSearchParams
 
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
@@ -35,11 +36,6 @@ class MmiaStockSubReportController extends MultiThreadRestReportController<MmiaS
     @Override
     protected String getProcessingStatusMsg() {
         return null
-    }
-
-    @Override
-    void printReport(String reportId, String fileType) {
-
     }
 
     def index(Integer max) {
