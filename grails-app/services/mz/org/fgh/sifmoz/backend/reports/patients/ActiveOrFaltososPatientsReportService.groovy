@@ -82,13 +82,14 @@ abstract class ActiveOrFaltososPatientsReportService implements IActiveOrFaltoso
         String reportType = reportSearchParams.getReportType()
         String clinicalService = reportSearchParams.getClinicalService()
 
-        // subtract days to date
-        if (reportSearchParams.getReportType().contains("ACTIVE_PATIENT")) {
-            endDate = ConvertDateUtils.addDaysDate(endDate, -33)
-        }
-        if (reportSearchParams.getReportType().contains("FALTOSO")) {
-            endDate = ConvertDateUtils.addDaysDate(endDate, -3)
-        }
+    endDate = ConvertDateUtils.createDate("02-05-2022", "dd-MM-yyyy")
+//        // subtract days to date
+//        if (reportSearchParams.getReportType().contains("ACTIVE_PATIENT")) {
+//            endDate = ConvertDateUtils.addDaysDate(endDate, -33)
+//        }
+//        if (reportSearchParams.getReportType().contains("FALTOSO")) {
+//            endDate = ConvertDateUtils.addDaysDate(endDate, -3)
+//        }
         System.out.println(clinic_id + " - " + clinicalService + " - " + endDate + " - " + province_id)
 //        def result = Patient.executeQuery(
 //                "select p.firstNames as firstNames, p.middleNames as middleNames, p.lastNames as lastNames " +
@@ -118,7 +119,7 @@ abstract class ActiveOrFaltososPatientsReportService implements IActiveOrFaltoso
                         "INNER JOIN PatientVisitDetails pvd " +
                         "ON pvd.episode.id = ep.id " +
                         "INNER JOIN Pack pack " +
-                        "ON pvd.pack.id = pack.id and DATE(pack.nextPickUpDate) + :days >= :endDate " +
+                        "ON pvd.pack.id = pack.id and pack.nextPickUpDate <= :endDate and DATE(pack.nextPickUpDate) + :days >= :endDate " +
                         "INNER JOIN Prescription pre " +
                         "ON pvd.prescription.id = pre.id " +
                         "INNER JOIN PrescriptionDetail pred " +
@@ -129,7 +130,7 @@ abstract class ActiveOrFaltososPatientsReportService implements IActiveOrFaltoso
                         "ON pred.dispenseType.id = dt.id " +
                         "INNER JOIN TherapeuticLine lt " +
                         "ON pred.therapeuticLine.id = lt.id",
-                [clinic_id: clinic_id, clinicalService: clinicalService, endDate: endDate, province_id: province_id, days: 3]
+                [clinic_id: clinic_id, clinicalService: clinicalService, endDate: endDate, province_id: province_id, days: 33]
         )
 
 //        System.out.println(result.getString("firstNames"))

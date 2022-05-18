@@ -7,7 +7,6 @@ import mz.org.fgh.sifmoz.backend.distribuicaoAdministrativa.District
 import mz.org.fgh.sifmoz.backend.distribuicaoAdministrativa.Province
 import mz.org.fgh.sifmoz.backend.multithread.MultiThreadRestReportController
 import mz.org.fgh.sifmoz.backend.multithread.ReportSearchParams
-import mz.org.fgh.sifmoz.backend.reports.patients.ActiveOrFaltosoPatientReport
 import mz.org.fgh.sifmoz.report.ReportGenerator
 
 import java.text.SimpleDateFormat

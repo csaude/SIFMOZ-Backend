@@ -127,6 +127,6 @@ class ActiveOrFaltososPatientsReportController extends MultiThreadRestReportCont
 
     @Override
     protected String getProcessingStatusMsg() {
-        return null
+        return " "
     }
 }
