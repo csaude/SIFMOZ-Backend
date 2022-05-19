@@ -2,12 +2,9 @@ package mz.org.fgh.sifmoz.backend.reports.stock
 
 import grails.gorm.services.Service
 import grails.gorm.transactions.Transactional
-import mz.org.fgh.sifmoz.backend.drug.Drug
 import mz.org.fgh.sifmoz.backend.multithread.ReportSearchParams
 import mz.org.fgh.sifmoz.backend.stock.Stock
 import mz.org.fgh.sifmoz.backend.stock.StockService
-import mz.org.fgh.sifmoz.backend.stockentrance.StockEntrance
-import mz.org.fgh.sifmoz.backend.stockentrance.StockEntranceService
 
 @Transactional
 @Service(StockReportTemp)

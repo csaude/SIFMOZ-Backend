@@ -5,7 +5,6 @@ import mz.org.fgh.sifmoz.backend.multithread.ReportSearchParams
 import mz.org.fgh.sifmoz.backend.reports.common.ReportProcessMonitor
 
 interface IReferredPatientsReportService {
-
     ReferredPatientsReport get(Serializable id)
 
     List<ReferredPatientsReport> list(Map args)
@@ -21,5 +20,6 @@ interface IReferredPatientsReportService {
     void processReportReferredDispenseRecords(ReportSearchParams searchParams, ReportProcessMonitor processMonitor)
 
     void processReportAbsentReferredDispenseRecords(ReportSearchParams searchParams, ReportProcessMonitor processMonitor)
+
 
 }

@@ -99,11 +99,12 @@ abstract class UsedStockReportService implements IUsedStockReportService {
                 "           ))) as saldo" +
                 " from Drug dr " +
                 " where dr.active = true And" +
-                "       dr.clinicalService.id=: clinicalService" +
-                "       and exists (select s " +
+                //"       dr.clinicalService.id=: clinicalService and" +
+                "        exists (select s " +
                 "                   from Stock s inner join s.entrance se " +
                 "                   where s.drug = dr and s.clinic = :clinic)",
-                [startDate: searchParams.getStartDate(), endDate: searchParams.getEndDate(), clinic: clinic, clinicalService: searchParams.getClinicalService()])
+                [startDate: searchParams.getStartDate(), endDate: searchParams.getEndDate(), clinic: clinic])
+      //  clinicalService: searchParams.getClinicalService()
 
         for (int i = 0; i < list.size() - 1; i++) {
             generateAndSaveUsedStockSubReport(list[i], searchParams)

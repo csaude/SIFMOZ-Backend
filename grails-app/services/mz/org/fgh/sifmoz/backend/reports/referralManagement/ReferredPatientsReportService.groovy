@@ -5,18 +5,16 @@ import grails.gorm.transactions.Transactional
 import mz.org.fgh.sifmoz.backend.clinic.Clinic
 import mz.org.fgh.sifmoz.backend.convertDateUtils.ConvertDateUtils
 import mz.org.fgh.sifmoz.backend.episode.Episode
-import mz.org.fgh.sifmoz.backend.episode.EpisodeService
 import mz.org.fgh.sifmoz.backend.episode.IEpisodeService
 import mz.org.fgh.sifmoz.backend.multithread.ReportSearchParams
 import mz.org.fgh.sifmoz.backend.packaging.IPackService
 import mz.org.fgh.sifmoz.backend.packaging.Pack
-import mz.org.fgh.sifmoz.backend.packaging.PackService
 import mz.org.fgh.sifmoz.backend.prescription.IPrescriptionService
 import mz.org.fgh.sifmoz.backend.prescription.Prescription
-import mz.org.fgh.sifmoz.backend.prescription.PrescriptionService
 import mz.org.fgh.sifmoz.backend.prescriptionDetail.PrescriptionDetail
 import mz.org.fgh.sifmoz.backend.reports.common.IReportProcessMonitorService
 import mz.org.fgh.sifmoz.backend.reports.common.ReportProcessMonitor
+
 import mz.org.fgh.sifmoz.backend.reports.referralManagement.IReferredPatientsReportService
 import mz.org.fgh.sifmoz.backend.reports.referralManagement.ReferredPatientsReport
 import mz.org.fgh.sifmoz.backend.service.ClinicalService
@@ -68,6 +66,7 @@ abstract class ReferredPatientsReportService implements IReferredPatientsReportS
         }
     }
 
+    @Override
     void processReportReferredDispenseRecords(ReportSearchParams searchParams, ReportProcessMonitor processMonitor) {
         Clinic clinic = Clinic.findById(searchParams.clinicId)
         ClinicalService clinicalService = ClinicalService.findById(searchParams.clinicalService)
@@ -90,13 +89,14 @@ abstract class ReferredPatientsReportService implements IReferredPatientsReportS
         }
     }
 
+    @Override
     void processReportAbsentReferredDispenseRecords(ReportSearchParams searchParams, ReportProcessMonitor processMonitor) {
         Clinic clinic = Clinic.findById(searchParams.clinicId)
         ClinicalService clinicalService = ClinicalService.findById(searchParams.clinicalService)
         List absentReferredPatients = packService.getAbsentReferredPatientsByClinicalServiceAndClinicOnPeriod(clinicalService,clinic,searchParams.startDate,searchParams.endDate)
         double percentageUnit = 100/absentReferredPatients.size()
         for (int i = 0; i < absentReferredPatients.size(); i ++) {
-            Object item = absentReferredPatients[0]
+            Object item = absentReferredPatients[i]
             Episode episode = (Episode) item[0]
             ReferredPatientsReport referredPatientAbsent = setGenericInfo(searchParams,clinic,episode)
 
@@ -134,4 +134,5 @@ abstract class ReferredPatientsReportService implements IReferredPatientsReportS
         referredPatient.setReferralPharmacy(episode.referralClinic.clinicName)
         return referredPatient
     }
+
 }

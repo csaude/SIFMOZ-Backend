@@ -1,16 +1,19 @@
 package mz.org.fgh.sifmoz.backend.reports.monitoringAndEvaluation
 
+import grails.converters.JSON
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
+import mz.org.fgh.sifmoz.backend.clinic.Clinic
+import mz.org.fgh.sifmoz.backend.distribuicaoAdministrativa.District
+import mz.org.fgh.sifmoz.backend.distribuicaoAdministrativa.Province
 import mz.org.fgh.sifmoz.backend.multithread.MultiThreadRestReportController
 import mz.org.fgh.sifmoz.backend.multithread.ReportSearchParams
-import mz.org.fgh.sifmoz.report.ReportGenerator
+import mz.org.fgh.sifmoz.backend.utilities.JSONSerializer
+import mz.org.fgh.sifmoz.backend.utilities.Utilities
 import org.hibernate.SessionFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.orm.hibernate5.SessionFactoryUtils
 
 import javax.sql.DataSource
-import java.sql.Connection
 
 import static org.springframework.http.HttpStatus.*
 
@@ -96,8 +99,7 @@ class ArvDailyRegisterReportController extends MultiThreadRestReportController {
 
     def initReportProcess(ReportSearchParams searchParams) {
         super.initReportParams(searchParams)
-        respond status: OK, view: "show"
-        render qtyToProcess: qtyRecordsToProcess
+        render JSONSerializer.setJsonObjectResponse(this.processStatus) as JSON
         doProcessReport()
     }
     /**
@@ -113,14 +115,14 @@ class ArvDailyRegisterReportController extends MultiThreadRestReportController {
 
     def printReport(String reportId, String fileType) {
         List<ArvDailyRegisterReportTemp> itemsReport = arvDailyRegisterReportService.getReportDataByReportId(reportId)
-        Connection connection = SessionFactoryUtils.getDataSource(sessionFactory).getConnection();
         Map<String, Object> map = new HashMap<>()
-        map.put("reportId", reportId)
-        map.put("path", "/home/erciliofrancisco/Documents/local/dev/idmed/SIFMOZ-Backend/src/main/webapp/reports/")
-        byte[] report = ReportGenerator.generateReport(map,
-                "/home/erciliofrancisco/Documents/local/dev/idmed/SIFMOZ-Backend/src/main/webapp/reports/monitoring/",
-                "LivroRegistoDiarioARV.jrxml",fileType, connection)
-        render(file: report, contentType: 'application/pdf')
+        map.put("facilityName", itemsReport.get(0).getPharmacyId() == null ? "" : Clinic.findById(itemsReport.get(0).getPharmacyId()).getClinicName())
+        map.put("endDate", itemsReport.get(0).getEndDate())
+        map.put("startDate", itemsReport.get(0).getStartDate())
+        map.put("province", itemsReport.get(0).getProvinceId() == null ? "" : Province.findById(itemsReport.get(0).getProvinceId()).getDescription())
+        map.put("district", itemsReport.get(0).getDistrictId() == null ? "" : District.findById(itemsReport.get(0).getDistrictId()).getDescription())
+        byte[] report = super.printReport(reportId, fileType, getReportsPath() + "monitoring/LivroRegistoDiarioARV.jrxml", map, null)
+        render(file: report, contentType: 'application/' + fileType.equalsIgnoreCase("PDF") ? 'pdf' : 'xls')
     }
 
 
@@ -138,8 +140,13 @@ class ArvDailyRegisterReportController extends MultiThreadRestReportController {
         return 0
     }
 
+    def getProcessingStatus(String reportId) {
+        render JSONSerializer.setJsonObjectResponse(reportProcessMonitorService.getByReportId(reportId)) as JSON
+    }
+
     @Override
     protected String getProcessingStatusMsg() {
-        return null
+        if (!Utilities.stringHasValue(processStage)) processStage = PROCESS_STATUS_INITIATING
+        return processStage
     }
 }

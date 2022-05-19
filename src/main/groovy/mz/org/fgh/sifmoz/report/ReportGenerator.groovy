@@ -5,18 +5,20 @@ import net.sf.jasperreports.engine.JasperCompileManager
 import net.sf.jasperreports.engine.JasperExportManager
 import net.sf.jasperreports.engine.JasperFillManager
 import net.sf.jasperreports.engine.JasperReport
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource
 import net.sf.jasperreports.engine.data.JRMapCollectionDataSource
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter
 import net.sf.jasperreports.export.Exporter
 import net.sf.jasperreports.export.SimpleExporterInput
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput
 import net.sf.jasperreports.export.SimpleXlsxReportConfiguration
+import org.apache.commons.collections.CollectionUtils
 
 import java.sql.Connection
 
 class ReportGenerator {
 
-    static byte[] generateReport(Map<String, Object> parameters, String fileType,Collection reportObjects, String reportPath ) {
+    static byte[] generateReport(Map<String, Object> parameters, String fileType, Collection reportObjects, String reportPath) {
         return generateReport(parameters, reportPath, fileType, null, reportObjects)
     }
 
@@ -28,59 +30,9 @@ class ReportGenerator {
         try {
             def jasperPrint
             JasperReport jasperReport = JasperCompileManager.compileReport(reportPath)
-<<<<<<< HEAD
-            def jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, mapCollectionDataSource)
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()
-            JasperExportManager.exportReportToPdfStream(jasperPrint, byteArrayOutputStream)
-            return byteArrayOutputStream.toByteArray()
-            // render(file: byteArrayOutputStream.toByteArray(), contentType: 'application/pdf')
-            //     response.setContentType("application/pdf")  //<-- you'll have to handle this dynamically at some point
-            //    response.setHeader("Content-disposition", "attachment;filename=${11}")
-            //   response.outputStream <<  byteArrayOutputStream.toByteArray()
-        } catch (Exception e) {
-            throw new RuntimeException("It's not possible to generate the pdf report.", e);
-        }
-    }
-
-    static byte[] generateReport(Map<String, Object> parameters, List objects, String reportPath, String report ) {
-        try {
-            JRBeanCollectionDataSource mapCollectionDataSource = new JRBeanCollectionDataSource(objects)
-            // String reportUri = reportPath+"/"+report
-            JasperReport jasperReport = JasperCompileManager.compileReport(report)
-            def jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, mapCollectionDataSource)
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()
-            JasperExportManager.exportReportToPdfStream(jasperPrint, byteArrayOutputStream)
-            return byteArrayOutputStream.toByteArray()
-        } catch (Exception e) {
-            throw new RuntimeException("It's not possible to generate the pdf report.", e);
-        }
-    }
-
-    static byte[] generateReport(Map<String, Object> parameters, String reportPath, String report, Connection connection) {
-        try {
-            String reportUri = reportPath+"/"+report
-            JasperReport jasperReport = JasperCompileManager.compileReport(reportUri)
-            def jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection)
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()
-            JasperExportManager.exportReportToPdfStream(jasperPrint, byteArrayOutputStream)
-
-            /* JRXlsExporter xlsExporter = new JRXlsExporter();
-             xlsExporter.setExporterInput(new SimpleExporterInput(xlsPrint));
-             xlsExporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outXlsName));
-             SimpleXlsReportConfiguration xlsReportConfiguration = new SimpleXlsReportConfiguration();
-             xlsReportConfiguration.setOnePagePerSheet(false);
-             xlsReportConfiguration.setRemoveEmptySpaceBetweenRows(true);
-             xlsReportConfiguration.setDetectCellType(false);
-             xlsReportConfiguration.setWhitePageBackground(false);
-             xlsExporter.setConfiguration(xlsReportConfiguration);
-
-             xlsExporter.exportReport();*/
-
-            return byteArrayOutputStream.toByteArray()
-=======
-            if (Utilities.listHasElements(reportObjects as ArrayList<?>)) {
-                JRMapCollectionDataSource mapCollectionDataSource = new JRMapCollectionDataSource(reportObjects)
-                jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, mapCollectionDataSource)
+             if (CollectionUtils.isNotEmpty(reportObjects)) {
+                JRBeanCollectionDataSource jrbeanCollectionDataSource = new JRBeanCollectionDataSource(reportObjects)
+                jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, jrbeanCollectionDataSource)
             } else {
                 jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection)
             }
@@ -104,10 +56,10 @@ class ReportGenerator {
                 byteArrayOutputStream.writeTo(fileOutputStream);
 
                 return byteArrayOutputStream.toByteArray()
-            } else throw new IllegalArgumentException("Report type not supported ["+ fileType+"]")
->>>>>>> 6f35413ae40509586a1b46e4ddb62e9509f37b77
+            } else throw new IllegalArgumentException("Report type not supported [" + fileType + "]")
         } catch (Exception e) {
             throw new RuntimeException("It's not possible to generate the pdf report.", e);
         }
     }
+
 }

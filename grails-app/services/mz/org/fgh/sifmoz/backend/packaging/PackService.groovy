@@ -98,6 +98,7 @@ abstract class PackService implements IPackService{
                 [serviceCode:clinicalService.code,clinicId:clinic.id,startDate:startDate,endDate:endDate])
     }
 
+    @Override
     List getAbsentReferredPatientsByClinicalServiceAndClinicOnPeriod(ClinicalService clinicalService, Clinic clinic, Date startDate, Date endDate){
 
         def list = Pack.executeQuery("select ep as episode," +
@@ -135,5 +136,45 @@ abstract class PackService implements IPackService{
                 [serviceCode:clinicalService.code,clinicId:clinic.id,startDate:startDate,endDate:endDate,days: 3])
 
        return list
+    }
+
+    @Override
+    List getAbsentPatientsByClinicalServiceAndClinicOnPeriod(ClinicalService clinicalService, Clinic clinic, Date startDate, Date endDate){
+
+        def list = Pack.executeQuery("select ep as episode," +
+                "pk.nextPickUpDate as dateMissedPickUp, " +
+                "p.cellphone as contact, " +
+                "(select pk4.pickupDate from Pack pk4 " +
+                "inner join pk4.patientVisitDetails as pvd2 " +
+                "inner join pvd2.patientVisit as pv2 " +
+                "inner join pvd2.episode as ep3 " +
+                "inner join ep3.patientServiceIdentifier as psi3 " +
+                "inner join psi3.service as s3 " +
+                "where psi.patient = psi3.patient and s3.code = :serviceCode and pk4.pickupDate > pk.nextPickUpDate and pk4.pickupDate <= :endDate) as returnedPickUp " +
+                "from Pack pk " +
+                "inner join pk.patientVisitDetails as pvd " +
+                "inner join pvd.patientVisit as pv " +
+                "inner join pvd.episode as ep " +
+                "inner join ep.startStopReason as stp " +
+                "inner join ep.patientServiceIdentifier as psi " +
+                "inner join psi.patient as p " +
+                "inner join psi.service as s " +
+                "inner join ep.clinic c " +
+                "where s.code = :serviceCode and c.id = :clinicId and pk.nextPickUpDate >= :startDate and pk.nextPickUpDate <= :endDate and DATE(pk.nextPickUpDate) + :days <= :endDate " +
+                "and psi.id in (select psi2.id from Episode ep2 " +
+                "inner join ep2.patientServiceIdentifier as psi2 " +
+                "inner join ep2.startStopReason as stp2 " +
+                "inner join psi2.service as s2 " +
+                "where stp.isStartReason = true and s2.code = :serviceCode and ep2.episodeDate >= :startDate and ep2.episodeDate <= :endDate) " +
+                "and pk.nextPickUpDate in (select max(pk2.nextPickUpDate) from Pack pk2 " +
+                "inner join pk2.patientVisitDetails as pvd2 " +
+                "inner join pvd2.patientVisit as pv2 " +
+                "inner join pvd2.episode as ep3 " +
+                "inner join ep3.patientServiceIdentifier as psi3 " +
+                "inner join psi3.service as s3 " +
+                "where psi.patient = psi3.patient and s3.code = :serviceCode and pk2.nextPickUpDate  >= :startDate and pk2.nextPickUpDate <= :endDate)",
+                [serviceCode:clinicalService.code,clinicId:clinic.id,startDate:startDate,endDate:endDate,days: 3])
+
+        return list
     }
 }

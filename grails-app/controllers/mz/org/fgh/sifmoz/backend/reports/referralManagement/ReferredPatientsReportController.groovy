@@ -137,7 +137,7 @@ class ReferredPatientsReportController extends MultiThreadRestReportController{
         List<ReferredPatientsReport> referredPatientsReports = ReferredPatientsReport.findAllByReportId(reportId)
         Map<String, Object> map = new HashMap<>()
         if (ArrayUtils.isNotEmpty(referredPatientsReports)) {
-            map.put("path", path)
+            map.put("path", getReportsPath())
             map.put("mainfacilityname", referredPatientsReports.get(0).getPharmacyId().isEmpty() ? "" : Clinic.findById(referredPatientsReports.get(0).getPharmacyId()).getClinicName())
             map.put("dateEnd", referredPatientsReports.get(0).getEndDate())
             map.put("date", referredPatientsReports.get(0).getStartDate())
@@ -152,21 +152,8 @@ class ReferredPatientsReportController extends MultiThreadRestReportController{
             } else {
                 reportPathFile = path+"/PacientesReferidosPara.jrxml"
             }
-            byte[] report = super.printReport(reportId, fileType, reportPathFile, map, referredPatientsReports as List<Map<String, Object>>)
+            byte[] report = super.printReport(reportId, fileType, reportPathFile, map, referredPatientsReports)
             render(file: report, contentType: 'application/'+fileType.equals("PDF")? 'pdf' : 'xls')
         }
-    }
-
-    private fillReportToPrint (String reportId, String fileType, String reportType) {
-
-        if(reportType.equals("HISTORICO_LEVANTAMENTO_PACIENTES_REFERIDOS")) {
-            referredPatientsReportService.processReportReferredDispenseRecords(searchParams)
-        } else if (reportType.equals("REFERIDOS_FALTOSOS_AO_LEVANTAMENTO")) {
-            referredPatientsReportService.processReportAbsentReferredDispenseRecords(searchParams)
-        }  else {
-            referredPatientsReportService.processReferredAndBackReferredReportRecords(searchParams)
-        }
-
-
     }
 }

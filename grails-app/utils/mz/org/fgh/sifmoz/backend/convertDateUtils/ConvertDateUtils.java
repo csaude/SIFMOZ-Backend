@@ -710,4 +710,12 @@ public class ConvertDateUtils {
             return 0;
         }
     }
+
+    public static double getAgeBetweenTwoDates(Date startDate, Date endDate) throws ParseException {
+        try {
+            return dateDiff(startDate, endDate, "dd-MM-yyyy");
+        } catch (Exception e) {
+            return 0;
+        }
+    }
 }
