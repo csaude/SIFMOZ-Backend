@@ -19,5 +19,5 @@ interface IHistoricoLevantamentoReportService {
 
     List<HistoricoLevantamentoReport> getReportDataByReportId(String reportId)
 
-    void doSave(List<HistoricoLevantamentoReport> historicoLevantamentoReports)
+    // void doSave(List<HistoricoLevantamentoReport> historicoLevantamentoReports)
 }

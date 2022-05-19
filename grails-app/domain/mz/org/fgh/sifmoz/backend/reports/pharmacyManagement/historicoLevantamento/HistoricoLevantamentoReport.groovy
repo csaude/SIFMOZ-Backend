@@ -3,12 +3,13 @@ package mz.org.fgh.sifmoz.backend.reports.pharmacyManagement.historicoLevantamen
 class HistoricoLevantamentoReport {
     String id
     String reportId
-    String clinicId
     String periodType
     int period
     int year
     Date startDate
     Date endDate
+    String province
+    String district
 
     String nid
     String firstNames
@@ -45,7 +46,7 @@ class HistoricoLevantamentoReport {
     }
     static constraints = {
         id generator: "uuid"
-        periodType nullable: false , inList: ['MONTH','QUARTER','SEMESTER','ANNUAL']
+        periodType nullable: false , inList: ['MONTH','QUARTER','SEMESTER','ANNUAL', 'SPECIFIC']
         startDate nullable: true
         endDate nullable: true
     }
@@ -56,7 +57,6 @@ class HistoricoLevantamentoReport {
         return "HistoricoLevantamentoReport{" +
                 " id='" + id + '\'' +
                 ", reportId='" + reportId + '\'' +
-                ", clinicId='" + clinicId + '\'' +
                 ", periodType='" + periodType + '\'' +
                 ", period=" + period +
                 ", year=" + year +

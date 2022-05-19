@@ -1,30 +1,20 @@
 package mz.org.fgh.sifmoz.backend.reports.pharmacyManagement.historicoLevantamento
 
-
-import grails.converters.*
-import mz.org.fgh.sifmoz.backend.clinic.Clinic
-import mz.org.fgh.sifmoz.backend.distribuicaoAdministrativa.District
-import mz.org.fgh.sifmoz.backend.distribuicaoAdministrativa.Province
+import grails.converters.JSON
 import mz.org.fgh.sifmoz.backend.multithread.MultiThreadRestReportController
 import mz.org.fgh.sifmoz.backend.multithread.ReportSearchParams
+import mz.org.fgh.sifmoz.backend.utilities.JSONSerializer
+import mz.org.fgh.sifmoz.backend.utilities.Utilities
 import mz.org.fgh.sifmoz.report.ReportGenerator
-
-import java.text.SimpleDateFormat
 
 class HistoricoLevantamentoReportController extends MultiThreadRestReportController {
     IHistoricoLevantamentoReportService historicoLevantamentoReportService
-    HistoricoLevantamentoReport historicoLevantamentoReport
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     HistoricoLevantamentoReportController() {
         super(HistoricoLevantamentoReport)
-    }
-
-    @Override
-    protected String getProcessingStatusMsg() {
-        return null
     }
 
     def index() { }
@@ -34,19 +24,7 @@ class HistoricoLevantamentoReportController extends MultiThreadRestReportControl
      */
     @Override
     void run() {
-        initHistryReport()
         processHistryReport()
-    }
-
-    private void initHistryReport() {
-        this.historicoLevantamentoReport = new HistoricoLevantamentoReport()
-        this.historicoLevantamentoReport.setReportId(getSearchParams().getId())
-        this.historicoLevantamentoReport.setClinicId(getSearchParams().getClinicId())
-        this.historicoLevantamentoReport.setPeriodType(getSearchParams().getPeriodType())
-        this.historicoLevantamentoReport.setPeriod(Integer.valueOf(getSearchParams().getPeriod()))
-        this.historicoLevantamentoReport.setYear(getSearchParams().getYear())
-        this.historicoLevantamentoReport.setStartDate(getSearchParams().getStartDate())
-        this.historicoLevantamentoReport.setEndDate(getSearchParams().getEndDate())
     }
 
     def initReportProcess (ReportSearchParams searchParams) {
@@ -59,24 +37,34 @@ class HistoricoLevantamentoReportController extends MultiThreadRestReportControl
         historicoLevantamentoReportService.processamentoDados(getSearchParams())
     }
 
-    def printReport(ReportSearchParams searchParams) {
-        Date stDate = new SimpleDateFormat("dd/MM/yyyy").parse("21/05/2019")
-        Date endDate = new SimpleDateFormat("dd/MM/yyyy").parse("21/03/2022")
-        String reportId = searchParams.getId()
+    def printReport(String reportId, String fileType) {
+        List<HistoricoLevantamentoReport> reportObjects = historicoLevantamentoReportService.getReportDataByReportId(reportId)
+        HistoricoLevantamentoReport historicoLevantamentoReport = reportObjects[0]
+
+//        String jrxmlFilePath = System.getProperty("user.home")+ File.separator + "HistoricoDeLevantamento.jrxml"
+        String jrxmlFilePath = getReportsPath()+"pharmacyManagement/HistoricoDeLevantamento.jrxml"
         Map<String, Object> map = new HashMap<>()
         map.put("path", System.getProperty("user.home"))
         map.put("reportId", reportId)
-        map.put("facilityName", Clinic.findById(searchParams.getClinicId()).getClinicName())
-        map.put("startDate", stDate)
-        map.put("endDate", endDate)
-        map.put("province", Province.findById(searchParams.getProvinceId()).getDescription())
-        map.put("district", District.findById(searchParams.getDistrictId()).getDescription())
-        map.put("year", searchParams.getYear().toString())
+        map.put("clinic", historicoLevantamentoReport.clinic)
+        map.put("province", historicoLevantamentoReport.province)
+        map.put("startDate", historicoLevantamentoReport.startDate)
+        map.put("endDate", historicoLevantamentoReport.endDate)
+        map.put("district", historicoLevantamentoReport.district)
+        map.put("year", historicoLevantamentoReport.getYear().toString())
 
-        List<HistoricoLevantamentoReport> reportObjects = historicoLevantamentoReportService.getReportDataByReportId(reportId)
-        String jrxmlFilePath = System.getProperty("user.home")+ File.separator + "HistoricoDeLevantamento.jrxml"
-
-        byte [] report = ReportGenerator.generateReport(map,reportObjects,jrxmlFilePath)
+        byte [] report = ReportGenerator.generateReport(map, fileType,reportObjects, jrxmlFilePath)
         render(file: report, contentType: 'application/pdf')
+    }
+
+
+    def getProcessingStatus(String reportId) {
+        render JSONSerializer.setJsonObjectResponse(reportProcessMonitorService.getByReportId(reportId)) as JSON
+    }
+
+    @Override
+    protected String getProcessingStatusMsg() {
+        if (!Utilities.stringHasValue(processStage)) processStage = PROCESS_STATUS_INITIATING
+        return processStage
     }
 }

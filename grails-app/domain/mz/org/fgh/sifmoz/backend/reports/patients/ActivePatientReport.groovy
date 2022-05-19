@@ -1,6 +1,6 @@
 package mz.org.fgh.sifmoz.backend.reports.patients
 
-class ActiveOrFaltosoPatientReport {
+class ActivePatientReport {
     String id
     String reportId
     String periodType
@@ -12,14 +12,12 @@ class ActiveOrFaltosoPatientReport {
     String middleNames
     String lastNames
     String gender
-    String ageOnEndDate
-    Date dateOfBirth
+    String age
     String cellphone
     String province
     String district
     String clinic // Report Parameter
     String nid
-    String reportType
     Date pickupDate
     Date nextPickUpDate
     String therapeuticRegimen
@@ -27,31 +25,34 @@ class ActiveOrFaltosoPatientReport {
     String dispenseType
     String patientType
 
-    ActiveOrFaltosoPatientReport() {
+    ActivePatientReport() {
     }
 
-    ActiveOrFaltosoPatientReport(String reportId, String firstNames, String middleNames, String lastNames, String gender, String cellphone, String therapeuticRegimen,  String therapeuticLine, String reportType) {
+    ActivePatientReport(String reportId, String firstNames, String middleNames, String lastNames, String gender, String cellphone, String therapeuticRegimen, String therapeuticLine,String periodType, String dispenseType, int year, Date startDate, Date endDate) {
         this.reportId = reportId
         this.firstNames = firstNames
         this.middleNames = middleNames
         this.lastNames = lastNames
         this.gender = gender
         this.cellphone = cellphone
-        this.reportType = reportType
         this.therapeuticRegimen = therapeuticRegimen
         this.therapeuticLine = therapeuticLine
+        this.periodType = periodType
+        this.year = year
+        this.startDate = startDate
+        this.endDate = endDate
+        this.dispenseType = dispenseType
     }
     static constraints = {
         id generator: "uuid"
         clinic nullable: true
         province nullable: true
         district nullable: true
-        periodType nullable: false, inList: ['MONTH', 'QUARTER', 'SEMESTER', 'ANNUAL']
-        reportType nullable: false, inList: ['ACTIVE_PATIENT', 'FALTOSO']
+        periodType nullable: false, inList: ['MONTH', 'QUARTER', 'SEMESTER', 'ANNUAL', 'SPECIFIC']
         startDate nullable: true
         endDate nullable: true
-        ageOnEndDate nullable: true
         year nullable: true
+        dispenseType nullable: false
     }
 
     static mapping = {
@@ -61,14 +62,13 @@ class ActiveOrFaltosoPatientReport {
 
     @Override
     public String toString() {
-        return "ActiveOrFaltosoPatientReport{" +
+        return "ActivePatientReport{" +
                 " Id='" + id + '\'' +
                 ", reportId='" + reportId + '\'' +
                 ", firstNames='" + firstNames + '\'' +
                 ", middleNames='" + middleNames + '\'' +
                 ", lastNames='" + lastNames + '\'' +
                 ", gender='" + gender + '\'' +
-                ", dateOfBirth=" + dateOfBirth +
                 ", cellphone='" + cellphone + '\'' +
                 ", provinceId='" + province + '\'' +
                 ", districtId='" + district + '\'' +
