@@ -49,7 +49,6 @@ public abstract class MultiThreadRestReportController<T> extends RestfulControll
         this.searchParams.determineStartEndDate();
         this.processStatus = new ReportProcessMonitor(getSearchParams().getId(), getProcessingStatusMsg(), 0);
         reportProcessMonitorService.save(this.processStatus);
-
     }
 
 
