@@ -29,6 +29,7 @@ abstract class AbsentPatientsReportService implements IAbsentPatientsReportServi
         ClinicalService clinicalService = ClinicalService.findById(searchParams.clinicalService)
         List absentReferredPatients = packService.getAbsentPatientsByClinicalServiceAndClinicOnPeriod(clinicalService,clinic,searchParams.startDate,searchParams.endDate)
         double percentageUnit
+
         if (absentReferredPatients.size() == 0) {
             processMonitor.setProgress(100)
             processMonitor.setMsg(PROCESS_STATUS_PROCESSING_FINISHED)

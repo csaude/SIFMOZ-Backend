@@ -77,6 +77,7 @@ abstract class ReferredPatientsReportService implements IReferredPatientsReportS
         }
     }
 
+
     @Override
     void processReportReferredDispenseRecords(ReportSearchParams searchParams, ReportProcessMonitor processMonitor) {
         Clinic clinic = Clinic.findById(searchParams.clinicId)
