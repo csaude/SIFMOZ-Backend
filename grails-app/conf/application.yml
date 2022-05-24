@@ -38,7 +38,7 @@ management:
 
 server:
     port:
-        8000
+        8884
 
 quartz:
     autoStartup: true
@@ -101,7 +101,7 @@ dataSource:
     dialect: org.hibernate.dialect.PostgreSQLDialect
     driverClassName: org.postgresql.Driver
     username: postgres
-    password: postgres
+    password: admin
 environments:
     development:
         dataSource:
