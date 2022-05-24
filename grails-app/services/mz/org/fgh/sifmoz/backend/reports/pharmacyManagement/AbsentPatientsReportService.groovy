@@ -12,6 +12,8 @@ import mz.org.fgh.sifmoz.backend.reports.common.ReportProcessMonitor
 import mz.org.fgh.sifmoz.backend.service.ClinicalService
 import org.springframework.beans.factory.annotation.Autowired
 
+import java.math.RoundingMode
+
 @Transactional
 @Service(AbsentPatientsReport)
 abstract class AbsentPatientsReportService implements IAbsentPatientsReportService{
@@ -20,12 +22,21 @@ abstract class AbsentPatientsReportService implements IAbsentPatientsReportServi
     @Autowired
     IReportProcessMonitorService reportProcessMonitorService
 
+    public static final String PROCESS_STATUS_PROCESSING_FINISHED = "Processamento terminado"
     @Override
     void processReportAbsentDispenseRecords(ReportSearchParams searchParams, ReportProcessMonitor processMonitor) {
         Clinic clinic = Clinic.findById(searchParams.clinicId)
         ClinicalService clinicalService = ClinicalService.findById(searchParams.clinicalService)
         List absentReferredPatients = packService.getAbsentPatientsByClinicalServiceAndClinicOnPeriod(clinicalService,clinic,searchParams.startDate,searchParams.endDate)
-        double percentageUnit = 100/absentReferredPatients.size()
+        double percentageUnit
+
+        if (absentReferredPatients.size() == 0) {
+            processMonitor.setProgress(100)
+            processMonitor.setMsg(PROCESS_STATUS_PROCESSING_FINISHED)
+            reportProcessMonitorService.save(processMonitor)
+        }  else{
+            percentageUnit = 100/absentReferredPatients.size()
+        }
         for (int i = 0; i < absentReferredPatients.size(); i ++) {
             Object item = absentReferredPatients[i]
             Episode episode = (Episode) item[0]
@@ -51,9 +62,13 @@ abstract class AbsentPatientsReportService implements IAbsentPatientsReportServi
             if(item[3] != null) {
                 absentPatient.setReturnedPickUp(item[3] as Date)
             }
-            processMonitor.setProgress(processMonitor.getProgress() + percentageUnit)
-            reportProcessMonitorService.save(processMonitor)
             save(absentPatient)
+            processMonitor.setProgress(processMonitor.getProgress() + percentageUnit)
+            if (100 == processMonitor.progress.intValue() || 99 == processMonitor.progress.intValue()) {
+                processMonitor.setProgress(100)
+                processMonitor.setMsg(PROCESS_STATUS_PROCESSING_FINISHED)
+            }
+            reportProcessMonitorService.save(processMonitor)
         }
     }
 }

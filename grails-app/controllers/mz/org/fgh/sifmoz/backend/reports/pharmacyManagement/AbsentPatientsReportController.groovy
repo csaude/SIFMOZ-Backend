@@ -110,8 +110,8 @@ class AbsentPatientsReportController extends MultiThreadRestReportController{
     void run() {
         absentPatientsReportService.processReportAbsentDispenseRecords(searchParams, this.processStatus)
     }
-    def getProcessingStatus() {
-        render JSONSerializer.setJsonObjectResponse(reportProcessMonitorService.getByReportId(searchParams.id)) as JSON
+    def getProcessingStatus(String reportId) {
+        render JSONSerializer.setJsonObjectResponse(reportProcessMonitorService.getByReportId(reportId)) as JSON
     }
 
     def deleteByReportId(String reportId) {
@@ -125,14 +125,16 @@ class AbsentPatientsReportController extends MultiThreadRestReportController{
         String reportPathFile = getReportsPath()+"pharmacyManagement/RelatorioAbandonosFaltososPersonalizado.jrxml"
         List<AbsentPatientsReport> absentPatientsReports = AbsentPatientsReport.findAllByReportId(reportId)
         Map<String, Object> map = new HashMap<>()
-        if (ArrayUtils.isNotEmpty(absentPatientsReports)) {
-           // map.put("path", getReportsPath())
+        if (absentPatientsReports.size() > 0) {
+            // map.put("path", getReportsPath())
             map.put("mainfacilityname", absentPatientsReports.get(0).getPharmacyId().isEmpty() ? "" : Clinic.findById(absentPatientsReports.get(0).getPharmacyId()).getClinicName())
             map.put("dateEnd", absentPatientsReports.get(0).getEndDate())
             map.put("date", absentPatientsReports.get(0).getStartDate())
 
             byte[] report = super.printReport(reportId, fileType, reportPathFile, map, absentPatientsReports)
             render(file: report, contentType: 'application/'+fileType.equals("PDF")? 'pdf' : 'xls')
+        } else {
+            render status: NO_CONTENT
         }
     }
 }

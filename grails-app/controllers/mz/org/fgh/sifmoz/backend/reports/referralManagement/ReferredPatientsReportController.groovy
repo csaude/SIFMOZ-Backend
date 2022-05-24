@@ -121,8 +121,8 @@ class ReferredPatientsReportController extends MultiThreadRestReportController{
     }
 
 
-    def getProcessingStatus() {
-        render JSONSerializer.setJsonObjectResponse(reportProcessMonitorService.getByReportId(searchParams.id)) as JSON
+    def getProcessingStatus(String reportId) {
+        render JSONSerializer.setJsonObjectResponse(reportProcessMonitorService.getByReportId(reportId)) as JSON
     }
 
     def deleteByReportId(String reportId) {
@@ -136,7 +136,7 @@ class ReferredPatientsReportController extends MultiThreadRestReportController{
         String path = getReportsPath()+"referralManagement"
         List<ReferredPatientsReport> referredPatientsReports = ReferredPatientsReport.findAllByReportId(reportId)
         Map<String, Object> map = new HashMap<>()
-        if (ArrayUtils.isNotEmpty(referredPatientsReports)) {
+        if (referredPatientsReports.size() > 0) {
             map.put("path", getReportsPath())
             map.put("mainfacilityname", referredPatientsReports.get(0).getPharmacyId().isEmpty() ? "" : Clinic.findById(referredPatientsReports.get(0).getPharmacyId()).getClinicName())
             map.put("dateEnd", referredPatientsReports.get(0).getEndDate())
@@ -154,6 +154,8 @@ class ReferredPatientsReportController extends MultiThreadRestReportController{
             }
             byte[] report = super.printReport(reportId, fileType, reportPathFile, map, referredPatientsReports)
             render(file: report, contentType: 'application/'+fileType.equals("PDF")? 'pdf' : 'xls')
+        } else {
+            render status: NO_CONTENT
         }
     }
 }
