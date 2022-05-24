@@ -1,0 +1,79 @@
+package mz.org.fgh.sifmoz.backend.patient
+
+import grails.testing.mixin.integration.Integration
+import grails.gorm.transactions.Rollback
+import org.grails.datastore.mapping.core.Datastore
+import org.springframework.beans.factory.annotation.Autowired
+import spock.lang.Specification
+
+@Integration
+@Rollback
+class PatientClinicalServiceSpec extends Specification {
+
+    IPatientService patientService
+    @Autowired Datastore datastore
+
+    private Long setupData() {
+        // TODO: Populate valid domain instances and return a valid ID
+        //new Patient(...).save(flush: true, failOnError: true)
+        //new Patient(...).save(flush: true, failOnError: true)
+        //Patient patient = new Patient(...).save(flush: true, failOnError: true)
+        //new Patient(...).save(flush: true, failOnError: true)
+        //new Patient(...).save(flush: true, failOnError: true)
+        assert false, "TODO: Provide a setupData() implementation for this generated test suite"
+        //patient.id
+    }
+
+    void cleanup() {
+        assert false, "TODO: Provide a cleanup implementation if using MongoDB"
+    }
+
+    void "test get"() {
+        setupData()
+
+        expect:
+        patientService.get(1) != null
+    }
+
+    void "test list"() {
+        setupData()
+
+        when:
+        List<Patient> patientList = patientService.list(max: 2, offset: 2)
+
+        then:
+        patientList.size() == 2
+        assert false, "TODO: Verify the correct instances are returned"
+    }
+
+    void "test count"() {
+        setupData()
+
+        expect:
+        patientService.count() == 5
+    }
+
+    void "test delete"() {
+        Long patientId = setupData()
+
+        expect:
+        patientService.count() == 5
+
+        when:
+        patientService.delete(patientId)
+        datastore.currentSession.flush()
+
+        then:
+        patientService.count() == 4
+    }
+
+    void "test save"() {
+        when:
+        assert false, "TODO: Provide a valid instance to save"
+        Patient patient = new Patient()
+        patientService.save(patient)
+
+        then:
+        patient.id != null
+    }
+}
