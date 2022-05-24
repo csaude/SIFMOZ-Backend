@@ -101,7 +101,7 @@ class ActivePatientReportController extends MultiThreadRestReportController {
      */
     @Override
     void run() {
-        activePatientReportService.doSave(activePatientReportService.processamentoDados(getSearchParams()))
+        activePatientReportService.doSave(activePatientReportService.processamentoDados(getSearchParams(),  this.processStatus),)
     }
 
     def printReport(String reportId, String fileType) {
@@ -113,12 +113,12 @@ class ActivePatientReportController extends MultiThreadRestReportController {
         Map<String, Object> map = new HashMap<>()
         map.put("path", System.getProperty("user.home"))
         map.put("reportId", reportId)
-        map.put("clinic", activePatientReport==null? "":Clinic.findById(activePatientReport.getId()).getClinicName())
+        map.put("clinic", activePatientReport==null? "":activePatientReport.getClinic())
         map.put("province", activePatientReport==null? "":activePatientReport.province)
         map.put("startDate", activePatientReport==null? "":activePatientReport.getStartDate())
         map.put("endDate", activePatientReport==null? "":activePatientReport.getEndDate())
-        map.put("district", activePatientReport==null? "":activePatientReport.district)
-        map.put("year", activePatientReport.getYear().toString())
+        map.put("district", activePatientReport==null? " ":activePatientReport.district)
+        map.put("year", activePatientReport==null? "":activePatientReport.year.toString())
 
         byte [] report = ReportGenerator.generateReport(map, fileType,reportObjects, jrxmlFilePath)
         render(file: report, contentType: 'application/pdf')

@@ -1,12 +1,11 @@
 package mz.org.fgh.sifmoz.report
 
-import mz.org.fgh.sifmoz.backend.utilities.Utilities
+
 import net.sf.jasperreports.engine.JasperCompileManager
 import net.sf.jasperreports.engine.JasperExportManager
 import net.sf.jasperreports.engine.JasperFillManager
 import net.sf.jasperreports.engine.JasperReport
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource
-import net.sf.jasperreports.engine.data.JRMapCollectionDataSource
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter
 import net.sf.jasperreports.export.Exporter
 import net.sf.jasperreports.export.SimpleExporterInput

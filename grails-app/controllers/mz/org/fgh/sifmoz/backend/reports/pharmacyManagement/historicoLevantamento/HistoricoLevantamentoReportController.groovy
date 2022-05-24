@@ -34,7 +34,7 @@ class HistoricoLevantamentoReportController extends MultiThreadRestReportControl
     }
 
     void processHistryReport() {
-        historicoLevantamentoReportService.processamentoDados(getSearchParams())
+        historicoLevantamentoReportService.processamentoDados(getSearchParams(),  this.processStatus)
     }
 
     def printReport(String reportId, String fileType) {
@@ -46,12 +46,12 @@ class HistoricoLevantamentoReportController extends MultiThreadRestReportControl
         Map<String, Object> map = new HashMap<>()
         map.put("path", System.getProperty("user.home"))
         map.put("reportId", reportId)
-        map.put("clinic", historicoLevantamentoReport.clinic)
-        map.put("province", historicoLevantamentoReport.province)
-        map.put("startDate", historicoLevantamentoReport.startDate)
-        map.put("endDate", historicoLevantamentoReport.endDate)
-        map.put("district", historicoLevantamentoReport.district)
-        map.put("year", historicoLevantamentoReport.getYear().toString())
+        map.put("clinic", historicoLevantamentoReport==null? "":historicoLevantamentoReport.clinic)
+        map.put("province", historicoLevantamentoReport==null? "":historicoLevantamentoReport.province)
+        map.put("startDate", historicoLevantamentoReport==null? "":historicoLevantamentoReport.startDate)
+        map.put("endDate", historicoLevantamentoReport==null? "":historicoLevantamentoReport.endDate)
+        map.put("district", historicoLevantamentoReport==null? "":historicoLevantamentoReport.district)
+        map.put("year", historicoLevantamentoReport==null? "":historicoLevantamentoReport.year.toString())
 
         byte [] report = ReportGenerator.generateReport(map, fileType,reportObjects, jrxmlFilePath)
         render(file: report, contentType: 'application/pdf')

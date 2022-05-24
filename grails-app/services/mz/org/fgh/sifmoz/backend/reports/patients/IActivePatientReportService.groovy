@@ -1,6 +1,7 @@
 package mz.org.fgh.sifmoz.backend.reports.patients
 
 import mz.org.fgh.sifmoz.backend.multithread.ReportSearchParams
+import mz.org.fgh.sifmoz.backend.reports.common.ReportProcessMonitor
 
 interface IActivePatientReportService {
 
@@ -12,7 +13,7 @@ interface IActivePatientReportService {
 
     ActivePatientReport delete(Serializable id)
 
-    List<ActivePatientReport> processamentoDados (ReportSearchParams reportSearchParams)
+    List<ActivePatientReport> processamentoDados (ReportSearchParams reportSearchParams, ReportProcessMonitor processMonitor)
 
     ActivePatientReport save(ActivePatientReport activeOrFaltosoPatientReport)
 

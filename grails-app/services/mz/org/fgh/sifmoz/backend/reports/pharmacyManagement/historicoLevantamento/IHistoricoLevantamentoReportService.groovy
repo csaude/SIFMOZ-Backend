@@ -2,6 +2,7 @@ package mz.org.fgh.sifmoz.backend.reports.pharmacyManagement.historicoLevantamen
 
 import grails.gorm.transactions.Transactional
 import mz.org.fgh.sifmoz.backend.multithread.ReportSearchParams
+import mz.org.fgh.sifmoz.backend.reports.common.ReportProcessMonitor
 
 @Transactional
 interface IHistoricoLevantamentoReportService {
@@ -13,7 +14,7 @@ interface IHistoricoLevantamentoReportService {
 
     HistoricoLevantamentoReport delete(Serializable id)
 
-    List<HistoricoLevantamentoReport> processamentoDados (ReportSearchParams reportSearchParams)
+    List<HistoricoLevantamentoReport> processamentoDados (ReportSearchParams reportSearchParams, ReportProcessMonitor processMonitor)
 
     HistoricoLevantamentoReport save(HistoricoLevantamentoReport historicoLevantamentoReport)
 
