@@ -12,8 +12,6 @@ import mz.org.fgh.sifmoz.backend.reports.common.ReportProcessMonitor
 import mz.org.fgh.sifmoz.backend.service.ClinicalService
 import org.springframework.beans.factory.annotation.Autowired
 
-import java.math.RoundingMode
-
 @Transactional
 @Service(AbsentPatientsReport)
 abstract class AbsentPatientsReportService implements IAbsentPatientsReportService{
@@ -28,14 +26,7 @@ abstract class AbsentPatientsReportService implements IAbsentPatientsReportServi
         Clinic clinic = Clinic.findById(searchParams.clinicId)
         ClinicalService clinicalService = ClinicalService.findById(searchParams.clinicalService)
         List absentReferredPatients = packService.getAbsentPatientsByClinicalServiceAndClinicOnPeriod(clinicalService,clinic,searchParams.startDate,searchParams.endDate)
-        double percentageUnit
-        if (absentReferredPatients.size() == 0) {
-            processMonitor.setProgress(100)
-            processMonitor.setMsg(PROCESS_STATUS_PROCESSING_FINISHED)
-            reportProcessMonitorService.save(processMonitor)
-        }  else{
-            percentageUnit = 100/absentReferredPatients.size()
-        }
+        double percentageUnit = 100/absentReferredPatients.size()
         for (int i = 0; i < absentReferredPatients.size(); i ++) {
             Object item = absentReferredPatients[i]
             Episode episode = (Episode) item[0]
@@ -62,12 +53,10 @@ abstract class AbsentPatientsReportService implements IAbsentPatientsReportServi
                 absentPatient.setReturnedPickUp(item[3] as Date)
             }
             save(absentPatient)
-            processMonitor.setProgress(processMonitor.getProgress() + percentageUnit)
-            if (100 == processMonitor.progress.intValue() || 99 == processMonitor.progress.intValue()) {
-                processMonitor.setProgress(100)
+            reportProcessMonitorService.save(processMonitor)
+            if (100 == processMonitor.progress.intValue()) {
                 processMonitor.setMsg(PROCESS_STATUS_PROCESSING_FINISHED)
             }
-            reportProcessMonitorService.save(processMonitor)
         }
     }
 }
