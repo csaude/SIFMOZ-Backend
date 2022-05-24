@@ -15,6 +15,7 @@ import org.springframework.orm.hibernate5.SessionFactoryUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
@@ -49,6 +50,7 @@ public abstract class MultiThreadRestReportController<T> extends RestfulControll
         this.searchParams.determineStartEndDate();
         this.processStatus = new ReportProcessMonitor(getSearchParams().getId(), getProcessingStatusMsg(), 0);
         reportProcessMonitorService.save(this.processStatus);
+
     }
 
 

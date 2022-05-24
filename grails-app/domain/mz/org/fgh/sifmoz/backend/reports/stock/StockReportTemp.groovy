@@ -48,7 +48,7 @@ class StockReportTemp {
         return "StockReportTemp{" +
                 "id='" + id + '\'' +
                 ", reportId='" + reportId + '\'' +
-                ", clinic='" + pharmacyId + '\'' +
+                ", pharmacyId='" + pharmacyId + '\'' +
                 ", provinceId='" + provinceId + '\'' +
                 ", districtId='" + districtId + '\'' +
                 ", period='" + period + '\'' +

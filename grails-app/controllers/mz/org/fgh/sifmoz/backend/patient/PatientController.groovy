@@ -49,64 +49,64 @@ class PatientController extends RestfulController {
         render JSONSerializer.setJsonObjectResponse(patientService.get(id)) as JSON
     }
 
-    @Transactional
-    def save(Patient patient) {
-        if (patient == null) {
-            render status: NOT_FOUND
-            return
-        }
-        if (patient.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond patient.errors
-            return
-        }
+        @Transactional
+        def save(Patient patient) {
+            if (patient == null) {
+                render status: NOT_FOUND
+                return
+            }
+            if (patient.hasErrors()) {
+                transactionStatus.setRollbackOnly()
+                respond patient.errors
+                return
+            }
 
-        try {
-            patientService.save(patient)
-        } catch (ValidationException e) {
-            respond patient.errors
-            return
-        }
+            try {
+                patientService.save(patient)
+            } catch (ValidationException e) {
+                respond patient.errors
+                return
+            }
 
-        respond patient, [status: CREATED, view: "show"]
-    }
-
-    @Transactional
-    def update(Patient patient) {
-        if (patient == null) {
-            render status: NOT_FOUND
-            return
-        }
-        if (patient.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond patient.errors
-            return
+            respond patient, [status: CREATED, view: "show"]
         }
 
-        try {
-            patientService.save(patient)
-        } catch (ValidationException e) {
-            respond patient.errors
-            return
+        @Transactional
+        def update(Patient patient) {
+            if (patient == null) {
+                render status: NOT_FOUND
+                return
+            }
+            if (patient.hasErrors()) {
+                transactionStatus.setRollbackOnly()
+                respond patient.errors
+                return
+            }
+
+            try {
+                patientService.save(patient)
+            } catch (ValidationException e) {
+                respond patient.errors
+                return
+            }
+
+            respond patient, [status: OK, view: "show"]
         }
 
-        respond patient, [status: OK, view: "show"]
-    }
+        @Transactional
+        def delete(Long id) {
+            if (id == null || patientService.delete(id) == null) {
+                render status: NOT_FOUND
+                return
+            }
 
-    @Transactional
-    def delete(Long id) {
-        if (id == null || patientService.delete(id) == null) {
-            render status: NOT_FOUND
-            return
+            render status: NO_CONTENT
         }
 
-        render status: NO_CONTENT
-    }
-
-    def getByClinicId(String clinicId, int offset, int max) {
-        render JSONSerializer.setObjectListJsonResponse(patientService.getAllByClinicId(clinicId, offset, max)) as JSON
-        //respond patientService.getAllByClinicId(clinicId, offset, max)
-    }
+        def getByClinicId(String clinicId, int offset, int max) {
+            render JSONSerializer.setObjectListJsonResponse(patientService.getAllByClinicId(clinicId, offset, max)) as JSON
+            //respond patientService.getAllByClinicId(clinicId, offset, max)
+        }
 
 
     def getOpenMRSSession(String interoperabilityId, String username, String password) {
@@ -115,7 +115,7 @@ class PatientController extends RestfulController {
         InteroperabilityType interoperabilityType = InteroperabilityType.findByCode("URL_BASE")
         InteroperabilityAttribute interoperabilityAttribute = InteroperabilityAttribute.findByHealthInformationSystemAndInteroperabilityType(healthInformationSystem, interoperabilityType)
 
-        render RestOpenMRSClient.getResponseOpenMRSClient(username, password, null, interoperabilityAttribute.value, "session", "GET")
+       render RestOpenMRSClient.getResponseOpenMRSClient(username, password, null, interoperabilityAttribute.value, "session", "GET")
 
     }
 
@@ -144,7 +144,7 @@ class PatientController extends RestfulController {
         map.put("clinicid", clinic.getId())
         Map<String, Object> map1 = new HashMap<String, Object>()
         map1.put("clinicname", clinic.getClinicName())
-        List<Map<String, Object>> reportObjects = new ArrayList<>()
+           List<Map<String, Object>> reportObjects = new ArrayList<>()
         //    List<Map<String, Object>> reportObjects = new ArrayList<Map<String, Object>>()
         for (PatientServiceIdentifier patient:patients) {
             Map<String, Object> reportObject = new HashMap<String, Object>()
