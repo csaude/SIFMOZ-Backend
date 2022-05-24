@@ -20,7 +20,6 @@ abstract class AbsentPatientsReportService implements IAbsentPatientsReportServi
     @Autowired
     IReportProcessMonitorService reportProcessMonitorService
 
-    public static final String PROCESS_STATUS_PROCESSING_FINISHED = "Processamento terminado"
     @Override
     void processReportAbsentDispenseRecords(ReportSearchParams searchParams, ReportProcessMonitor processMonitor) {
         Clinic clinic = Clinic.findById(searchParams.clinicId)
@@ -52,11 +51,9 @@ abstract class AbsentPatientsReportService implements IAbsentPatientsReportServi
             if(item[3] != null) {
                 absentPatient.setReturnedPickUp(item[3] as Date)
             }
-            save(absentPatient)
+            processMonitor.setProgress(processMonitor.getProgress() + percentageUnit)
             reportProcessMonitorService.save(processMonitor)
-            if (100 == processMonitor.progress.intValue()) {
-                processMonitor.setMsg(PROCESS_STATUS_PROCESSING_FINISHED)
-            }
+            save(absentPatient)
         }
     }
 }
