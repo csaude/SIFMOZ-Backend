@@ -42,7 +42,13 @@ abstract class ReferredPatientsReportService implements IReferredPatientsReportS
         Map<String , Prescription> prescriptionMap= prescriptionService.getLastPrescriptionsByClinicAndClinicalServiceAndEndDate(clinic,clinicalService,searchParams.endDate)
         List<Episode> episodes = episodeService.getEpisodeOfReferralOrBackReferral(clinic,clinicalService,searchParams.reportType,searchParams.startDate,searchParams.endDate)
         println(episodes)
-            double percentageUnit = 100/episodes.size()
+        double percentageUnit
+        if (episodes.size() == 0) {
+            setProcessMonitor(processMonitor)
+            reportProcessMonitorService.save(processMonitor)
+        }  else{
+            percentageUnit = 100/episodes.size()
+        }
         List<ReferredPatientsReport> referencesToCreate = new ArrayList<>()
         for (Episode episode:episodes) {
             Prescription lastPrescription = prescriptionMap.get(episode.patientServiceIdentifier.patient.id)
@@ -63,8 +69,8 @@ abstract class ReferredPatientsReportService implements IReferredPatientsReportS
             }
             referencesToCreate.add(referredPatient)
             processMonitor.setProgress(processMonitor.getProgress() + percentageUnit)
-            if (100 == processMonitor.progress.intValue()) {
-                processMonitor.setMsg(PROCESS_STATUS_PROCESSING_FINISHED)
+            if (100 == processMonitor.progress.intValue() || 99 == processMonitor.progress.intValue()) {
+                setProcessMonitor(processMonitor)
             }
             reportProcessMonitorService.save(processMonitor)
             save(referredPatient)
@@ -76,7 +82,13 @@ abstract class ReferredPatientsReportService implements IReferredPatientsReportS
         Clinic clinic = Clinic.findById(searchParams.clinicId)
         ClinicalService clinicalService = ClinicalService.findById(searchParams.clinicalService)
         List<Pack> packs = packService.getPacksOfReferredPatientsByClinicalServiceAndClinicOnPeriod(clinicalService,clinic,searchParams.startDate,searchParams.endDate)
-        double percentageUnit = 100/packs.size()
+        double percentageUnit
+        if (packs.size() == 0) {
+            setProcessMonitor(processMonitor)
+            reportProcessMonitorService.save(processMonitor)
+        }  else{
+            percentageUnit = 100/packs.size()
+        }
         for (Pack pack:packs) {
             Prescription prescription = pack.patientVisitDetails.getAt(0).prescription
             PrescriptionDetail prescriptionDetail = prescription.prescriptionDetails.getAt(0)
@@ -90,10 +102,10 @@ abstract class ReferredPatientsReportService implements IReferredPatientsReportS
             referredPatientDispense.setTarvType(prescription.patientType)
             save(referredPatientDispense)
             processMonitor.setProgress(processMonitor.getProgress() + percentageUnit)
-            reportProcessMonitorService.save(processMonitor)
-            if (100 == processMonitor.progress.intValue()) {
-                processMonitor.setMsg(PROCESS_STATUS_PROCESSING_FINISHED)
+            if (100 == processMonitor.progress.intValue() || 99 == processMonitor.progress.intValue()) {
+                setProcessMonitor(processMonitor)
             }
+            reportProcessMonitorService.save(processMonitor)
         }
     }
 
@@ -102,7 +114,13 @@ abstract class ReferredPatientsReportService implements IReferredPatientsReportS
         Clinic clinic = Clinic.findById(searchParams.clinicId)
         ClinicalService clinicalService = ClinicalService.findById(searchParams.clinicalService)
         List absentReferredPatients = packService.getAbsentReferredPatientsByClinicalServiceAndClinicOnPeriod(clinicalService,clinic,searchParams.startDate,searchParams.endDate)
-        double percentageUnit = 100/absentReferredPatients.size()
+        double percentageUnit
+        if (absentReferredPatients.size() == 0) {
+            setProcessMonitor(processMonitor)
+            reportProcessMonitorService.save(processMonitor)
+        }  else{
+            percentageUnit = 100/absentReferredPatients.size()
+        }
         for (int i = 0; i < absentReferredPatients.size(); i ++) {
             Object item = absentReferredPatients[i]
             Episode episode = (Episode) item[0]
@@ -120,10 +138,11 @@ abstract class ReferredPatientsReportService implements IReferredPatientsReportS
                 referredPatientAbsent.setReturnedPickUp(item[3] as Date)
             }
             save(referredPatientAbsent)
-            reportProcessMonitorService.save(processMonitor)
-            if (100 == processMonitor.progress.intValue()) {
-                processMonitor.setMsg(PROCESS_STATUS_PROCESSING_FINISHED)
+            processMonitor.setProgress(processMonitor.getProgress() + percentageUnit)
+            if (100 == processMonitor.progress.intValue() || 99 == processMonitor.progress.intValue()) {
+              setProcessMonitor(processMonitor)
             }
+            reportProcessMonitorService.save(processMonitor)
         }
 
     }
@@ -145,4 +164,8 @@ abstract class ReferredPatientsReportService implements IReferredPatientsReportS
         return referredPatient
     }
 
+    private ReportProcessMonitor setProcessMonitor(ReportProcessMonitor processMonitor) {
+        processMonitor.setProgress(100)
+        processMonitor.setMsg(PROCESS_STATUS_PROCESSING_FINISHED)
+    }
 }
