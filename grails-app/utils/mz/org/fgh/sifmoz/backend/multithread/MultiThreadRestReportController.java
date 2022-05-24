@@ -59,9 +59,9 @@ public abstract class MultiThreadRestReportController<T> extends RestfulControll
      */
     protected void doProcessReport() {
         executor.execute(this);
-     //   this.processStage = PROCESS_STATUS_PROCESSING_FINISHED;
-      //  this.processStatus.setProgress(100);
-     //   reportProcessMonitorService.save(this.processStatus);
+        this.processStage = PROCESS_STATUS_PROCESSING_FINISHED;
+        this.processStatus.setProgress(100);
+        reportProcessMonitorService.save(this.processStatus);
     }
 
     protected void updateProcessingStatus() {
