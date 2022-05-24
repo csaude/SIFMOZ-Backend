@@ -32,8 +32,6 @@ abstract class ReferredPatientsReportService implements IReferredPatientsReportS
     @Autowired
     IReportProcessMonitorService reportProcessMonitorService
 
-    public static final String PROCESS_STATUS_PROCESSING_FINISHED = "Processamento terminado"
-
     @Override
     void processReferredAndBackReferredReportRecords(ReportSearchParams searchParams, ReportProcessMonitor processMonitor) {
 
@@ -63,9 +61,6 @@ abstract class ReferredPatientsReportService implements IReferredPatientsReportS
             }
             referencesToCreate.add(referredPatient)
             processMonitor.setProgress(processMonitor.getProgress() + percentageUnit)
-            if (100 == processMonitor.progress.intValue()) {
-                processMonitor.setMsg(PROCESS_STATUS_PROCESSING_FINISHED)
-            }
             reportProcessMonitorService.save(processMonitor)
             save(referredPatient)
         }
@@ -88,12 +83,9 @@ abstract class ReferredPatientsReportService implements IReferredPatientsReportS
             referredPatientDispense.setPickUpDate(pack.pickupDate)
             referredPatientDispense.setNextPickUpDate(pack.nextPickUpDate)
             referredPatientDispense.setTarvType(prescription.patientType)
-            save(referredPatientDispense)
             processMonitor.setProgress(processMonitor.getProgress() + percentageUnit)
             reportProcessMonitorService.save(processMonitor)
-            if (100 == processMonitor.progress.intValue()) {
-                processMonitor.setMsg(PROCESS_STATUS_PROCESSING_FINISHED)
-            }
+            save(referredPatientDispense)
         }
     }
 
@@ -119,11 +111,9 @@ abstract class ReferredPatientsReportService implements IReferredPatientsReportS
             if(item[3] != null) {
                 referredPatientAbsent.setReturnedPickUp(item[3] as Date)
             }
-            save(referredPatientAbsent)
+            processMonitor.setProgress(processMonitor.getProgress() + percentageUnit)
             reportProcessMonitorService.save(processMonitor)
-            if (100 == processMonitor.progress.intValue()) {
-                processMonitor.setMsg(PROCESS_STATUS_PROCESSING_FINISHED)
-            }
+            save(referredPatientAbsent)
         }
 
     }
