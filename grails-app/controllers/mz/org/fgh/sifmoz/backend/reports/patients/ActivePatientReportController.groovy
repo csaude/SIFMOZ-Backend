@@ -101,8 +101,15 @@ class ActivePatientReportController extends MultiThreadRestReportController {
         activePatientReportService.doSave(activePatientReportService.processamentoDados(getSearchParams(),  this.processStatus),)
     }
 
+    def getProcessedData(String reportId) {
+        List<ActivePatientReport> reportObjects = activePatientReportService.getReportDataByReportId(reportId)
+//        render JSONSerializer.setJsonObjectResponse(activePatientReportService.getReportDataByReportId(reportId)) as JSON
+        render reportObjects as JSON
+    }
+
     def printReport(String reportId, String fileType) {
         List<ActivePatientReport> reportObjects = activePatientReportService.getReportDataByReportId(reportId)
+        println(reportObjects.size())
         ActivePatientReport activePatientReport = reportObjects[0]
 //        String jrxmlFilePath = System.getProperty("user.home")+ File.separator + "PacientesActivos.jrxml"
         String jrxmlFilePath = getReportsPath()+"patient/PacientesActivos.jrxml"
@@ -118,7 +125,28 @@ class ActivePatientReportController extends MultiThreadRestReportController {
 
         byte [] report = ReportGenerator.generateReport(map, fileType,reportObjects, jrxmlFilePath)
         render(file: report, contentType: 'application/pdf')
+        render reportObjects as JSON
     }
+
+//    def printReport(String reportId, String fileType) {
+//        List<ActivePatientReport> reportObjects = activePatientReportService.getReportDataByReportId(reportId)
+//        println(reportObjects.size())
+//        ActivePatientReport activePatientReport = reportObjects[0]
+////        String jrxmlFilePath = System.getProperty("user.home")+ File.separator + "PacientesActivos.jrxml"
+//        String jrxmlFilePath = getReportsPath()+"patient/PacientesActivos.jrxml"
+//        Map<String, Object> map = new HashMap<>()
+//        map.put("path", System.getProperty("user.home"))
+//        map.put("reportId", reportId)
+//        map.put("clinic", activePatientReport==null? "":activePatientReport.getClinic())
+//        map.put("province", activePatientReport==null? "":activePatientReport.province)
+//        map.put("startDate", activePatientReport==null? "":activePatientReport.getStartDate())
+//        map.put("endDate", activePatientReport==null? "":activePatientReport.getEndDate())
+//        map.put("district", activePatientReport==null? " ":activePatientReport.district)
+//        map.put("year", activePatientReport==null? "":activePatientReport.year.toString())
+//
+//        byte [] report = ReportGenerator.generateReport(map, fileType,reportObjects, jrxmlFilePath)
+//        render(file: report, contentType: 'application/pdf')
+//    }
 
 
     protected int countProcessedRecs() {
