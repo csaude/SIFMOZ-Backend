@@ -15,11 +15,11 @@ class PatientVisitDetails extends BaseEntity {
     String id
     Episode episode
     Clinic clinic
-    Prescription prescription
+   Prescription prescription
     Pack pack
     PatientVisit patientVisit
 
-    static belongsTo = [PatientVisit]
+    static belongsTo = [patientVisit:PatientVisit]
 
     static mapping = {
         id generator: "uuid"

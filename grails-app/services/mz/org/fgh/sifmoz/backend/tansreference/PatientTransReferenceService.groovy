@@ -23,48 +23,16 @@ abstract class PatientTransReferenceService implements IPatientTransReferenceSer
     IEpisodeService episodeService
 
     @Override
-    TransReferenceData getPatientTransReferenceDetailsByNid(String nid){
+    TransReferenceData getPatientTransReferenceDetailsByNid(String nid, String destinationClinicUuid){
        PatientServiceIdentifier patientServiceIdentifier = PatientServiceIdentifier.findByValue(nid)
-        PatientTransReference pt = PatientTransReference.findByIdentifier(patientServiceIdentifier)
+       PatientTransReferenceType transReferenceType = PatientTransReferenceType.findByCode('TRANSFERENCIA')
+        PatientTransReference pt = PatientTransReference.findByIdentifierAndDestinationAndOperationType(patientServiceIdentifier,destinationClinicUuid,transReferenceType)
 
         Episode episode = episodeService.getLastInitialEpisodeByIdentifier(pt.identifier.id)
         PatientVisitDetails lastVisitDetails = visitDetailsService.getLastVisitByEpisodeId(episode.id)
         TransReferenceData transReferenceData = new TransReferenceData()
         transReferenceData.setId(111)
-   //     transReferenceData.setDestinationClinic(pt.identifier.clinic)
-    //    transReferenceData.setOriginClinic(pt.getOrigin())
-  //    transReferenceData.setPatientServiceIdentifier(pt.identifier)
-    //    transReferenceData.setPatientVisit(lastVisitDetails.patientVisit)
-        /*     transReferenceData.setPrescription(lastVisitDetails.prescription)
-             transReferenceData.setPack(lastVisitDetails.pack)
 
-
-             List<PrescribedDrug> prescribedDrugList = new ArrayList<>()
-             for(PrescribedDrug prescribedDrug : lastVisitDetails.prescription.prescribedDrugs) {
-                 prescribedDrugList.add(prescribedDrug)
-             }
-             transReferenceData.setPrescribedDrugs(prescribedDrugList)
-
-             List<PackagedDrug> packagedDrugList = new ArrayList<>()
-             for(PackagedDrug packagedDrug : lastVisitDetails.pack.packagedDrugs) {
-                 packagedDrugList.add(packagedDrug)
-             }
-             transReferenceData.setPackagedDrugs(packagedDrugList)
-
- String cellphone;
-  String alternativeCellphone;
-  String address;
-  String addressReference;
-  boolean accountstatus;
-  String hisUuid;
-  String hisLocation;
-  String hisLocationName;
-  HealthInformationSystem his;
-  String provinceCode;
-  String bairroCode;
-  String districtCode;
-  String postoAdministrativoCode;
-          */
         transReferenceData.setFirstNames(pt.identifier.patient.firstNames)
         transReferenceData.setLastNames(pt.identifier.patient.lastNames)
         transReferenceData.setMiddleNames(pt.identifier.patient.middleNames)
@@ -135,7 +103,7 @@ abstract class PatientTransReferenceService implements IPatientTransReferenceSer
        pd.put("form", prescribedDrugs.form)
        listPD.add(pd);
       }
-      transReferenceData.setJsonPrescribedDrug(listPD.toString());
+      transReferenceData.setJsonPrescribedDrug(listPD);
      }
 
      if (!lastVisitDetails.pack.packagedDrugs.isEmpty()) {
@@ -148,10 +116,10 @@ abstract class PatientTransReferenceService implements IPatientTransReferenceSer
        packagedDrugs.put("quantitySupplied", packageDrug.quantitySupplied)
        packagedDrugs.put("nextPickUpDate", packageDrug.nextPickUpDate)
        packagedDrugs.put("toContinue", packageDrug.toContinue)
-       listPackD.add(packageDrug);
+       listPackD.add(packagedDrugs);
 
       }
-      transReferenceData.setJsonPackagedDrug(listPackD.toString());
+      transReferenceData.setJsonPackagedDrug(listPackD);
      }
         return transReferenceData;
 

@@ -16,6 +16,6 @@ interface IPatientTransReferenceService {
 
     PatientTransReference save(PatientTransReference patientTransReference)
 
-    TransReferenceData getPatientTransReferenceDetailsByNid(String nid)
+    TransReferenceData getPatientTransReferenceDetailsByNid(String nid, String destinationClinicUuid)
 
 }

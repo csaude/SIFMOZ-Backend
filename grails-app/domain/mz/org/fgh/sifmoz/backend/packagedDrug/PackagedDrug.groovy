@@ -25,7 +25,7 @@ class PackagedDrug extends BaseEntity {
     }
 
     static constraints = {
-        quantitySupplied(min: 1)
+        quantitySupplied(min: 0)
         nextPickUpDate nullable: true
         creationDate nullable: true
     }

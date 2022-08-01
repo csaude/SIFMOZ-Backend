@@ -23,6 +23,7 @@ import mz.org.fgh.sifmoz.backend.startStopReason.StartStopReason;
 import mz.org.fgh.sifmoz.backend.therapeuticLine.TherapeuticLine;
 import mz.org.fgh.sifmoz.backend.therapeuticRegimen.TherapeuticRegimen;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,17 +31,6 @@ public class TransReferenceData {
 
 
     Long id;
-  //  Clinic originClinic;
-//    Clinic destinationClinic;
-  //  PatientServiceIdentifier patientServiceIdentifier;
- //   PatientVisit patientVisit;
-  //  PatientVisitDetails patientVisitDetails;
- //   Prescription prescription;
-  //  Pack pack;
-  //  List<PrescribedDrug> prescribedDrugs;
-   // List<PackagedDrug> packagedDrugs;
-   // String dispenseModeCode;
-
   String firstNames;
   String middleNames;
   String lastNames;
@@ -102,8 +92,8 @@ public class TransReferenceData {
   String dispenseModeCode;
 
 
-  String jsonPrescribedDrug;
-  String jsonPackagedDrug;
+  ArrayList<String> jsonPrescribedDrug;
+  ArrayList<String> jsonPackagedDrug;
    //Falta prescribedDrug organizar json
 
     public Long getId() {
@@ -586,19 +576,19 @@ public class TransReferenceData {
     this.dispenseModeCode = dispenseModeCode;
   }
 
-  public String getJsonPrescribedDrug() {
+  public ArrayList<String> getJsonPrescribedDrug() {
     return jsonPrescribedDrug;
   }
 
-  public void setJsonPrescribedDrug(String jsonPrescribedDrug) {
+  public void setJsonPrescribedDrug(ArrayList<String> jsonPrescribedDrug) {
     this.jsonPrescribedDrug = jsonPrescribedDrug;
   }
 
-  public String getJsonPackagedDrug() {
+  public ArrayList<String> getJsonPackagedDrug() {
     return jsonPackagedDrug;
   }
 
-  public void setJsonPackagedDrug(String jsonPackagedDrug) {
+  public void setJsonPackagedDrug(ArrayList<String> jsonPackagedDrug) {
     this.jsonPackagedDrug = jsonPackagedDrug;
   }
 }

@@ -88,12 +88,7 @@ class PatientTransReferenceController extends RestfulController{
         render status: NO_CONTENT
     }
 
-    def getDetailsByNid(String nid) {
-      //  render JSONSerializer.setObjectListJsonResponse(prescriptionService.getAllByClinicId(clinicId, offset, max)) as JSON
-     //   Gson gson = new Gson();
-   //    render gson.toJson(patientTransReferenceService.getPatientTransReferenceDetailsByNid(nid)) as JSON
-      render JSONSerializer.setJsonObjectResponse(patientTransReferenceService.getPatientTransReferenceDetailsByNid(nid)) as JSON
-    //      render  patientTransReferenceService.getPatientTransReferenceDetailsByNid(nid) as JSON
-
+    def getDetailsByNid(String nid , String destinationClinicUuid) {
+      render JSONSerializer.setJsonObjectResponse(patientTransReferenceService.getPatientTransReferenceDetailsByNid(nid,destinationClinicUuid)) as JSON
     }
 }
