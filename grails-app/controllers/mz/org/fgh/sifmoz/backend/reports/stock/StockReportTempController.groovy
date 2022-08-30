@@ -10,7 +10,7 @@ import mz.org.fgh.sifmoz.backend.utilities.Utilities
 
 import static org.springframework.http.HttpStatus.*
 
-class ReceivedStockReportController extends MultiThreadRestReportController {
+class StockReportTempController extends MultiThreadRestReportController {
 
 
     IStockReportService stockReportService
@@ -18,7 +18,7 @@ class ReceivedStockReportController extends MultiThreadRestReportController {
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    ReceivedStockReportController() {
+    StockReportTempController() {
         super(StockReportTemp)
     }
 

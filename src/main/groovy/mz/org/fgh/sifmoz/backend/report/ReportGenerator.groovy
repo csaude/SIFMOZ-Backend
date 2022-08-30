@@ -1,4 +1,4 @@
-package mz.org.fgh.sifmoz.report
+package mz.org.fgh.sifmoz.backend.report
 
 import mz.org.fgh.sifmoz.backend.utilities.Utilities
 import net.sf.jasperreports.engine.JasperCompileManager

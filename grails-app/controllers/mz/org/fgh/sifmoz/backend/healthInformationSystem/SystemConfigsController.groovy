@@ -1,9 +1,14 @@
 package mz.org.fgh.sifmoz.backend.healthInformationSystem
 
+import grails.converters.JSON
 import grails.validation.ValidationException
 import mz.org.fgh.sifmoz.backend.clinic.Clinic
 import mz.org.fgh.sifmoz.backend.clinicSector.ClinicSector
 import mz.org.fgh.sifmoz.backend.clinicSectorType.ClinicSectorType
+
+import mz.org.fgh.sifmoz.backend.clinic.Clinic
+import mz.org.fgh.sifmoz.backend.packaging.Pack
+import mz.org.fgh.sifmoz.backend.utilities.JSONSerializer
 
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
@@ -123,5 +128,9 @@ class SystemConfigsController {
         clinicSectorList.add(new LinkedHashMap(id: '8a8a823b81900fee0181902674b20004', code: 'NORMAL', description: 'Atendimento Geral',  clinicSectorType_id: '8a8a823b81c7fa9d0181c802d7ec0006', uuid: '8a8a823b81900fee0181901674b20004', active: 'true'))
 
         return clinicSectorList
+    }
+
+    def getByKey(String key) {
+        render JSONSerializer.setJsonObjectResponse(SystemConfigs.findByKey(key)) as JSON
     }
 }

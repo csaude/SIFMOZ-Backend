@@ -6,6 +6,7 @@ import mz.org.fgh.sifmoz.backend.clinic.Clinic
 import mz.org.fgh.sifmoz.backend.groupMember.GroupMember
 import mz.org.fgh.sifmoz.backend.groupType.GroupType
 import mz.org.fgh.sifmoz.backend.patient.Patient
+import mz.org.fgh.sifmoz.backend.protection.Menu
 import mz.org.fgh.sifmoz.backend.service.ClinicalService
 
 class GroupInfo extends BaseEntity {
@@ -47,5 +48,14 @@ class GroupInfo extends BaseEntity {
                 ", groupType=" + groupType +
                 ", service=" + service +
                 '}';
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(groupsMenuCode))
+        }
+        return menus
     }
 }

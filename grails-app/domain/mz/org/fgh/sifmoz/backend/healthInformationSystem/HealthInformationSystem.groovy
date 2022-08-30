@@ -3,6 +3,7 @@ package mz.org.fgh.sifmoz.backend.healthInformationSystem
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import mz.org.fgh.sifmoz.backend.base.BaseEntity
 import mz.org.fgh.sifmoz.backend.interoperabilityAttribute.InteroperabilityAttribute
+import mz.org.fgh.sifmoz.backend.protection.Menu
 
 class HealthInformationSystem extends BaseEntity {
 
@@ -28,5 +29,14 @@ class HealthInformationSystem extends BaseEntity {
     static constraints = {
         abbreviation nullable: false, unique: true
         description nullable: false
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(patientMenuCode,administrationMenuCode,homeMenuCode))
+        }
+        return menus
     }
 }

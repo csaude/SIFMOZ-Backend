@@ -10,6 +10,7 @@ import mz.org.fgh.sifmoz.backend.episodeType.EpisodeType
 import mz.org.fgh.sifmoz.backend.patientIdentifier.PatientServiceIdentifier
 import mz.org.fgh.sifmoz.backend.patientVisitDetails.PatientVisitDetails
 import mz.org.fgh.sifmoz.backend.prescription.Prescription
+import mz.org.fgh.sifmoz.backend.protection.Menu
 import mz.org.fgh.sifmoz.backend.service.ClinicalService
 import mz.org.fgh.sifmoz.backend.startStopReason.StartStopReason
 
@@ -62,4 +63,13 @@ class Episode extends BaseEntity {
 //                ", clinic=" + clinic +
 //                '}';
 //    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(patientMenuCode,groupsMenuCode,dashboardMenuCode,administrationMenuCode))
+        }
+        return menus
+    }
 }

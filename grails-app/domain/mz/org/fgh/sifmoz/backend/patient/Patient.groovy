@@ -12,6 +12,7 @@ import mz.org.fgh.sifmoz.backend.healthInformationSystem.HealthInformationSystem
 import mz.org.fgh.sifmoz.backend.patientAttribute.PatientAttribute
 import mz.org.fgh.sifmoz.backend.patientIdentifier.PatientServiceIdentifier
 import mz.org.fgh.sifmoz.backend.patientVisit.PatientVisit
+import mz.org.fgh.sifmoz.backend.protection.Menu
 import mz.org.fgh.sifmoz.backend.tansreference.PatientTransReference
 
 class Patient extends BaseEntity {
@@ -103,4 +104,13 @@ class Patient extends BaseEntity {
 //                ", postoAdministrativo=" + postoAdministrativo +
 //                '}';
 //    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(patientMenuCode,groupsMenuCode,dashboardMenuCode))
+        }
+        return menus
+    }
 }

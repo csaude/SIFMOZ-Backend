@@ -1,6 +1,9 @@
 package mz.org.fgh.sifmoz.backend.reports.referralManagement
 
-class ReferredPatientsReport {
+import mz.org.fgh.sifmoz.backend.base.BaseEntity
+import mz.org.fgh.sifmoz.backend.protection.Menu
+
+class ReferredPatientsReport extends BaseEntity{
 
     String id //ReportId
     String reportId
@@ -55,5 +58,14 @@ class ReferredPatientsReport {
         dateIdentifiedAbandonment nullable: true
         returnedPickUp nullable: true
         lastPickUpDate nullable: true
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(reportsMenuCode))
+        }
+        return menus
     }
 }

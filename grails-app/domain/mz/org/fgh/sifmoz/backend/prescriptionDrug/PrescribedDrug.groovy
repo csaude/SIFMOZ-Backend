@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference
 import mz.org.fgh.sifmoz.backend.base.BaseEntity
 import mz.org.fgh.sifmoz.backend.drug.Drug
 import mz.org.fgh.sifmoz.backend.prescription.Prescription
+import mz.org.fgh.sifmoz.backend.protection.Menu
 
 class PrescribedDrug extends BaseEntity {
     String id
@@ -25,5 +26,14 @@ class PrescribedDrug extends BaseEntity {
     }
     static constraints = {
         timesPerDay(min: 1)
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(patientMenuCode,groupsMenuCode,administrationMenuCode))
+        }
+        return menus
     }
 }

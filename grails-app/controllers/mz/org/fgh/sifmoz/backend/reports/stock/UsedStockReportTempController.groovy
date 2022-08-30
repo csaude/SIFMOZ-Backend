@@ -10,7 +10,7 @@ import mz.org.fgh.sifmoz.backend.utilities.Utilities
 
 import static org.springframework.http.HttpStatus.*
 
-class UsedStockReportController extends MultiThreadRestReportController {
+class UsedStockReportTempController extends MultiThreadRestReportController {
 
 
     IUsedStockReportService usedStockReportService
@@ -18,8 +18,8 @@ class UsedStockReportController extends MultiThreadRestReportController {
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    UsedStockReportController() {
-        super(StockReportTemp)
+    UsedStockReportTempController() {
+        super(UsedStockReportTemp)
     }
 
     def index(Integer max) {
@@ -32,7 +32,7 @@ class UsedStockReportController extends MultiThreadRestReportController {
     }
 
     @Transactional
-    def save(StockReportTemp stockReport) {
+    def save(UsedStockReportTemp stockReport) {
         if (stockReport == null) {
             render status: NOT_FOUND
             return

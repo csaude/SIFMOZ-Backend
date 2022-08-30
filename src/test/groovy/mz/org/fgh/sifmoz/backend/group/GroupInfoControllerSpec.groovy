@@ -11,7 +11,7 @@ import grails.testing.web.controllers.ControllerUnitTest
 import grails.testing.gorm.DomainUnitTest
 import grails.plugin.json.view.JsonViewGrailsPlugin
 
-class GroupInfoControllerSpec extends Specification implements ControllerUnitTest<GroupController>, DomainUnitTest<GroupInfo> {
+class GroupInfoControllerSpec extends Specification implements ControllerUnitTest<GroupInfoController>, DomainUnitTest<GroupInfo> {
 
     void setupSpec() {
         defineBeans(new JsonViewGrailsPlugin(applicationContext: applicationContext))

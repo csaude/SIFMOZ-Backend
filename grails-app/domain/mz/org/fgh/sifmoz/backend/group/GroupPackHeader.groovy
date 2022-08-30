@@ -2,6 +2,7 @@ package mz.org.fgh.sifmoz.backend.group
 
 import mz.org.fgh.sifmoz.backend.base.BaseEntity
 import mz.org.fgh.sifmoz.backend.duration.Duration
+import mz.org.fgh.sifmoz.backend.protection.Menu
 
 class GroupPackHeader extends BaseEntity {
 
@@ -31,5 +32,14 @@ class GroupPackHeader extends BaseEntity {
                 ", duration=" + duration +
                 ", nextPickUpDate=" + nextPickUpDate +
                 '}';
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(groupsMenuCode))
+        }
+        return menus
     }
 }

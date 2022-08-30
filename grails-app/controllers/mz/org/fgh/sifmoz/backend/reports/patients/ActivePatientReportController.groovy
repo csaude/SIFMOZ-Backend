@@ -3,14 +3,10 @@ package mz.org.fgh.sifmoz.backend.reports.patients
 import grails.converters.JSON
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
-import mz.org.fgh.sifmoz.backend.clinic.Clinic
-import mz.org.fgh.sifmoz.backend.distribuicaoAdministrativa.District
-import mz.org.fgh.sifmoz.backend.distribuicaoAdministrativa.Province
 import mz.org.fgh.sifmoz.backend.multithread.MultiThreadRestReportController
 import mz.org.fgh.sifmoz.backend.multithread.ReportSearchParams
 import mz.org.fgh.sifmoz.backend.utilities.JSONSerializer
 import mz.org.fgh.sifmoz.backend.utilities.Utilities
-import mz.org.fgh.sifmoz.report.ReportGenerator
 
 import static org.springframework.http.HttpStatus.*
 

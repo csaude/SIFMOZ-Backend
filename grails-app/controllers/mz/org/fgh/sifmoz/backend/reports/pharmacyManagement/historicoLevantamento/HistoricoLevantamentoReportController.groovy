@@ -5,7 +5,6 @@ import mz.org.fgh.sifmoz.backend.multithread.MultiThreadRestReportController
 import mz.org.fgh.sifmoz.backend.multithread.ReportSearchParams
 import mz.org.fgh.sifmoz.backend.utilities.JSONSerializer
 import mz.org.fgh.sifmoz.backend.utilities.Utilities
-import mz.org.fgh.sifmoz.report.ReportGenerator
 
 class HistoricoLevantamentoReportController extends MultiThreadRestReportController {
     IHistoricoLevantamentoReportService historicoLevantamentoReportService

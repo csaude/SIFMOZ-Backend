@@ -5,6 +5,7 @@ import mz.org.fgh.sifmoz.backend.base.BaseEntity
 import mz.org.fgh.sifmoz.backend.clinicSector.ClinicSector
 import mz.org.fgh.sifmoz.backend.episode.Episode
 import mz.org.fgh.sifmoz.backend.identifierType.IdentifierType
+import mz.org.fgh.sifmoz.backend.protection.Menu
 import mz.org.fgh.sifmoz.backend.serviceattribute.ClinicalServiceAttribute
 import mz.org.fgh.sifmoz.backend.therapeuticRegimen.TherapeuticRegimen
 
@@ -46,5 +47,14 @@ class ClinicalService extends BaseEntity {
 
     boolean isTarv() {
         return this.code == "TARV"
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(patientMenuCode,groupsMenuCode,dashboardMenuCode,administrationMenuCode,reportsMenuCode,homeMenuCode))
+        }
+        return menus
     }
 }

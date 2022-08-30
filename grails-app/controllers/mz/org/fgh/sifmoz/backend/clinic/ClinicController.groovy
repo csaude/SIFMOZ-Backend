@@ -3,16 +3,16 @@ package mz.org.fgh.sifmoz.backend.clinic
 import grails.converters.JSON
 import grails.rest.RestfulController
 import grails.validation.ValidationException
+
 import mz.org.fgh.sifmoz.backend.distribuicaoAdministrativa.District
+import mz.org.fgh.sifmoz.backend.distribuicaoAdministrativa.Province
 import mz.org.fgh.sifmoz.backend.utilities.JSONSerializer
 
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NO_CONTENT
 import static org.springframework.http.HttpStatus.OK
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY
 
-import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
 
 class ClinicController extends RestfulController{
@@ -95,4 +95,12 @@ class ClinicController extends RestfulController{
         render JSONSerializer.setObjectListJsonResponse(Clinic.findAllByDistrictAndActive(district,true)) as JSON
         // respond communityMobilizerService.getAllByDistrictId(districtId)
     }
+
+    def searchClinicsByProvinceCode(String provinceCode){
+        Province province = Province.findByCode(provinceCode)
+        render JSONSerializer.setObjectListJsonResponse(Clinic.findAllByProvinceAndActive(province,true)) as JSON
+        // respond communityMobilizerService.getAllByDistrictId(districtId)
+    }
+
+
 }

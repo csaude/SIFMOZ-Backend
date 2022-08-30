@@ -3,6 +3,7 @@ package mz.org.fgh.sifmoz.backend.stockadjustment
 import mz.org.fgh.sifmoz.backend.base.BaseEntity
 import mz.org.fgh.sifmoz.backend.clinic.Clinic
 import mz.org.fgh.sifmoz.backend.packagedDrug.PackagedDrug
+import mz.org.fgh.sifmoz.backend.protection.Menu
 import mz.org.fgh.sifmoz.backend.stock.Stock
 import mz.org.fgh.sifmoz.backend.stockdestruction.DestroyedStock
 import mz.org.fgh.sifmoz.backend.stockinventory.Inventory
@@ -49,4 +50,5 @@ abstract class StockAdjustment extends BaseEntity {
                 ", finalised=" + finalised +
                 '}'
     }
+
 }

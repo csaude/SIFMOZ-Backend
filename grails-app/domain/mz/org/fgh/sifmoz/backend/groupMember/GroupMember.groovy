@@ -5,6 +5,7 @@ import mz.org.fgh.sifmoz.backend.clinic.Clinic
 import mz.org.fgh.sifmoz.backend.group.GroupInfo
 import mz.org.fgh.sifmoz.backend.group.GroupPackHeader
 import mz.org.fgh.sifmoz.backend.patient.Patient
+import mz.org.fgh.sifmoz.backend.protection.Menu
 
 class GroupMember extends BaseEntity {
     String id
@@ -24,5 +25,14 @@ class GroupMember extends BaseEntity {
             return startDate != null ? startDate <= new Date() : null
         })
         endDate nullable: true
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(groupsMenuCode))
+        }
+        return menus
     }
 }

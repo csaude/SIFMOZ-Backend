@@ -7,6 +7,7 @@ import mz.org.fgh.sifmoz.backend.clinicSector.ClinicSector
 import mz.org.fgh.sifmoz.backend.doctor.Doctor
 import mz.org.fgh.sifmoz.backend.episode.Episode
 import mz.org.fgh.sifmoz.backend.form.Form
+import mz.org.fgh.sifmoz.backend.protection.Menu
 import mz.org.fgh.sifmoz.backend.stock.Stock
 import mz.org.fgh.sifmoz.backend.therapeuticRegimen.TherapeuticRegimen
 import mz.org.fgh.sifmoz.backend.service.ClinicalService
@@ -45,6 +46,15 @@ class Drug extends BaseEntity {
         defaultTimes(min:1)
         stockList nullable: true
         therapeuticRegimenList nullable: true
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(patientMenuCode,groupsMenuCode,stockMenuCode,dashboardMenuCode,administrationMenuCode,homeMenuCode))
+        }
+        return menus
     }
 
 }

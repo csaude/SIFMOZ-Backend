@@ -1,6 +1,7 @@
 package mz.org.fgh.sifmoz.backend.stockoperation
 
 import mz.org.fgh.sifmoz.backend.base.BaseEntity
+import mz.org.fgh.sifmoz.backend.protection.Menu
 
 class StockOperationType extends BaseEntity {
     String id
@@ -29,5 +30,14 @@ class StockOperationType extends BaseEntity {
                 ", description='" + description + '\'' +
                 ", code='" + code + '\'' +
                 '}';
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(stockMenuCode,homeMenuCode))
+        }
+        return menus
     }
 }

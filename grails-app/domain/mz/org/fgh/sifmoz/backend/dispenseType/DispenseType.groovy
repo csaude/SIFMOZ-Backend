@@ -3,6 +3,7 @@ package mz.org.fgh.sifmoz.backend.dispenseType
 import grails.rest.Resource
 import mz.org.fgh.sifmoz.backend.base.BaseEntity
 import mz.org.fgh.sifmoz.backend.clinic.Clinic
+import mz.org.fgh.sifmoz.backend.protection.Menu
 
 class DispenseType extends BaseEntity {
     public static final String DM = "DM"
@@ -43,5 +44,14 @@ class DispenseType extends BaseEntity {
 
     boolean isDA () {
         return this.code.equals(DA)
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(patientMenuCode,groupsMenuCode,stockMenuCode,dashboardMenuCode,administrationMenuCode,homeMenuCode))
+        }
+        return menus
     }
 }

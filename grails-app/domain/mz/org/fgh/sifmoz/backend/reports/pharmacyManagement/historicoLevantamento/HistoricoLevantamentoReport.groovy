@@ -1,6 +1,9 @@
 package mz.org.fgh.sifmoz.backend.reports.pharmacyManagement.historicoLevantamento
 
-class HistoricoLevantamentoReport {
+import mz.org.fgh.sifmoz.backend.base.BaseEntity
+import mz.org.fgh.sifmoz.backend.protection.Menu
+
+class HistoricoLevantamentoReport extends BaseEntity {
     String id
     String reportId
     String periodType
@@ -79,5 +82,14 @@ class HistoricoLevantamentoReport {
                 ", clinicalService='" + clinicalService + '\'' +
                 ", clinic='" + clinic + '\'' +
                 '}';
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(reportsMenuCode))
+        }
+        return menus
     }
 }

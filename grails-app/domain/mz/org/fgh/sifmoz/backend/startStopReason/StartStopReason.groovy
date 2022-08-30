@@ -1,6 +1,7 @@
 package mz.org.fgh.sifmoz.backend.startStopReason
 
 import mz.org.fgh.sifmoz.backend.base.BaseEntity
+import mz.org.fgh.sifmoz.backend.protection.Menu
 
 class StartStopReason extends BaseEntity {
     public static final String TERMINO_DO_TRATAMENTO = "TERMINO_DO_TRATAMENTO"
@@ -60,5 +61,14 @@ class StartStopReason extends BaseEntity {
     }
     boolean isReferido() {
         return this.code.equals(REFERIDO_PARA)
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(patientMenuCode,groupsMenuCode,dashboardMenuCode,administrationMenuCode,homeMenuCode))
+        }
+        return menus
     }
 }

@@ -2,6 +2,7 @@ package mz.org.fgh.sifmoz.backend.stockdestruction
 
 import mz.org.fgh.sifmoz.backend.base.BaseEntity
 import mz.org.fgh.sifmoz.backend.clinic.Clinic
+import mz.org.fgh.sifmoz.backend.protection.Menu
 import mz.org.fgh.sifmoz.backend.stockadjustment.StockDestructionAdjustment
 
 class DestroyedStock extends BaseEntity {
@@ -27,4 +28,13 @@ class DestroyedStock extends BaseEntity {
                 ", updateStatus='" + updateStatus + '\'' +
                 '}';
     }
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(stockMenuCode,homeMenuCode))
+        }
+        return menus
+    }
+
 }

@@ -2,15 +2,11 @@ package mz.org.fgh.sifmoz.backend.reports.pharmacyManagement
 
 import grails.converters.JSON
 import grails.validation.ValidationException
-import mz.org.fgh.sifmoz.backend.clinic.Clinic
 import mz.org.fgh.sifmoz.backend.multithread.MultiThreadRestReportController
 import mz.org.fgh.sifmoz.backend.multithread.ReportSearchParams
-import mz.org.fgh.sifmoz.backend.reports.pharmacyManagement.historicoLevantamento.HistoricoLevantamentoReport
 import mz.org.fgh.sifmoz.backend.reports.referralManagement.ReferredPatientsReport
 import mz.org.fgh.sifmoz.backend.utilities.JSONSerializer
 import mz.org.fgh.sifmoz.backend.utilities.Utilities
-import mz.org.fgh.sifmoz.report.ReportGenerator
-import org.apache.commons.lang3.ArrayUtils
 
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND

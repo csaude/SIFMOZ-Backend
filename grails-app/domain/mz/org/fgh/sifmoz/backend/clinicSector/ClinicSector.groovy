@@ -5,6 +5,7 @@ import grails.rest.Resource
 import mz.org.fgh.sifmoz.backend.base.BaseEntity
 import mz.org.fgh.sifmoz.backend.clinic.Clinic
 import mz.org.fgh.sifmoz.backend.clinicSectorType.ClinicSectorType
+import mz.org.fgh.sifmoz.backend.protection.Menu
 
 class ClinicSector extends BaseEntity {
     String id
@@ -32,5 +33,14 @@ class ClinicSector extends BaseEntity {
         code nullable: false, unique: true
         description nullable: false
         uuid unique: true
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(patientMenuCode,groupsMenuCode,stockMenuCode,dashboardMenuCode,reportsMenuCode,administrationMenuCode,homeMenuCode))
+        }
+        return menus
     }
 }

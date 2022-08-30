@@ -1,6 +1,9 @@
 package mz.org.fgh.sifmoz.backend.reports.patients
 
-class ActivePatientReport {
+import mz.org.fgh.sifmoz.backend.base.BaseEntity
+import mz.org.fgh.sifmoz.backend.protection.Menu
+
+class ActivePatientReport extends BaseEntity{
     String id
     String reportId
     String periodType
@@ -82,5 +85,13 @@ class ActivePatientReport {
                 ", endDate=" + endDate +
                 ", periodType='" + periodType + '\'' +
                 '}';
+    }
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(reportsMenuCode))
+        }
+        return menus
     }
 }

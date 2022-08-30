@@ -1,5 +1,15 @@
 package sifmoz.backend
 
+import grails.artefact.DomainClass
+import grails.core.GrailsApplication
+import grails.core.GrailsClass
+import grails.plugin.springsecurity.SecurityFilterPosition
+import grails.plugin.springsecurity.SpringSecurityService
+import grails.plugin.springsecurity.SpringSecurityUtils
+import grails.web.Action
+import mz.org.fgh.sifmoz.backend.clinic.Clinic
+import mz.org.fgh.sifmoz.backend.clinic.ClinicController
+import mz.org.fgh.sifmoz.backend.clinic.ClinicService
 import com.fasterxml.jackson.annotation.JsonIgnore
 import mz.org.fgh.sifmoz.backend.clinic.Clinic
 import mz.org.fgh.sifmoz.backend.clinicSector.ClinicSector
@@ -24,6 +34,11 @@ import mz.org.fgh.sifmoz.backend.migration.stage.MigrationStage
 import mz.org.fgh.sifmoz.backend.multithread.ExecutorThreadProvider
 import mz.org.fgh.sifmoz.backend.prescription.SpetialPrescriptionMotive
 import mz.org.fgh.sifmoz.backend.provincialServer.ProvincialServer
+import mz.org.fgh.sifmoz.backend.protection.Menu
+import mz.org.fgh.sifmoz.backend.protection.Requestmap
+import mz.org.fgh.sifmoz.backend.protection.Role
+import mz.org.fgh.sifmoz.backend.protection.SecUser
+import mz.org.fgh.sifmoz.backend.protection.SecUserRole
 import mz.org.fgh.sifmoz.backend.service.ClinicalService
 import mz.org.fgh.sifmoz.backend.serviceattributetype.ClinicalServiceAttributeType
 import mz.org.fgh.sifmoz.backend.startStopReason.StartStopReason
@@ -31,10 +46,15 @@ import mz.org.fgh.sifmoz.backend.stockoperation.StockOperationType
 import mz.org.fgh.sifmoz.backend.tansreference.PatientTransReferenceType
 import mz.org.fgh.sifmoz.backend.therapeuticLine.TherapeuticLine
 import mz.org.fgh.sifmoz.backend.therapeuticRegimen.TherapeuticRegimen
+import org.grails.core.artefact.ControllerArtefactHandler
+
 
 import java.util.concurrent.ExecutorService
 
 class BootStrap {
+
+    GrailsApplication grailsApplication
+    SpringSecurityService springSecurityService
 
     def init = { servletContext ->
 
@@ -102,12 +122,77 @@ class BootStrap {
 
         MigrationStage.withTransaction {initMigration()}
 
+        SpringSecurityUtils.clientRegisterFilter("corsFilterTest", SecurityFilterPosition.SECURITY_CONTEXT_FILTER.order - 1)
+
+        Requestmap.withTransaction {
+            initRequestMaps()
+        }
+
+        Menu.withNewTransaction {
+            initMenus()
+
+        }
+
+        SecUser.withTransaction {
+            initUserManagement()
+            springSecurityService.clearCachedRequestmaps()
+        }
+
     }
 
 
     def destroy = {
     }
 
+
+    void initMenus() {
+        new Menu(code:'01', description: 'Pacientes').save()
+        new Menu(code:'02', description: 'Grupos').save()
+        new Menu(code:'03', description: 'Stock').save()
+        new Menu(code:'04', description: 'Dashboard').save()
+        new Menu(code:'05', description: 'Relatorios').save()
+        new Menu(code:'06', description: 'Administração').save()
+        new Menu(code:'07', description: 'Migração').save()
+        new Menu(code:'08', description: 'Tela Inicial').save()
+    }
+
+    void initRequestMaps() {
+        HashMap<String,Object> maps =  grailsApplication.getArtefactInfo(ControllerArtefactHandler.TYPE).logicalPropertyNameToClassMap
+        for (String key :maps.keySet()) {
+            def url = '/api'+'/'+key+'/**'
+
+            if(key == 'clinic' || key == 'province' || key == 'district' || key == 'systemConfigs') {
+                new Requestmap(url: url, configAttribute: 'IS_AUTHENTICATED_ANONYMOUSLY').save(flush: true, failOnError: false);
+            } else {
+                new Requestmap(url: url, configAttribute: 'ROLE_ADMIN,IS_AUTHENTICATED_REMEMBERED').save(flush: true, failOnError: false);
+            }
+        }
+
+        for (String url in [
+                '/', '/index', '/index.gsp', '/**/favicon.ico',
+                '/**/js/**', '/**/css/**', '/**/images/**',
+                '/login', '/login.*', '/login/*',
+                '/logout', '/logout.*', '/logout/*']) {
+            new Requestmap(url: url, configAttribute: 'permitAll').save(flush: true, failOnError: false);
+
+        }
+    }
+
+    void initUserManagement() {
+
+        if(!Role.findByAuthority('ROLE_ADMIN')){
+            Role adminRole = new Role('ROLE_ADMIN','Admin','Role_Admin',true)
+            for (Menu menu: Menu.findAll()) {
+                adminRole.menus.add(menu)
+            }
+
+            Role adminRoleCreated = adminRole.save(flush: true, failOnError: true)
+            SecUser adminUser = new SecUser('admin', 'admin','admin','admin','admin@gmail.com').save(flush: true, failOnError: true)
+
+            SecUserRole.create(adminUser, adminRoleCreated ,true)
+        }
+
+    }
     // Methods
     void initMigration() {
         if (MigrationStage.findByValue(MigrationStage.STAGE_IN_PROGRESS) != null) ExecutorThreadProvider.getInstance().getExecutorService().execute(new MigrationService())
@@ -490,7 +575,7 @@ class BootStrap {
                 systemConfigs.value = systemConfigsObject.value
                 systemConfigs.description = systemConfigsObject.description
                 systemConfigs.key = systemConfigsObject.key
-                systemConfigs.save(flush: true, failOnError: true)
+               systemConfigs.save(flush: true, failOnError: true)
             }
         }
     }
@@ -2217,6 +2302,22 @@ class BootStrap {
         clinicList.add(new LinkedHashMap(uuid:"2AD1DA7D-9F4B-45EB-A0BB-2360B1860DC8",sisma_id:"N/A",provinceCode:"04",province:"Zambezia",districtCode:"05",district:"Gurue",sitename:"Cadeia Civil Gurue PS",site_nid:"1040505"))
 
         return clinicList
+    }
+
+
+
+    List<Object> listMenus() {
+        List<Object> menus = new ArrayList<>()
+        menus.add(new Menu(code:'01', description: 'Pacientes'))
+        menus.add( new Menu(code:'02', description: 'Grupos'))
+        menus.add(new Menu(code:'03', description: 'Stock'))
+        menus.add(new Menu(code:'04', description: 'Dashboard'))
+        menus.add(new Menu(code:'05', description: 'Relatorios'))
+        menus.add(new Menu(code:'06', description: 'Administração'))
+        menus.add(new Menu(code:'07', description: 'Migração'))
+        menus.add(new Menu(code:'08', description: 'Tela Inicial'))
+
+        return menus
     }
 
 }

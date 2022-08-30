@@ -1,6 +1,7 @@
 package mz.org.fgh.sifmoz.backend.identifierType
 
 import mz.org.fgh.sifmoz.backend.base.BaseEntity
+import mz.org.fgh.sifmoz.backend.protection.Menu
 
 class IdentifierType extends BaseEntity {
     String id
@@ -22,5 +23,14 @@ class IdentifierType extends BaseEntity {
         code nullable: false, unique: true
         description nullable: false
         pattern nullable: true
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(patientMenuCode,groupsMenuCode,dashboardMenuCode,administrationMenuCode,homeMenuCode))
+        }
+        return menus
     }
 }

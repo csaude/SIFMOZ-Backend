@@ -1,6 +1,9 @@
 package mz.org.fgh.sifmoz.backend.reports.pharmacyManagement
 
-class AbsentPatientsReport {
+import mz.org.fgh.sifmoz.backend.base.BaseEntity
+import mz.org.fgh.sifmoz.backend.protection.Menu
+
+class AbsentPatientsReport extends BaseEntity{
     String id //ReportId
     String reportId
     String clinic
@@ -33,5 +36,14 @@ class AbsentPatientsReport {
         dateMissedPickUp nullable: true
         dateIdentifiedAbandonment nullable: true
         returnedPickUp nullable: true
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(reportsMenuCode))
+        }
+        return menus
     }
 }

@@ -4,6 +4,7 @@ package mz.org.fgh.sifmoz.backend.patientAttribute
 import mz.org.fgh.sifmoz.backend.attributeType.PatientAttributeType
 import mz.org.fgh.sifmoz.backend.base.BaseEntity
 import mz.org.fgh.sifmoz.backend.patient.Patient
+import mz.org.fgh.sifmoz.backend.protection.Menu
 
 class PatientAttribute extends BaseEntity {
     String id
@@ -18,5 +19,14 @@ class PatientAttribute extends BaseEntity {
     static constraints = {
         attributeType nullable: false
         value nullable: false, blank: false
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(patientMenuCode,groupsMenuCode))
+        }
+        return menus
     }
 }

@@ -4,6 +4,7 @@ import mz.org.fgh.sifmoz.backend.base.BaseEntity
 import mz.org.fgh.sifmoz.backend.clinic.Clinic
 import mz.org.fgh.sifmoz.backend.drug.Drug
 import mz.org.fgh.sifmoz.backend.packagedDrug.PackagedDrug
+import mz.org.fgh.sifmoz.backend.protection.Menu
 import mz.org.fgh.sifmoz.backend.stockadjustment.StockAdjustment
 import mz.org.fgh.sifmoz.backend.stockcenter.StockCenter
 import mz.org.fgh.sifmoz.backend.stockentrance.StockEntrance
@@ -59,4 +60,13 @@ class Stock extends BaseEntity {
                 '}'
     }
      */
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(patientMenuCode,groupsMenuCode,dashboardMenuCode,stockMenuCode,homeMenuCode))
+        }
+        return menus
+    }
 }

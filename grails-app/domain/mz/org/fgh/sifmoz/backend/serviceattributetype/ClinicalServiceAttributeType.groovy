@@ -1,6 +1,7 @@
 package mz.org.fgh.sifmoz.backend.serviceattributetype
 
 import mz.org.fgh.sifmoz.backend.base.BaseEntity
+import mz.org.fgh.sifmoz.backend.protection.Menu
 
 class ClinicalServiceAttributeType extends BaseEntity {
     String id
@@ -19,5 +20,14 @@ class ClinicalServiceAttributeType extends BaseEntity {
     static constraints = {
         code nullable: false, unique: true
         description nullable: false
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(patientMenuCode,groupsMenuCode,dashboardMenuCode,administrationMenuCode,homeMenuCode))
+        }
+        return menus
     }
 }

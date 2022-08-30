@@ -1,6 +1,7 @@
 package mz.org.fgh.sifmoz.backend.tansreference
 
 import mz.org.fgh.sifmoz.backend.base.BaseEntity
+import mz.org.fgh.sifmoz.backend.protection.Menu
 
 class PatientTransReferenceType extends BaseEntity {
 
@@ -29,5 +30,14 @@ class PatientTransReferenceType extends BaseEntity {
                 ", description='" + description + '\'' +
                 ", code='" + code + '\'' +
                 '}';
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(patientMenuCode,administrationMenuCode,homeMenuCode))
+        }
+        return menus
     }
 }

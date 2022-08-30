@@ -9,6 +9,7 @@ import mz.org.fgh.sifmoz.backend.episode.Episode
 import mz.org.fgh.sifmoz.backend.packaging.Pack
 import mz.org.fgh.sifmoz.backend.patientVisit.PatientVisit
 import mz.org.fgh.sifmoz.backend.prescription.Prescription
+import mz.org.fgh.sifmoz.backend.protection.Menu
 
 class PatientVisitDetails extends BaseEntity {
 
@@ -26,5 +27,14 @@ class PatientVisitDetails extends BaseEntity {
     }
     static constraints = {
         pack nullable: false
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(patientMenuCode,groupsMenuCode,dashboardMenuCode))
+        }
+        return menus
     }
 }

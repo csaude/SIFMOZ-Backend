@@ -1,6 +1,9 @@
 package mz.org.fgh.sifmoz.backend.reports.monitoringAndEvaluation
 
-class ArvDailyRegisterReportTemp {
+import mz.org.fgh.sifmoz.backend.base.BaseEntity
+import mz.org.fgh.sifmoz.backend.protection.Menu
+
+class ArvDailyRegisterReportTemp extends BaseEntity{
     String id //ReportId
     String reportId
     String pharmacyId
@@ -94,5 +97,14 @@ class ArvDailyRegisterReportTemp {
                 ", pickupDate=" + pickupDate +
                 ", nextPickupDate=" + nextPickupDate +
                 '}';
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(reportsMenuCode))
+        }
+        return menus
     }
 }

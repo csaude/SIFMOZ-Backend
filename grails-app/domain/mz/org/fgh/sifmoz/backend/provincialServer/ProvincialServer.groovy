@@ -1,8 +1,10 @@
 package mz.org.fgh.sifmoz.backend.provincialServer
 
+import mz.org.fgh.sifmoz.backend.base.BaseEntity
+import mz.org.fgh.sifmoz.backend.protection.Menu
 
 
-class ProvincialServer {
+class ProvincialServer extends BaseEntity{
 
     String id
     String code
@@ -28,4 +30,14 @@ class ProvincialServer {
         username(nullable: false,blank: false)
         password(nullable: false,blank: false)
     }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(patientMenuCode,administrationMenuCode,homeMenuCode))
+        }
+        return menus
+    }
+
 }

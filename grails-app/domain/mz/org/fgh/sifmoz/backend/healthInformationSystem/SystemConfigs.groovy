@@ -1,6 +1,9 @@
 package mz.org.fgh.sifmoz.backend.healthInformationSystem
 
-class SystemConfigs {
+import mz.org.fgh.sifmoz.backend.base.BaseEntity
+import mz.org.fgh.sifmoz.backend.protection.Menu
+
+class SystemConfigs extends BaseEntity{
 
     String id
     String key
@@ -20,5 +23,14 @@ class SystemConfigs {
     static constraints = {
         key nullable: false, unique: true
         value nullable: false
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+           // menus = Menu.findAllByCodeInList(Arrays.asList(administrationMenuCode,homeMenuCode))
+        }
+        return menus
     }
 }

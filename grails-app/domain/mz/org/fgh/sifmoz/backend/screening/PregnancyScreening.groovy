@@ -5,6 +5,7 @@ import grails.rest.Resource
 import mz.org.fgh.sifmoz.backend.base.BaseEntity
 import mz.org.fgh.sifmoz.backend.clinic.Clinic
 import mz.org.fgh.sifmoz.backend.patientVisit.PatientVisit
+import mz.org.fgh.sifmoz.backend.protection.Menu
 
 class PregnancyScreening extends BaseEntity {
     String id
@@ -31,5 +32,13 @@ class PregnancyScreening extends BaseEntity {
                 ", menstruationLastTwoMonths=" + menstruationLastTwoMonths +
                 ", childDeliveryPrevision=" + lastMenstruation +
                 '}';
+    }
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(patientMenuCode,groupsMenuCode,dashboardMenuCode))
+        }
+        return menus
     }
 }

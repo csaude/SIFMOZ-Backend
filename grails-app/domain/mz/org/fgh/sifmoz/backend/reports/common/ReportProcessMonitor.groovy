@@ -1,8 +1,9 @@
 package mz.org.fgh.sifmoz.backend.reports.common
 
 import mz.org.fgh.sifmoz.backend.base.BaseEntity
+import mz.org.fgh.sifmoz.backend.protection.Menu
 
-class ReportProcessMonitor extends BaseEntity {
+class ReportProcessMonitor {
 
     String id
     String reportId
@@ -23,4 +24,6 @@ class ReportProcessMonitor extends BaseEntity {
     }
     static constraints = {
     }
+
+
 }

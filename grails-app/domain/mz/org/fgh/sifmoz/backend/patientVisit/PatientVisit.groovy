@@ -6,6 +6,7 @@ import mz.org.fgh.sifmoz.backend.base.BaseEntity
 import mz.org.fgh.sifmoz.backend.clinic.Clinic
 import mz.org.fgh.sifmoz.backend.patient.Patient
 import mz.org.fgh.sifmoz.backend.patientVisitDetails.PatientVisitDetails
+import mz.org.fgh.sifmoz.backend.protection.Menu
 import mz.org.fgh.sifmoz.backend.screening.AdherenceScreening
 import mz.org.fgh.sifmoz.backend.screening.PregnancyScreening
 import mz.org.fgh.sifmoz.backend.screening.RAMScreening
@@ -41,5 +42,14 @@ class PatientVisit extends BaseEntity {
         pregnancyScreening nullable: true
         tbScreening nullable: true
         ramScreening nullable: true
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(patientMenuCode,groupsMenuCode,dashboardMenuCode))
+        }
+        return menus
     }
 }

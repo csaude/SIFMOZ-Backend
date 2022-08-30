@@ -2,6 +2,7 @@ package mz.org.fgh.sifmoz.backend.regimenDrug
 
 import mz.org.fgh.sifmoz.backend.base.BaseEntity
 import mz.org.fgh.sifmoz.backend.drug.Drug
+import mz.org.fgh.sifmoz.backend.protection.Menu
 import mz.org.fgh.sifmoz.backend.therapeuticRegimen.TherapeuticRegimen
 
 class RegimenDrug extends BaseEntity {
@@ -19,5 +20,14 @@ class RegimenDrug extends BaseEntity {
     }
 
     static constraints = {
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList('01'))
+        }
+        return menus
     }
 }

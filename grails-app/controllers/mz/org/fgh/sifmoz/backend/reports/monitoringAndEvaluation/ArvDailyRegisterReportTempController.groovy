@@ -17,7 +17,7 @@ import javax.sql.DataSource
 
 import static org.springframework.http.HttpStatus.*
 
-class ArvDailyRegisterReportController extends MultiThreadRestReportController {
+class ArvDailyRegisterReportTempController extends MultiThreadRestReportController {
 
     IArvDailyRegisterReportService arvDailyRegisterReportService
     @Autowired
@@ -29,7 +29,7 @@ class ArvDailyRegisterReportController extends MultiThreadRestReportController {
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    ArvDailyRegisterReportController() {
+    ArvDailyRegisterReportTempController() {
         super(ArvDailyRegisterReportTemp)
     }
 

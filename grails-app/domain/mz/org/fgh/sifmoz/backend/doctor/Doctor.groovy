@@ -6,6 +6,7 @@ import grails.rest.Resource
 import mz.org.fgh.sifmoz.backend.base.BaseEntity
 import mz.org.fgh.sifmoz.backend.clinic.Clinic
 import mz.org.fgh.sifmoz.backend.prescription.Prescription
+import mz.org.fgh.sifmoz.backend.protection.Menu
 import mz.org.fgh.sifmoz.backend.stock.Stock
 
 class Doctor extends BaseEntity {
@@ -34,5 +35,14 @@ class Doctor extends BaseEntity {
         telephone(nullable: true, matches: /\d+/, maxSize: 12, minSize: 9)
         email nullable: true
 
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(patientMenuCode,groupsMenuCode,administrationMenuCode,homeMenuCode))
+        }
+        return menus
     }
 }

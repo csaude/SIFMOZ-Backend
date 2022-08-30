@@ -6,6 +6,7 @@ import mz.org.fgh.sifmoz.backend.dispenseMode.DispenseMode
 import mz.org.fgh.sifmoz.backend.group.GroupPack
 import mz.org.fgh.sifmoz.backend.packagedDrug.PackagedDrug
 import mz.org.fgh.sifmoz.backend.patientVisitDetails.PatientVisitDetails
+import mz.org.fgh.sifmoz.backend.protection.Menu
 
 class Pack extends BaseEntity {
     String id
@@ -44,5 +45,14 @@ class Pack extends BaseEntity {
         groupPack nullable: true
         patientVisitDetails nullable: true
         reasonForPackageReturn(nullable: true,maxSize: 500)
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(patientMenuCode,groupsMenuCode,stockMenuCode,dashboardMenuCode))
+        }
+        return menus
     }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import grails.rest.Resource
 import mz.org.fgh.sifmoz.backend.base.BaseEntity
+import mz.org.fgh.sifmoz.backend.protection.Menu
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 class Province extends BaseEntity {
@@ -25,5 +26,14 @@ class Province extends BaseEntity {
     static constraints = {
         code nullable: false, unique: true
         description nullable: false
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+          //  menus = Menu.findAllByCodeInList(Arrays.asList(patientMenuCode,groupsMenuCode,stockMenuCode,dashboardMenuCode,administrationMenuCode))
+        }
+        return menus
     }
 }

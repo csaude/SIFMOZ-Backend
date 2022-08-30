@@ -3,7 +3,7 @@ package mz.org.fgh.sifmoz.backend.reports.stock
 import grails.testing.web.controllers.ControllerUnitTest
 import spock.lang.Specification
 
-class UsedStockReportControllerSpec extends Specification implements ControllerUnitTest<UsedStockReportController> {
+class UsedStockReportTempControllerSpec extends Specification implements ControllerUnitTest<UsedStockReportTempController> {
 
     def setup() {
     }

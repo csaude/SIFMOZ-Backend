@@ -3,6 +3,7 @@ package mz.org.fgh.sifmoz.backend.stockrefered
 import grails.rest.Resource
 import mz.org.fgh.sifmoz.backend.base.BaseEntity
 import mz.org.fgh.sifmoz.backend.clinic.Clinic
+import mz.org.fgh.sifmoz.backend.protection.Menu
 import mz.org.fgh.sifmoz.backend.stockadjustment.StockAdjustment
 import mz.org.fgh.sifmoz.backend.stockadjustment.StockReferenceAdjustment
 
@@ -38,5 +39,14 @@ class ReferedStockMoviment extends BaseEntity {
                 ", quantity=" + quantity +
                 ", updateStatus=" + updateStatus +
                 '}';
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(stockMenuCode,homeMenuCode))
+        }
+        return menus
     }
 }

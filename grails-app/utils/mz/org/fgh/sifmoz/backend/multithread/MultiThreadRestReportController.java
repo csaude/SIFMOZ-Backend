@@ -5,22 +5,16 @@ import grails.rest.RestfulController;
 import mz.org.fgh.sifmoz.backend.convertDateUtils.ConvertDateUtils;
 import mz.org.fgh.sifmoz.backend.reports.common.ReportProcessMonitor;
 import mz.org.fgh.sifmoz.backend.reports.common.IReportProcessMonitorService;
-import mz.org.fgh.sifmoz.backend.reports.referralManagement.ReferredPatientsReport;
-import mz.org.fgh.sifmoz.backend.utilities.Utilities;
-import mz.org.fgh.sifmoz.report.ReportGenerator;
+import mz.org.fgh.sifmoz.backend.report.ReportGenerator;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.SessionFactoryUtils;
 
-import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
-
-import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 public abstract class MultiThreadRestReportController<T> extends RestfulController<T> implements ReportExecutor {
     protected ReportSearchParams searchParams;

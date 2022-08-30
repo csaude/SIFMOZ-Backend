@@ -21,7 +21,7 @@ abstract class PatientService implements IPatientService{
                                 "                   where pt.id = p.id and psi.value like :identifier) "
         String searchQuery = mainQuery + (Utilities.listHasElements(patient.identifiers as ArrayList<?>) ? indentifierCondition : "")
 
-        searchQuery += " order by 1, 2, 3 "
+        searchQuery += " order by p.firstNames "
 
         Clinic clinic = Clinic.findById(patient.clinic.id)
 
@@ -33,6 +33,28 @@ abstract class PatientService implements IPatientService{
                                      identifier: (Utilities.listHasElements(patient.identifiers as ArrayList<?>) ? "%${patient.identifiers.getAt(0).value}%" : ""), max: 400]
                                     )
         //return Patient.findAllByFirstNamesIlikeOrMiddleNamesIlikeOrLastNamesIlike("%${patient.firstNames}%", "%${patient.middleNames}%", "%${patient.lastNames}%")
+    }
+
+    @Override
+    List<Patient> search(String searchString, String clinicId) {
+        String mainQuery =  "select p from Patient p " +
+                " where (p.firstNames like :searchString OR" +
+                " p.middleNames like :searchString OR " +
+                " p.lastNames like :searchString) " +
+                " AND p.clinic =:clinic"
+        String indentifierCondition = " OR EXISTS (select psi " +
+                "                   from PatientServiceIdentifier psi inner join psi.patient pt " +
+                "                   where pt.id = p.id and psi.value like :searchString) "
+        String searchQuery = mainQuery + indentifierCondition
+
+        searchQuery += " order by p.firstNames "
+
+        Clinic clinic = Clinic.findById(clinicId)
+
+        return Patient.executeQuery(searchQuery,
+                [searchString: "%${searchString}%",
+                 clinic: clinic, max: 400]
+        )
     }
 
     @Override

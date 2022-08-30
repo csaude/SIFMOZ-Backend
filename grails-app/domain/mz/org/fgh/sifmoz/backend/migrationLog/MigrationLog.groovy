@@ -1,6 +1,7 @@
 package mz.org.fgh.sifmoz.backend.migrationLog
 
 import mz.org.fgh.sifmoz.backend.base.BaseEntity
+import mz.org.fgh.sifmoz.backend.protection.Menu
 
 import java.sql.Timestamp
 
@@ -66,5 +67,14 @@ class MigrationLog extends BaseEntity{
                 ", iDMEDEntity='" + iDMEDEntity + '\'' +
                 ", creationDate=" + creationDate +
                 '}';
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(migrationMenuCode))
+        }
+        return menus
     }
 }

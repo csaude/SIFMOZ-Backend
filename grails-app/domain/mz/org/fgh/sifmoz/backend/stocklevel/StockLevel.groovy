@@ -3,6 +3,7 @@ package mz.org.fgh.sifmoz.backend.stocklevel
 import grails.rest.Resource
 import mz.org.fgh.sifmoz.backend.base.BaseEntity
 import mz.org.fgh.sifmoz.backend.clinic.Clinic
+import mz.org.fgh.sifmoz.backend.protection.Menu
 import mz.org.fgh.sifmoz.backend.stock.Stock
 
 class StockLevel extends BaseEntity {
@@ -27,5 +28,14 @@ class StockLevel extends BaseEntity {
                 ", fullContainerRemaining=" + fullContainerRemaining +
                 ", loosePillsRemaining=" + loosePillsRemaining +
                 '}';
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(stockMenuCode))
+        }
+        return menus
     }
 }

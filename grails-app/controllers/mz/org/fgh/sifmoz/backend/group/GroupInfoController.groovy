@@ -12,14 +12,14 @@ import static org.springframework.http.HttpStatus.OK
 
 import grails.gorm.transactions.Transactional
 
-class GroupController extends RestfulController{
+class GroupInfoController extends RestfulController{
 
     IGroupService groupService
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    GroupController() {
+    GroupInfoController() {
         super(GroupInfo)
     }
 

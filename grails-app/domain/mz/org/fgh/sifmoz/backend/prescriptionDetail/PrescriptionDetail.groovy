@@ -4,6 +4,7 @@ import mz.org.fgh.sifmoz.backend.base.BaseEntity
 import mz.org.fgh.sifmoz.backend.dispenseType.DispenseType
 import mz.org.fgh.sifmoz.backend.prescription.Prescription
 import mz.org.fgh.sifmoz.backend.prescription.SpetialPrescriptionMotive
+import mz.org.fgh.sifmoz.backend.protection.Menu
 import mz.org.fgh.sifmoz.backend.therapeuticLine.TherapeuticLine
 import mz.org.fgh.sifmoz.backend.therapeuticRegimen.TherapeuticRegimen
 
@@ -26,5 +27,14 @@ class PrescriptionDetail extends BaseEntity {
         therapeuticRegimen nullable: true
         therapeuticLine nullable: true
         spetialPrescriptionMotive nullable: true
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(patientMenuCode,groupsMenuCode,administrationMenuCode))
+        }
+        return menus
     }
 }

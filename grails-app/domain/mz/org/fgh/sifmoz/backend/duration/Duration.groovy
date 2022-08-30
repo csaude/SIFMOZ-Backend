@@ -1,6 +1,7 @@
 package mz.org.fgh.sifmoz.backend.duration
 
 import mz.org.fgh.sifmoz.backend.base.BaseEntity
+import mz.org.fgh.sifmoz.backend.protection.Menu
 
 class Duration extends BaseEntity {
 
@@ -19,5 +20,14 @@ class Duration extends BaseEntity {
     }
 
     static constraints = {
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(patientMenuCode,groupsMenuCode,dashboardMenuCode,administrationMenuCode,homeMenuCode))
+        }
+        return menus
     }
 }

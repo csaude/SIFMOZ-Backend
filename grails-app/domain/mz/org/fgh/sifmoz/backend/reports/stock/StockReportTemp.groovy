@@ -1,6 +1,9 @@
 package mz.org.fgh.sifmoz.backend.reports.stock
 
-class StockReportTemp {
+import mz.org.fgh.sifmoz.backend.base.BaseEntity
+import mz.org.fgh.sifmoz.backend.protection.Menu
+
+class StockReportTemp extends BaseEntity{
 
     String id //ReportId
     String reportId
@@ -67,5 +70,14 @@ class StockReportTemp {
                 ", manufacture='" + manufacture + '\'' +
                 ", batchNumber='" + batchNumber + '\'' +
                 '}';
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+            menus = Menu.findAllByCodeInList(Arrays.asList(reportsMenuCode))
+        }
+        return menus
     }
 }

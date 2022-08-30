@@ -6,6 +6,7 @@ import mz.org.fgh.sifmoz.backend.distribuicaoAdministrativa.District
 import mz.org.fgh.sifmoz.backend.distribuicaoAdministrativa.Province
 import mz.org.fgh.sifmoz.backend.facilityType.FacilityType
 import mz.org.fgh.sifmoz.backend.nationalClinic.NationalClinic
+import mz.org.fgh.sifmoz.backend.protection.Menu
 
 class Clinic extends BaseEntity {
     String id
@@ -54,5 +55,14 @@ class Clinic extends BaseEntity {
         if (id != clinic.id) return false
 
         return true
+    }
+
+    @Override
+    List<Menu> hasMenus() {
+        List<Menu> menus = new ArrayList<>()
+        Menu.withTransaction {
+           // menus = Menu.findAllByCodeInList(Arrays.asList(patientMenuCode,groupsMenuCode,stockMenuCode,dashboardMenuCode,reportsMenuCode,administrationMenuCode))
+        }
+        return menus
     }
 }

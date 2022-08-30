@@ -17,6 +17,8 @@ interface IPatientService {
 
     List<Patient> search(Patient patient)
 
+    List<Patient> search(String searchString, String clinicId)
+
     List<Patient> getAllByClinicId(String clinicId, int offset, int max)
 
     Long count(Patient patient)
