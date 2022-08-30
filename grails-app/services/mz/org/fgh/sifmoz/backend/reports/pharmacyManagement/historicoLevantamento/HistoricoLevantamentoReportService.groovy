@@ -11,6 +11,7 @@ import mz.org.fgh.sifmoz.backend.packaging.Pack
 import mz.org.fgh.sifmoz.backend.reports.common.IReportProcessMonitorService
 import mz.org.fgh.sifmoz.backend.reports.common.ReportProcessMonitor
 import mz.org.fgh.sifmoz.backend.reports.patients.ActivePatientReport
+import mz.org.fgh.sifmoz.backend.service.ClinicalService
 import mz.org.fgh.sifmoz.backend.utilities.Utilities
 import org.hibernate.Session
 import org.hibernate.SessionFactory
@@ -58,6 +59,7 @@ abstract class HistoricoLevantamentoReportService implements IHistoricoLevantame
     @Override
     List<HistoricoLevantamentoReport> processamentoDados(ReportSearchParams reportSearchParams, ReportProcessMonitor processMonitor) {
         Clinic clinic = Clinic.findById(reportSearchParams.clinicId)
+        String clinicalService = ClinicalService.findById(reportSearchParams.clinicalService).code
         def queryString =
                 "SELECT    " +
                         "    pat.id,    " +
@@ -102,7 +104,7 @@ abstract class HistoricoLevantamentoReportService implements IHistoricoLevantame
         def query = session.createSQLQuery(queryString)
         query.setParameter("stDate", reportSearchParams.startDate)
         query.setParameter("endDate", reportSearchParams.endDate)
-        query.setParameter("serv_clinico", reportSearchParams.clinicalService)
+        query.setParameter("serv_clinico", clinicalService)
         List<Object[]> result = query.list()
 
         if (Utilities.listHasElements(result as ArrayList<?>)) {

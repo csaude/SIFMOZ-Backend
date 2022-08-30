@@ -11,11 +11,9 @@ import mz.org.fgh.sifmoz.backend.reports.common.IReportProcessMonitorService
 import mz.org.fgh.sifmoz.backend.reports.common.ReportProcessMonitor
 import mz.org.fgh.sifmoz.backend.service.ClinicalService
 import mz.org.fgh.sifmoz.backend.utilities.Utilities
-import org.hibernate.SQLQuery
 import org.hibernate.Session
 import org.hibernate.SessionFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.orm.hibernate5.SessionFactoryUtils
 
 import java.text.SimpleDateFormat
 
@@ -69,24 +67,13 @@ abstract class ActivePatientReportService implements IActivePatientReportService
 //
         String reportId = reportSearchParams.getId()
         //---------------
-        String clinicalService = ClinicalService.findById(reportSearchParams.getClinicalService()).code
+        String clinicalService = ClinicalService.findById(reportSearchParams.clinicalService).code
         Clinic clinic = Clinic.findById(reportSearchParams.clinicId)
         String province_id = clinic.province.id
+
         //---------------
 
         def queryString =
-//                'SELECT ' +
-//                'pat.first_names, ' +
-//                'pat.middle_names, ' +
-//                'pat.last_names, ' +
-//                'pat.gender, ' +
-//                'pat.cellphone ' +
-//                'psi.prefered, ' +
-//                'psi.value, ' +
-//                '' +
-//                'FROM patient pat ' +
-//                'INNER JOIN patient_service_identifier psi ' +
-//                'ON psi.patient_id = pat.id '
                 "SELECT pat.first_names, " +
                         "pat.middle_names, " +
                         "pat.last_names, " +
@@ -107,7 +94,7 @@ abstract class ActivePatientReportService implements IActivePatientReportService
                         "pre.prescription_date " +
                         "FROM Patient pat " +
                         "INNER JOIN patient_service_identifier psi ON psi.patient_id = pat.id " +
-                        "INNER JOIN clinical_service cs ON psi.service_id = cs.id " +
+                        "INNER JOIN clinical_service cs ON psi.service_id = cs.id  and cs.code = :clinicalService " +
                         "INNER JOIN identifier_type idt ON psi.identifier_type_id = idt.id " +
                         "INNER JOIN ( SELECT patient_service_identifier_id, start_stop_reason_id, id, max(episode_date) as episode_date " +
                         "from episode " +
@@ -137,13 +124,15 @@ abstract class ActivePatientReportService implements IActivePatientReportService
         def query = session.createSQLQuery(queryString)
         query.setParameter("endDate", reportSearchParams.endDate)
         query.setParameter("days", 3)
+        query.setParameter("clinicalService", clinicalService)
         List<Object[]> result = query.list()
+
+        System.out.println(result.size())
 
         if (Utilities.listHasElements(result as ArrayList<?>)) {
             double percUnit = 100 / result.size()
 
             for (item in result) {
-                System.out.println(item[14])
                 ActivePatientReport activePatientReport = setGenericInfo(reportSearchParams, clinic, item[14] as Date)
                 processMonitor.setProgress(processMonitor.getProgress() + percUnit)
                 reportProcessMonitorService.save(processMonitor)
@@ -167,7 +156,6 @@ abstract class ActivePatientReportService implements IActivePatientReportService
 
 
     private ActivePatientReport setGenericInfo(ReportSearchParams searchParams, Clinic clinic, Date dateOfBirth) {
-        System.out.println(dateOfBirth)
         ActivePatientReport activePatientReport = new ActivePatientReport()
         activePatientReport.setClinic(clinic.getClinicName())
         activePatientReport.setStartDate(searchParams.startDate)
