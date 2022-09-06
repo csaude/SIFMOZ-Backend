@@ -32,7 +32,7 @@ class ClinicController extends RestfulController{
     }
 
     def show(String id) {
-        render JSONSerializer.setJsonObjectResponse(clinicService.(id)) as JSON
+        render JSONSerializer.setJsonObjectResponse(clinicService.get(id)) as JSON
     }
 
     @Transactional
