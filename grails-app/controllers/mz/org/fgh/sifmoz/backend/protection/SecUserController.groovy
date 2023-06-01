@@ -1,6 +1,7 @@
 package mz.org.fgh.sifmoz.backend.protection
 
 import grails.converters.JSON
+import grails.rest.RestfulController
 import grails.validation.ValidationException
 import mz.org.fgh.sifmoz.backend.utilities.JSONSerializer
 
@@ -13,12 +14,16 @@ import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
 
 @ReadOnly
-class SecUserController {
+class SecUserController extends RestfulController{
 
     ISecUserService secUserService
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+
+    SecUserController() {
+        super(SecUser)
+    }
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
@@ -31,6 +36,7 @@ class SecUserController {
 
     @Transactional
     def save(SecUser secUser) {
+        println(secUser)
         if (secUser == null) {
             render status: NOT_FOUND
             return
@@ -60,6 +66,7 @@ class SecUserController {
 
     @Transactional
     def update(SecUser secUser) {
+        println(secUser)
         if (secUser == null) {
             render status: NOT_FOUND
             return
