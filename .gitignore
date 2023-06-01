@@ -11,3 +11,8 @@ out/
 .settings
 .classpath
 /.attach_pid250071
+gradle/wrapper/gradle-wrapper.properties
+gradle/wrapper/gradle-wrapper.properties
+grails-app/conf/application.yml
+grails-app/domain/mz/org/fgh/sifmoz/backend/reports/referralManagement/ReferredPatientsReport.groovy
+grails-app/domain/mz/org/fgh/sifmoz/backend/reports/referralManagement/ReferredPatientsReport.groovy

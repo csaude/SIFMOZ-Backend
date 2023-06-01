@@ -4,8 +4,10 @@ import grails.artefact.DomainClass
 import grails.converters.JSON
 import grails.core.GrailsApplication
 import grails.plugin.springsecurity.SpringSecurityService
+import grails.rest.RestfulController
 import grails.validation.ValidationException
 import mz.org.fgh.sifmoz.backend.base.BaseEntity
+import mz.org.fgh.sifmoz.backend.clinic.Clinic
 import mz.org.fgh.sifmoz.backend.utilities.JSONSerializer
 import org.apache.commons.lang.StringUtils
 import org.apache.commons.text.CaseUtils
@@ -20,7 +22,7 @@ import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
 
 @ReadOnly
-class RoleController {
+class RoleController extends RestfulController{
 
     RoleService roleService
 
@@ -34,6 +36,10 @@ class RoleController {
 
     public static final String  stockMenuCode = "03";
     public static final String  dashboardMenuCode = "04";
+
+    RoleController() {
+        super(Role)
+    }
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
@@ -98,12 +104,45 @@ class RoleController {
         respond role, [status: CREATED, view:"show"]
     }
 
+//    @Transactional
+//    def update(Role role) {
+//        if (role == null) {
+//            render status: NOT_FOUND
+//            return
+//        }
+//        if (role.hasErrors()) {
+//            transactionStatus.setRollbackOnly()
+//            respond role.errors
+//            return
+//        }
+//
+//        try {
+//            roleService.save(role)
+//        } catch (ValidationException e) {
+//            respond role.errors
+//            return
+//        }
+//
+//        respond role, [status: OK, view:"show"]
+//    }
+
     @Transactional
-    def update(Role role) {
-        if (role == null) {
-            render status: NOT_FOUND
-            return
+    def update() {
+
+        Role role
+        def objectJSON = request.JSON
+
+        println(objectJSON)
+
+        if(objectJSON.id){
+            role = Role.get(objectJSON.id)
+            if (role == null) {
+                render status: NOT_FOUND
+                return
+            }
+            role.properties = objectJSON
         }
+
         if (role.hasErrors()) {
             transactionStatus.setRollbackOnly()
             respond role.errors
