@@ -84,7 +84,8 @@ class InventoryController extends RestfulController{
             respond inventory.errors
             return
         }
-        render JSONSerializer.setJsonObjectResponse(inventory)
+        def result = JSONSerializer.setJsonObjectResponse(inventory)
+        render result as JSON
  //       respond inventory, [status: CREATED, view:"show"]
     }
 
