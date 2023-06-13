@@ -2,6 +2,7 @@ package mz.org.fgh.sifmoz.backend.stockadjustment
 
 import grails.converters.JSON
 import grails.rest.RestfulController
+import mz.org.fgh.sifmoz.backend.patientVisit.PatientVisit
 import mz.org.fgh.sifmoz.backend.utilities.JSONSerializer
 import org.grails.datastore.mapping.validation.ValidationException
 
@@ -69,26 +70,35 @@ class InventoryStockAdjustmentController extends RestfulController{
     }
 
     @Transactional
-    def update(InventoryStockAdjustment inventoryStockAdjustment) {
-        if (inventoryStockAdjustment == null) {
+    def update() {
+
+
+        def objectJSON = request.JSON
+        InventoryStockAdjustment inventoryStockAdjustmentDB = InventoryStockAdjustment.get(objectJSON.id)
+        if (inventoryStockAdjustmentDB == null) {
             render status: NOT_FOUND
             return
         }
-        if (inventoryStockAdjustment.hasErrors()) {
+        //updating db object
+        inventoryStockAdjustmentDB.properties =  objectJSON as InventoryStockAdjustment
+
+        if (inventoryStockAdjustmentDB.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond inventoryStockAdjustment.errors
+            respond inventoryStockAdjustmentDB.errors
             return
         }
 
         try {
-            inventoryStockAdjustmentService.save(inventoryStockAdjustment)
-        } catch (ValidationException e) {
-            respond inventoryStockAdjustment.errors
+            inventoryStockAdjustmentService.save(inventoryStockAdjustmentDB)
+        } catch (grails.validation.ValidationException e) {
+            respond inventoryStockAdjustmentDB.errors
             return
         }
 
-        respond inventoryStockAdjustment, [status: OK, view:"show"]
+        respond inventoryStockAdjustmentDB, [status: OK, view:"show"]
+
     }
+
 
     @Transactional
     def delete(String id) {

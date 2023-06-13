@@ -62,6 +62,7 @@ class InventoryController extends RestfulController{
         def objectJSON = request.JSON
         inventory = objectJSON as Inventory
 
+
         inventory.beforeInsert()
         inventory.adjustments.eachWithIndex { item, index ->
             item.id = UUID.fromString(objectJSON.adjustments[index].id)
@@ -83,7 +84,9 @@ class InventoryController extends RestfulController{
             respond inventory.errors
             return
         }
-        respond inventory, [status: CREATED, view:"show"]
+        def result = JSONSerializer.setJsonObjectResponse(inventory)
+        render result as JSON
+ //       respond inventory, [status: CREATED, view:"show"]
     }
 
     @Transactional
